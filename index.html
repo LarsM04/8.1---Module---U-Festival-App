@@ -8,13 +8,15 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#ffffff" />
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+   <style>
+     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Sansation:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+
+     * {
+       margin: 0;
+       padding: 0;
+       box-sizing: border-box;
+       font-family: 'Sansation', sans-serif;
+     }
 
     body {
       background: #f3f3f3;
@@ -34,10 +36,10 @@
       z-index: 100;
     }
 
-    header h1 {
-      font-size: 28px;
-      font-weight: 400;
-    }
+     header h1 {
+       font-size: 28px;
+       font-weight: 700;
+     }
 
     .header-icons {
       display: flex;
@@ -77,24 +79,29 @@
       min-height: 120px;
     }
 
-    .hero {
-      text-align: center;
-      font-size: 28px;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+     .hero {
+       text-align: center;
+       font-size: 28px;
+       font-weight: 700;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+     }
 
     .placeholder {
       background: #efefef;
       min-height: 160px;
     }
 
-    .info-text {
-      line-height: 1.7;
-      font-size: 18px;
-    }
+     .info-text {
+       line-height: 1.7;
+       font-size: 18px;
+       font-weight: 400;
+     }
+
+     .info-text p {
+       font-weight: 400;
+     }
 
     .schedule-tabs {
       display: flex;
@@ -102,25 +109,27 @@
       gap: 10px;
     }
 
-    .schedule-tabs button {
-      flex: 1;
-      padding: 12px;
-      border-radius: 10px;
-      border: 2px solid #aaa;
-      background: white;
-      cursor: pointer;
-      font-size: 16px;
-    }
+     .schedule-tabs button {
+       flex: 1;
+       padding: 12px;
+       border-radius: 10px;
+       border: 2px solid #aaa;
+       background: white;
+       cursor: pointer;
+       font-size: 16px;
+       font-weight: 300;
+       font-style: italic;
+     }
 
-    .artist {
-      background: white;
-      border: 2px solid #bbb;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 15px;
-      font-size: 22px;
-      font-weight: bold;
-    }
+     .artist {
+       background: white;
+       border: 2px solid #bbb;
+       border-radius: 12px;
+       padding: 20px;
+       margin-bottom: 15px;
+       font-size: 22px;
+       font-weight: 700;
+     }
 
     .map-box {
       background: #e5e5e5;
@@ -146,16 +155,18 @@
       align-items: center;
     }
 
-    nav button {
-      background: none;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 14px;
-      cursor: pointer;
-      color: #444;
-    }
+     nav button {
+       background: none;
+       border: none;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       font-size: 14px;
+       cursor: pointer;
+       color: #444;
+       font-weight: 300;
+       font-style: italic;
+     }
 
     nav button span {
       font-size: 26px;
@@ -213,9 +224,9 @@
 
     <!-- INFO -->
     <section id="info" class="page">
-      <h2 style="font-size: 42px; margin-bottom: 30px;">
-        FESTIVAL INFORMATION
-      </h2>
+       <h2 style="font-size: 42px; margin-bottom: 30px; font-weight: 700;">
+         FESTIVAL INFORMATION
+       </h2>
 
       <div class="info-text">
         <p>
@@ -240,16 +251,16 @@
 
     <!-- SCHEDULE -->
     <section id="schedule" class="page">
-      <h2 style="font-size: 42px; margin-bottom: 25px;">
-        LINE-UP'S SCHEDULE
-      </h2>
+       <h2 style="font-size: 42px; margin-bottom: 25px; font-weight: 700;">
+         LINE-UP'S SCHEDULE
+       </h2>
 
       <div class="schedule-tabs">
         <button>Saturday</button>
         <button>Sunday</button>
       </div>
 
-      <h3 style="margin-bottom: 15px;">DAY</h3>
+       <h3 style="margin-bottom: 15px; font-weight: 700;">DAY</h3>
 
       <div class="artist">ARTIST</div>
       <div class="artist">ARTIST</div>
