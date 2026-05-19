@@ -217,52 +217,87 @@
        justify-content: center;
      }
 
-    .placeholder {
-      background: var(--placeholder-bg);
-      min-height: clamp(120px, 22vh, 280px);
-    }
+.placeholder {
+       background: var(--placeholder-bg);
+       min-height: clamp(120px, 22vh, 280px);
+     }
 
-.info-text h3 {
-        margin-top: 20px;
-        margin-bottom: 12px;
-        font-size: clamp(20px, 3vw, 24px);
-        font-weight: 700;
-        color: var(--color-secondary);
-      }
+     .accordion-item {
+       margin-bottom: clamp(12px, 2vw, 20px);
+     }
 
-      .info-text h3:first-child {
-        margin-top: 0;
-      }
+     .accordion-header {
+       width: 100%;
+       padding: clamp(14px, 2vw, 20px);
+       background: var(--card-bg);
+       border: 2px solid var(--card-border);
+       border-radius: 12px;
+       color: var(--color-secondary);
+       font-size: clamp(18px, 3vw, 22px);
+       font-weight: 700;
+       text-align: left;
+       cursor: pointer;
+       display: flex;
+       justify-content: space-between;
+       align-items: center;
+       transition: background 0.15s;
+     }
 
-      .info-text h4 {
-        margin-top: 12px;
-        margin-bottom: 6px;
-        font-size: clamp(17px, 2.5vw, 19px);
-        font-weight: 700;
-        color: var(--text);
-      }
+     .accordion-header:hover {
+       background: var(--placeholder-bg);
+     }
 
-      .info-text a {
-        color: var(--color-secondary);
-        text-decoration: underline;
-      }
+     .accordion-header.active {
+       border-bottom-left-radius: 0;
+       border-bottom-right-radius: 0;
+     }
 
-      .info-text a:hover {
+     .accordion-icon {
+       transition: transform 0.2s;
+     }
+
+     .accordion-header.active .accordion-icon {
+       transform: rotate(180deg);
+     }
+
+     .accordion-content {
+       line-height: 1.7;
+       font-size: clamp(16px, 2.5vw, 18px);
+       font-weight: 400;
+       color: var(--text);
+       margin: 0;
+     }
+
+     .accordion-content h4 {
+       margin-top: 12px;
+       margin-bottom: 6px;
+       font-size: clamp(17px, 2.5vw, 19px);
+       font-weight: 700;
+       color: var(--text);
+     }
+
+     .accordion-content a {
+       color: var(--color-secondary);
+       text-decoration: underline;
+     }
+
+.accordion-content a:hover {
         opacity: 0.8;
       }
 
-      .info-text {
-        line-height: 1.7;
-        font-size: clamp(16px, 2.5vw, 18px);
-        font-weight: 400;
-        color: var(--text);
-        border-left: 4px solid var(--color-info);
-        padding-left: clamp(12px, 2vw, 20px);
+      .accordion-content-inner {
+        background: var(--card-bg);
+        border: 2px solid var(--card-border);
+        border-top: none;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        padding: clamp(14px, 2vw, 20px);
+        display: none;
       }
 
-     .info-text p {
-       font-weight: 400;
-     }
+      .accordion-content-inner.open {
+        display: block;
+      }
 
     .schedule-tabs {
       display: flex;
@@ -443,107 +478,122 @@
     </section>
 
 <!-- INFO -->
-     <section id="info" class="page">
+      <section id="info" class="page">
         <h2 class="page-title">
           FESTIVAL INFORMATION<br />
           <span style="font-size: clamp(18px, 3vw, 22px); font-weight: 400;">FESTIVAL INFORMATIE</span>
         </h2>
 
-       <div class="info-text">
-         <h3>Algemeen & contact</h3>
-         <p>
-           Het ❤️U Festival is voor (nieuwe) studenten in de regio Utrecht en is een aanvulling op UIT.
-         </p>
+<div class="accordion-item">
+           <button type="button" class="accordion-header">
+             Algemeen & contact
+             <span class="accordion-icon">▼</span>
+           </button>
+           <div class="accordion-content-inner">
+             <p>
+               Het ❤️U Festival is voor (nieuwe) studenten in de regio Utrecht en is een aanvulling op UIT.
+             </p>
+             <h4>Adres</h4>
+             <p>
+               <strong>Locatie:</strong> Strijkviertel, Utrecht<br />
+               <strong>Navigatieadres:</strong> Strijkviertelweg, Utrecht
+             </p>
+             <h4>Datum & Openingstijden</h4>
+             <p>
+               Zaterdag 5 september 2026 - 12:00 tot 23:00 uur
+             </p>
+           </div>
+         </div>
 
-         <h4>Adres</h4>
-         <p>
-           <strong>Locatie:</strong> Strijkviertel, Utrecht<br />
-           <strong>Navigatieadres:</strong> Strijkviertelweg, Utrecht
-         </p>
+         <div class="accordion-item">
+           <button type="button" class="accordion-header">
+             Bereikbaarheid
+             <span class="accordion-icon">▼</span>
+           </button>
+           <div class="accordion-content-inner">
+             <h4>Fiets</h4>
+             <p>
+               Er is een grote gratis fietsenstalling aanwezig waar je jouw fiets de gehele dag kunt stallen.
+             </p>
+             <h4>Auto</h4>
+             <p>
+               Je kunt een parkingticket aanschaffen. Parkeren kan op P+R Papendorp, volg hiervoor de borden 'P online ticket'. Heb je geen ticket van te voren gekocht? Dan kun je bij de parkeerwachter op locatie een parkeerticket aanschaffen (PIN ONLY). Let wel op: VOL=VOL
+             </p>
+             <h4>OV</h4>
+             <p>
+               Kom je met het openbaar vervoer naar Lief? Plan dan je trip via <a href="https://9292.nl/" target="_blank">9292.nl</a>.
+             </p>
+             <h4>Shuttlebus</h4>
+             <p>
+               Vanaf Utrecht Centraal kun je onze gratis shuttlebus richting het festivalterrein pakken. Je vindt deze bus op het centraal station aan de Mineurslaan. Volg de witte bordjes met zwarte pijlen én ' ❤️U Festival'.
+             </p>
+             <p>
+               De bus rijdt tussen 12:00 uur & 19:00 uur richting het festival en vanaf 21:00 uur kun je weer instappen om richting het station te gaan.
+             </p>
+             <h4>Taxi + Kiss & Ride</h4>
+             <p>
+               Navigeer naar Strijkviertel, De Meern (Utrecht). Volg de borden "Kiss & Ride ❤️U Festival", zodra je in de buurt bent van het festivalterrein.
+             </p>
+           </div>
+         </div>
 
-         <h4>Datum & Openingstijden</h4>
-         <p>
-           Zaterdag 5 september 2026 - 12:00 tot 23:00 uur
-         </p>
+         <div class="accordion-item">
+           <button type="button" class="accordion-header">
+             Lockers
+             <span class="accordion-icon">▼</span>
+           </button>
+           <div class="accordion-content-inner">
+             <p>
+               Op het festivalterrein zijn kluisjes aanwezig waar je je spullen veilig kunt opbergen!
+             </p>
+             <p>
+               Hier passen 3 à 4 jassen in. Goed om te weten: je kunt je kluisje gedurende de hele dag openen en sluiten zo vaak je wilt.
+             </p>
+             <p>
+               Het is niet mogelijk om online een kluisje te reserveren.
+             </p>
+           </div>
+         </div>
 
-         <br />
+         <div class="accordion-item">
+           <button type="button" class="accordion-header">
+             FAQ
+             <span class="accordion-icon">▼</span>
+           </button>
+           <div class="accordion-content-inner">
+             <h4>Ik gebruik medicatie. Wat nu?</h4>
+             <p>
+               Het is toegestaan om medicijnen mee te nemen in een dosis die je maximaal nodig hebt op 1 dag. Een doktersverklaring/medicatiepaspoort is noodzakelijk.
+             </p>
+             <p>
+               De beveiliging zal jouw documentatie beoordelen en de medicijnen controleren. Het kan zijn dat de EHBO jouw medicijnen (bijvoorbeeld als deze gevaarlijk zijn i.c.m. alcohol) in bewaring neemt en je deze enkel kan innemen bij de EHBO.
+             </p>
+             <h4>Mag ik het festivalterrein tussentijds verlaten?</h4>
+             <p>
+               Nee, helaas is dat niet mogelijk. Om de veiligheid van alle bezoekers te kunnen waarborgen, kunnen we het niet toestaan dat het festivalterrein tussentijds verlaten wordt. Wij hebben namelijk geen zicht op hetgeen wat een bezoeker buiten het festivalterrein doet en ik welke staat deze het terrein weer betreedt. Hier kunnen dan ook geen uitzonderingen voor gemaakt worden. Wij hebben genoeg loungeplekken, foodstands & barren om het een hele dag uit te kunnen houden.
+             </p>
+             <h4>Zijn er lockers?</h4>
+             <p>
+               Yes, deze zijn er! Op het terrein kun je medium & grote lockers huren.
+             </p>
+           </div>
+         </div>
 
-         <h3>Bereikbaarheid</h3>
-
-         <h4>Fiets</h4>
-         <p>
-           Er is een grote gratis fietsenstalling aanwezig waar je jouw fiets de gehele dag kunt stallen.
-         </p>
-
-         <h4>Auto</h4>
-         <p>
-           Je kunt een parkingticket aanschaffen. Parkeren kan op P+R Papendorp, volg hiervoor de borden 'P online ticket'. Heb je geen ticket van te voren gekocht? Dan kun je bij de parkeerwachter op locatie een parkeerticket aanschaffen (PIN ONLY). Let wel op: VOL=VOL
-         </p>
-
-         <h4>OV</h4>
-         <p>
-           Kom je met het openbaar vervoer naar Lief? Plan dan je trip via <a href="https://9292.nl/" target="_blank">9292.nl</a>.
-         </p>
-
-         <h4>Shuttlebus</h4>
-         <p>
-           Vanaf Utrecht Centraal kun je onze gratis shuttlebus richting het festivalterrein pakken. Je vindt deze bus op het centraal station aan de Mineurslaan. Volg de witte bordjes met zwarte pijlen én ' ❤️U Festival'.
-         </p>
-         <p>
-           De bus rijdt tussen 12:00 uur & 19:00 uur richting het festival en vanaf 21:00 uur kun je weer instappen om richting het station te gaan.
-         </p>
-
-         <h4>Taxi + Kiss & Ride</h4>
-         <p>
-           Navigeer naar Strijkviertel, De Meern (Utrecht). Volg de borden "Kiss & Ride ❤️U Festival", zodra je in de buurt bent van het festivalterrein.
-         </p>
-
-         <br />
-
-         <h3>Lockers</h3>
-         <p>
-           Op het festivalterrein zijn kluisjes aanwezig waar je je spullen veilig kunt opbergen!
-         </p>
-         <p>
-           Hier passen 3 à 4 jassen in. Goed om te weten: je kunt je kluisje gedurende de hele dag openen en sluiten zo vaak je wilt.
-         </p>
-         <p>
-           Het is niet mogelijk om online een kluisje te reserveren.
-         </p>
-
-         <br />
-
-         <h3>FAQ</h3>
-
-         <h4>Ik gebruik medicatie. Wat nu?</h4>
-         <p>
-           Het is toegestaan om medicijnen mee te nemen in een dosis die je maximaal nodig hebt op 1 dag. Een doktersverklaring/medicatiepaspoort is noodzakelijk.
-         </p>
-         <p>
-           De beveiliging zal jouw documentatie beoordelen en de medicijnen controleren. Het kan zijn dat de EHBO jouw medicijnen (bijvoorbeeld als deze gevaarlijk zijn i.c.m. alcohol) in bewaring neemt en je deze enkel kan innemen bij de EHBO.
-         </p>
-
-         <h4>Mag ik het festivalterrein tussentijds verlaten?</h4>
-         <p>
-           Nee, helaas is dat niet mogelijk. Om de veiligheid van alle bezoekers te kunnen waarborgen, kunnen we het niet toestaan dat het festivalterrein tussentijds verlaten wordt. Wij hebben namelijk geen zicht op hetgeen wat een bezoeker buiten het festivalterrein doet en ik welke staat deze het terrein weer betreedt. Hier kunnen dan ook geen uitzonderingen voor gemaakt worden. Wij hebben genoeg loungeplekken, foodstands & barren om het een hele dag uit te kunnen houden.
-         </p>
-
-         <h4>Zijn er lockers?</h4>
-         <p>
-           Yes, deze zijn er! Op het terrein kun je medium & grote lockers huren.
-         </p>
-
-         <br />
-
-         <h3>Golden-GLU</h3>
-         <p>
-           Studenten van het GLU hebben tijdens het festival speciale privileges en zijn herkenbaar aan een gouden armbandje.
-         </p>
-         <p>
-           Met dit gouden armbandje kunnen ze tijdens het festival gebruik maken van de gouden toiletten en met goud gemarkeerde bestelpunten aan de bars zonder in een rij te hoeven staan.
-         </p>
-       </div>
-     </section>
+         <div class="accordion-item">
+           <button type="button" class="accordion-header">
+             Golden-GLU
+             <span class="accordion-icon">▼</span>
+           </button>
+           <div class="accordion-content-inner">
+             <p>
+               Studenten van het GLU hebben tijdens het festival speciale privileges en zijn herkenbaar aan een gouden armbandje.
+             </p>
+             <p>
+               Met dit gouden armbandje kunnen ze tijdens het festival gebruik maken van de gouden toiletten en met goud gemarkeerde bestelpunten aan de bars zonder in een rij te hoeven staan.
+             </p>
+           </div>
+         </div>
+      </section>
 
     <!-- SCHEDULE -->
     <section id="schedule" class="page">
@@ -633,15 +683,30 @@
       applyTheme(isDark ? "light" : "dark");
     });
 
-    document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
-      const tabButtons = tabGroup.querySelectorAll("button");
-      tabButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
-          tabButtons.forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-        });
-      });
-    });
+document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
+       const tabButtons = tabGroup.querySelectorAll("button");
+       tabButtons.forEach(btn => {
+         btn.addEventListener("click", () => {
+           tabButtons.forEach(b => b.classList.remove("active"));
+           btn.classList.add("active");
+         });
+       });
+     });
+
+     document.querySelectorAll(".accordion-header").forEach(header => {
+       header.addEventListener("click", () => {
+         const content = header.nextElementSibling;
+         const isOpen = content.classList.contains("open");
+         
+         if (isOpen) {
+           content.classList.remove("open");
+           header.classList.remove("active");
+         } else {
+           content.classList.add("open");
+           header.classList.add("active");
+         }
+       });
+     });
 
     // Service worker registreren
     if ("serviceWorker" in navigator) {
