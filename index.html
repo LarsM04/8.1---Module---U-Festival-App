@@ -632,6 +632,11 @@
         padding-left: clamp(24px, 5vw, 80px);
         padding-right: clamp(24px, 5vw, 80px);
       }
+
+      body.act-detail-open main {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
     }
 
     /* Act detail page */
@@ -750,6 +755,70 @@
       width: 100%;
       height: 100%;
       border: none;
+    }
+
+    .act-video-fallback {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-secondary);
+      text-decoration: underline;
+    }
+
+    .act-video-fallback:hover {
+      opacity: 0.85;
+    }
+
+    /* Act detail: desktop / tablet — keep mobile-sized layout, sharp images */
+    @media (min-width: 768px) {
+      body.act-detail-open main {
+        display: flex;
+        justify-content: center;
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      #act-detail.active {
+        max-width: 420px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      .act-hero {
+        width: 100%;
+        max-width: 312px;
+        max-height: 234px;
+        margin: 0 auto;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        object-position: center top;
+      }
+
+      .act-detail-body {
+        padding: 24px 28px 32px;
+      }
+
+      .act-detail-name {
+        font-size: 32px;
+      }
+
+      .act-detail-bio {
+        font-size: 16px;
+        margin-bottom: 24px;
+      }
+
+      .act-video-wrapper {
+        max-width: 360px;
+        margin: 0 auto;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      body.act-detail-open main {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
     }
 
     .acts-list {
@@ -1004,8 +1073,9 @@
         </div>
         <p class="act-detail-bio" id="act-detail-bio"></p>
         <div class="act-video-wrapper">
-          <iframe id="act-detail-video" title="Act video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+          <iframe id="act-detail-video" title="Act video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
+        <a class="act-video-fallback" id="act-detail-video-link" href="#" target="_blank" rel="noopener noreferrer">Bekijk op YouTube</a>
       </div>
     </section>
 
@@ -1172,7 +1242,9 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       document.getElementById("act-detail-image").alt = act.name;
       document.getElementById("act-detail-name").textContent = act.name;
       document.getElementById("act-detail-bio").textContent = act.bio;
-      document.getElementById("act-detail-video").src = `https://www.youtube.com/embed/${act.videoId}`;
+      const embedUrl = `https://www.youtube-nocookie.com/embed/${act.videoId}?rel=0&modestbranding=1`;
+      document.getElementById("act-detail-video").src = embedUrl;
+      document.getElementById("act-detail-video-link").href = `https://www.youtube.com/watch?v=${act.videoId}`;
 
       updateActFavoriteButton();
 
