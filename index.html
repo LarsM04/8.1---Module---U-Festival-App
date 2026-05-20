@@ -1079,7 +1079,7 @@
         </div>
         <p class="act-detail-bio" id="act-detail-bio"></p>
         <div class="act-video-wrapper">
-          <iframe id="act-detail-video" title="Act video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          <iframe id="act-detail-video" title="Act video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
         <a class="act-video-fallback" id="act-detail-video-link" href="#" target="_blank" rel="noopener noreferrer">Bekijk op YouTube</a>
       </div>
@@ -1226,6 +1226,26 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       });
     }
 
+    function getYoutubeVideoId(act) {
+      const url = act.videoUrl || "";
+      const match = url.match(/(?:v=|\/embed\/|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+      if (match) return match[1];
+      if (act.videoId) return act.videoId;
+      return null;
+    }
+
+    function getYoutubeWatchUrl(act) {
+      if (act.videoUrl) return act.videoUrl;
+      const id = getYoutubeVideoId(act);
+      return id ? `https://www.youtube.com/watch?v=${id}` : "#";
+    }
+
+    function getYoutubeEmbedUrl(act) {
+      const id = getYoutubeVideoId(act);
+      if (!id) return "";
+      return `https://www.youtube.com/embed/${id}?rel=0`;
+    }
+
     function updateActFavoriteButton() {
       const btn = document.getElementById("act-detail-favorite");
       if (!btn || !currentActId) return;
@@ -1248,9 +1268,8 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       document.getElementById("act-detail-image").alt = act.name;
       document.getElementById("act-detail-name").textContent = act.name;
       document.getElementById("act-detail-bio").textContent = act.bio;
-      const embedUrl = `https://www.youtube-nocookie.com/embed/${act.videoId}?rel=0&modestbranding=1`;
-      document.getElementById("act-detail-video").src = embedUrl;
-      document.getElementById("act-detail-video-link").href = `https://www.youtube.com/watch?v=${act.videoId}`;
+      document.getElementById("act-detail-video").src = getYoutubeEmbedUrl(act);
+      document.getElementById("act-detail-video-link").href = getYoutubeWatchUrl(act);
 
       updateActFavoriteButton();
 
