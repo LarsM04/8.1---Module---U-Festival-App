@@ -1,0 +1,92 @@
+{
+  "acts": [
+    {
+      "id": "armin-van-buuren",
+      "name": "Armin van Buuren",
+      "tagline": "trance icon",
+      "bio": "Five-time \"World's No. 1 DJ\" and trance icon, Armin delivers euphoric, high-energy sets that have headlined festivals from Tomorrowland to Ultra. His uplifting melodies and impeccable mixing keep crowds dancing for hours.",
+      "image": "assets/artists/image.png",
+      "videoId": "TxvpctgU_s8"
+    },
+    {
+      "id": "martin-garrix",
+      "name": "Martin Garrix",
+      "tagline": "EDM superstar",
+      "bio": "Broke through as a teenager with \"Animals,\" Martin Garrix has become one of the biggest names in EDM. His anthemic big-room tracks and stadium-sized drops make him a festival favorite across Europe.",
+      "image": "assets/artists/image (1).png",
+      "videoId": "Zv1QV6lrc_Y"
+    },
+    {
+      "id": "kensington",
+      "name": "Kensington",
+      "tagline": "indie rock anthems",
+      "bio": "Rotterdam-born indie rock quintet known for soaring choruses and driving guitar riffs. Hits like \"Streets\" and \"Riddles\" showcase their knack for arena-ready hooks and emotionally charged lyricism.",
+      "image": "assets/artists/image (2).png",
+      "videoId": "IH77eOyV95o"
+    },
+    {
+      "id": "within-temptation",
+      "name": "Within Temptation",
+      "tagline": "symphonic metal pioneers",
+      "bio": "Symphonic metal pioneers fronted by Sharon den Adel. Their cinematic soundscapes and operatic vocals (think \"Ice Queen,\" \"Mother Earth\") translate into dramatic, visually stunning festival performances.",
+      "image": "assets/artists/image (3).png",
+      "videoId": "iQVei5C2N4E"
+    },
+    {
+      "id": "de-staat",
+      "name": "De Staat",
+      "tagline": "experimental rock innovators",
+      "bio": "Experimental rock outfit from Nijmegen, blending funky grooves with angular guitar work and theatrical stagecraft. Tracks like \"Witch Doctor\" and \"Down Town\" highlight their genre-bending approach and infectious energy.",
+      "image": "assets/artists/image (4).png",
+      "videoId": "0ttGgIQpAUc"
+    },
+    {
+      "id": "chefs-special",
+      "name": "Chef'Special",
+      "tagline": "genre-blending funk-pop",
+      "bio": "A four-piece from Haarlem mixing funk, pop, rock and hip-hop. Their upbeat, genre-fluid sound on songs like \"Amigo\" and \"In Your Arms\" makes for joyous, dance-floor-friendly live shows.",
+      "image": "assets/artists/image (5).png",
+      "videoId": "l3jRIr44lss"
+    },
+    {
+      "id": "navarone",
+      "name": "Navarone",
+      "tagline": "hard-hitting rock four-piece",
+      "bio": "Utrecht's hard-hitting rock four-piece, delivering riff-driven anthems and dynamic vocals. With a live reputation for raw intensity, they're tailor-made for late-night main stages.",
+      "image": "assets/artists/image (6).png",
+      "videoId": "EvLpaCSnc4k"
+    },
+    {
+      "id": "dotan",
+      "name": "Dotan",
+      "tagline": "folk-pop singer-songwriter",
+      "bio": "Folk-pop singer-songwriter whose intimate voice and acoustic arrangements (notably on \"Home\") have earned him platinum sales and sell-out shows. His heartfelt storytelling connects deeply on festival acoustic stages.",
+      "image": "assets/artists/image (7).png",
+      "videoId": "FZEuqzW16Nw"
+    },
+    {
+      "id": "eefje-de-visser",
+      "name": "Eefje de Visser",
+      "tagline": "atmospheric indie-pop",
+      "bio": "Indie-pop artist crafting atmospheric, electronic-tinged songs. Her hypnotic vocals and lush production (as heard on \"Ongeveer\") create a dreamlike vibe perfect for twilight festival slots.",
+      "image": "assets/artists/image (8).png",
+      "videoId": "6IlLJNmLDMg"
+    },
+    {
+      "id": "froukje",
+      "name": "Froukje",
+      "tagline": "candid pop songwriter",
+      "bio": "Breakthrough pop singer Froukje Veenstra combines candid lyrics with catchy, synth-driven hooks. Since her 2021 debut, she's become a voice of her generation—ideal for mid-day festival stages.",
+      "image": "assets/artists/image (9).png",
+      "videoId": "g4PlReX9e-E"
+    },
+    {
+      "id": "spinvis",
+      "name": "Spinvis",
+      "tagline": "Poetic lo-fi surrealist in pop form",
+      "bio": "Erik de Jong performs under the moniker Spinvis, crafting poetic, collage-like songs that blend spoken-word snippets, lo-fi electronics and wistful pop. Since his debut album in 2002—recorded in his attic—he's become a fixture of Dutch indie, renowned for narratives that feel both intimate and surreal. His live shows turn everyday observations into shared, dreamlike experiences.",
+      "image": "assets/artists/image (10).png",
+      "videoId": "F3ZTrGWSLf4"
+    }
+  ]
+}

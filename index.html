@@ -618,6 +618,10 @@
         padding-bottom: 88px;
       }
 
+      body.act-detail-open main {
+        padding-bottom: 88px;
+      }
+
       .schedule-tabs {
         flex-direction: column;
       }
@@ -629,6 +633,177 @@
         padding-right: clamp(24px, 5vw, 80px);
       }
     }
+
+    /* Act detail page */
+    body.act-detail-open main {
+      padding: 0;
+      padding-bottom: 72px;
+    }
+
+    body.act-detail-open .header-logo {
+      display: none;
+    }
+
+    body.act-detail-open .header-back-btn {
+      display: flex;
+    }
+
+    .header-back-btn {
+      grid-column: 1;
+      justify-self: start;
+      display: none;
+      align-items: center;
+      background: none;
+      border: none;
+      padding: 8px 4px;
+      cursor: pointer;
+    }
+
+    .header-back-btn .back-arrow {
+      width: 0;
+      height: 0;
+      border-top: 11px solid transparent;
+      border-bottom: 11px solid transparent;
+      border-right: 18px solid var(--color-accent);
+    }
+
+    #act-detail.active {
+      padding: 0;
+      gap: 0;
+    }
+
+    .act-hero {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      display: block;
+      background: var(--placeholder-bg);
+    }
+
+    .act-detail-body {
+      background: #FFFFFF;
+      color: #000000;
+      padding: clamp(18px, 4vw, 28px);
+      flex: 1;
+    }
+
+    [data-theme="dark"] .act-detail-body {
+      background: #FFFFFF;
+      color: #000000;
+    }
+
+    .act-detail-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: clamp(14px, 3vw, 20px);
+    }
+
+    .act-detail-name {
+      font-size: clamp(28px, 6vw, 40px);
+      font-weight: 700;
+      color: var(--color-secondary);
+      line-height: 1.15;
+      flex: 1;
+    }
+
+    .act-favorite-btn {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+
+    .act-favorite-btn svg {
+      width: clamp(28px, 6vw, 36px);
+      height: clamp(28px, 6vw, 36px);
+      display: block;
+    }
+
+    .act-favorite-btn.favorite svg path {
+      fill: var(--color-accent);
+    }
+
+    .act-detail-bio {
+      font-size: clamp(15px, 2.5vw, 17px);
+      line-height: 1.65;
+      font-weight: 400;
+      margin-bottom: clamp(20px, 4vw, 28px);
+    }
+
+    .act-video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .act-video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .acts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .act-list-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 12px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      color: inherit;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+
+    .act-list-item:hover {
+      border-color: var(--color-secondary);
+      transform: translateY(-1px);
+    }
+
+    .act-list-item img {
+      width: 56px;
+      height: 56px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .act-list-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .act-list-item-name {
+      font-size: clamp(17px, 3vw, 20px);
+      font-weight: 700;
+      color: var(--color-secondary);
+      margin-bottom: 2px;
+    }
+
+    .act-list-item-tagline {
+      font-size: clamp(14px, 2vw, 15px);
+      font-weight: 400;
+      color: var(--text);
+      opacity: 0.85;
+    }
   </style>
 </head>
 
@@ -638,6 +813,10 @@
     <a class="header-logo" href="#" aria-label="U Festival">
       <img src="assets/icons/logo_white.svg" alt="" />
     </a>
+
+    <button type="button" class="header-back-btn" id="act-back-btn" aria-label="Terug">
+      <span class="back-arrow" aria-hidden="true"></span>
+    </button>
 
     <h1>Festival</h1>
 
@@ -660,9 +839,12 @@
         U FESTIVAL
       </div>
 
-      <div class="card placeholder"></div>
-
-      <div class="card placeholder"></div>
+      <div class="card">
+        <h2 class="page-title" style="margin-bottom: 16px; font-size: clamp(22px, 4vw, 28px);">
+          Acts
+        </h2>
+        <div class="acts-list" id="acts-list"></div>
+      </div>
     </section>
 
 <!-- INFO -->
@@ -808,6 +990,25 @@
       </div>
     </section>
 
+    <!-- ACT DETAIL -->
+    <section id="act-detail" class="page">
+      <img class="act-hero" id="act-detail-image" src="" alt="" />
+      <div class="act-detail-body">
+        <div class="act-detail-header">
+          <h2 class="act-detail-name" id="act-detail-name"></h2>
+          <button type="button" class="act-favorite-btn" id="act-detail-favorite" aria-label="Favoriet">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="#F03228" stroke-width="2"/>
+            </svg>
+          </button>
+        </div>
+        <p class="act-detail-bio" id="act-detail-bio"></p>
+        <div class="act-video-wrapper">
+          <iframe id="act-detail-video" title="Act video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <nav>
@@ -834,6 +1035,12 @@
 
     buttons.forEach(button => {
       button.addEventListener("click", () => {
+        if (document.body.classList.contains("act-detail-open")) {
+          document.getElementById("act-detail").classList.remove("active");
+          document.body.classList.remove("act-detail-open");
+          document.getElementById("act-detail-video").src = "";
+          currentActId = null;
+        }
 
         buttons.forEach(btn => btn.classList.remove("active"));
         button.classList.add("active");
@@ -903,10 +1110,110 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       });
     }
 
+    // ==================== ACTS & DETAIL PAGE ====================
+    let actsData = null;
+    let actsById = {};
+    let previousPage = "home";
+    let currentActId = null;
+    let favorites = JSON.parse(localStorage.getItem("ufestival-favorites")) || [];
+
+    async function loadActsData() {
+      try {
+        const response = await fetch("./data/acts.json");
+        actsData = await response.json();
+        actsById = {};
+        actsData.acts.forEach(act => {
+          actsById[act.id] = act;
+        });
+        renderActsList();
+      } catch (error) {
+        console.error("Error loading acts:", error);
+      }
+    }
+
+    function renderActsList() {
+      const list = document.getElementById("acts-list");
+      if (!list || !actsData) return;
+
+      list.innerHTML = actsData.acts.map(act => `
+        <button type="button" class="act-list-item" data-act-id="${act.id}">
+          <img src="${act.image}" alt="" loading="lazy" />
+          <div class="act-list-item-info">
+            <div class="act-list-item-name">${act.name}</div>
+            <div class="act-list-item-tagline">${act.tagline}</div>
+          </div>
+        </button>
+      `).join("");
+
+      list.querySelectorAll(".act-list-item").forEach(btn => {
+        btn.addEventListener("click", () => openActDetail(btn.dataset.actId));
+      });
+    }
+
+    function updateActFavoriteButton() {
+      const btn = document.getElementById("act-detail-favorite");
+      if (!btn || !currentActId) return;
+      btn.classList.toggle("favorite", favorites.includes(currentActId));
+      const path = btn.querySelector("path");
+      if (path) {
+        path.setAttribute("fill", favorites.includes(currentActId) ? "#F03228" : "none");
+      }
+    }
+
+    function openActDetail(actId) {
+      const act = actsById[actId];
+      if (!act) return;
+
+      const activePage = document.querySelector(".page.active");
+      previousPage = activePage ? activePage.id : "home";
+      currentActId = actId;
+
+      document.getElementById("act-detail-image").src = act.image;
+      document.getElementById("act-detail-image").alt = act.name;
+      document.getElementById("act-detail-name").textContent = act.name;
+      document.getElementById("act-detail-bio").textContent = act.bio;
+      document.getElementById("act-detail-video").src = `https://www.youtube.com/embed/${act.videoId}`;
+
+      updateActFavoriteButton();
+
+      pages.forEach(p => p.classList.remove("active"));
+      document.getElementById("act-detail").classList.add("active");
+      document.body.classList.add("act-detail-open");
+      window.scrollTo(0, 0);
+    }
+
+    function closeActDetail() {
+      document.getElementById("act-detail").classList.remove("active");
+      document.body.classList.remove("act-detail-open");
+      document.getElementById("act-detail-video").src = "";
+
+      const returnPage = document.getElementById(previousPage);
+      if (returnPage) {
+        returnPage.classList.add("active");
+        const navBtn = document.querySelector(`.nav-btn[data-page="${previousPage}"]`);
+        if (navBtn) {
+          buttons.forEach(btn => btn.classList.remove("active"));
+          navBtn.classList.add("active");
+        }
+      }
+
+      currentActId = null;
+    }
+
+    document.getElementById("act-back-btn")?.addEventListener("click", closeActDetail);
+
+    document.getElementById("act-detail-favorite")?.addEventListener("click", () => {
+      if (!currentActId) return;
+      toggleFavorite(currentActId);
+      updateActFavoriteButton();
+      if (document.getElementById("schedule-grid").innerHTML) {
+        renderScheduleGrid();
+      }
+    });
+
     // ==================== SCHEDULE FUNCTIONALITY ====================
     let scheduleData = null;
     let currentDay = "saturday";
-    let favorites = JSON.parse(localStorage.getItem("ufestival-favorites")) || [];
 
     // Load schedule data
     async function loadScheduleData() {
@@ -993,7 +1300,13 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
             `;
 
             // Add click handler for act details
-            cell.querySelector('[data-act-id]').addEventListener("click", () => showActDetails(act));
+            cell.querySelector('[data-act-id]').addEventListener("click", () => {
+              if (actsById[act.id]) {
+                openActDetail(act.id);
+              } else {
+                showActDetails(act);
+              }
+            });
 
             // Add click handler for favorite button
             cell.querySelector(".favorite-btn").addEventListener("click", (e) => {
@@ -1089,8 +1402,11 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       });
     });
 
-    // Load schedule when page is loaded
-    window.addEventListener("load", loadScheduleData);
+    // Load data when page is loaded
+    window.addEventListener("load", () => {
+      loadActsData();
+      loadScheduleData();
+    });
 
     // ==================== NOTIFICATION SYSTEM ====================
     let notificationTimers = {};
