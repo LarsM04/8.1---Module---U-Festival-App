@@ -1,0 +1,532 @@
+{
+  "festival": {
+    "name": "U Festival 2026",
+    "date": "2026-09-05",
+    "location": "Strijkviertel, Utrecht",
+    "timezone": "Europe/Amsterdam"
+  },
+  "locations": [
+    { "id": "poton", "name": "Pôton", "color": "#247BA0" },
+    { "id": "lake", "name": "The Lake", "color": "#247BA0" },
+    { "id": "club", "name": "The Club", "color": "#247BA0" },
+    { "id": "hangar", "name": "Hangar", "color": "#247BA0" }
+  ],
+  "days": [
+    {
+      "id": "saturday",
+      "date": "2026-09-05",
+      "name": "Zaterdag",
+      "nameEn": "Saturday",
+      "acts": [
+        {
+          "id": "armin-van-buuren",
+          "name": "Armin van Buuren",
+          "location": "poton",
+          "startTime": "10:00",
+          "endTime": "11:00",
+          "description": "Wereldfaam DJ en producer uit Leiden. Armin van Buuren staat bekend om zijn progressive trance-sets.",
+          "descriptionEn": "World-famous DJ and producer from Leiden. Known for his progressive trance sets.",
+          "type": "DJ"
+        },
+        {
+          "id": "kensington",
+          "name": "Kensington",
+          "location": "poton",
+          "startTime": "12:00",
+          "endTime": "13:00",
+          "description": "Nederlandse rockband uit Amsterdam met catchy gitaarriffs en energieke live performances.",
+          "descriptionEn": "Dutch rock band from Amsterdam with catchy guitar riffs and energetic live performances.",
+          "type": "Band"
+        },
+        {
+          "id": "de-staat",
+          "name": "De Staat",
+          "location": "poton",
+          "startTime": "14:00",
+          "endTime": "15:00",
+          "description": "Nederlandse psychedelische rockband uit Utrecht. Bekend om hun experimentele geluid.",
+          "descriptionEn": "Dutch psychedelic rock band from Utrecht. Known for their experimental sound.",
+          "type": "Band"
+        },
+        {
+          "id": "navarone",
+          "name": "Navarone",
+          "location": "poton",
+          "startTime": "16:00",
+          "endTime": "17:00",
+          "description": "Nederlandse rapper en muziekproducent. Bekent voor zijn intelligente teksten.",
+          "descriptionEn": "Dutch rapper and music producer. Known for his intelligent lyrics.",
+          "type": "Hip-hop"
+        },
+        {
+          "id": "dotan",
+          "name": "Dotan",
+          "location": "poton",
+          "startTime": "17:00",
+          "endTime": "18:00",
+          "description": "Nederlandse singer-songwriter uit Amsterdam. Uitvoerder van popmuziek met diepgaande nummers.",
+          "descriptionEn": "Dutch singer-songwriter from Amsterdam. Performer of pop music with profound songs.",
+          "type": "Pop"
+        },
+        {
+          "id": "froukje",
+          "name": "Froukje",
+          "location": "poton",
+          "startTime": "22:00",
+          "endTime": "23:00",
+          "description": "Nederlandse zangeres. Bekend om haar warme stem en emotionele performances.",
+          "descriptionEn": "Dutch singer. Known for her warm voice and emotional performances.",
+          "type": "Pop"
+        },
+        {
+          "id": "talent-set-1",
+          "name": "Talent set 1",
+          "location": "lake",
+          "startTime": "10:00",
+          "endTime": "11:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-2",
+          "name": "Talent set 2",
+          "location": "lake",
+          "startTime": "11:00",
+          "endTime": "12:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-3",
+          "name": "Talent set 3",
+          "location": "lake",
+          "startTime": "12:30",
+          "endTime": "13:30",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-4",
+          "name": "Talent set 4",
+          "location": "lake",
+          "startTime": "14:00",
+          "endTime": "15:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-5",
+          "name": "Talent set 5",
+          "location": "lake",
+          "startTime": "16:00",
+          "endTime": "17:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-6",
+          "name": "Talent set 6",
+          "location": "lake",
+          "startTime": "18:00",
+          "endTime": "19:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-7",
+          "name": "Talent set 7",
+          "location": "lake",
+          "startTime": "22:00",
+          "endTime": "23:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "comedy",
+          "name": "Comedy",
+          "location": "club",
+          "startTime": "10:30",
+          "endTime": "11:30",
+          "description": "Stand-up comedy acts van lokale comedians.",
+          "descriptionEn": "Stand-up comedy acts from local comedians.",
+          "type": "Comedy"
+        },
+        {
+          "id": "lecture",
+          "name": "Lecture",
+          "location": "club",
+          "startTime": "12:00",
+          "endTime": "13:00",
+          "description": "Educatief programma met interessante sprekers.",
+          "descriptionEn": "Educational program with interesting speakers.",
+          "type": "Lecture"
+        },
+        {
+          "id": "theater",
+          "name": "Theater",
+          "location": "club",
+          "startTime": "13:30",
+          "endTime": "14:30",
+          "description": "Theaterperformances van lokale theatergroepen.",
+          "descriptionEn": "Theater performances from local theater groups.",
+          "type": "Theater"
+        },
+        {
+          "id": "movie",
+          "name": "Movie",
+          "location": "club",
+          "startTime": "15:00",
+          "endTime": "16:00",
+          "description": "Filmvertoning in de bioscoop.",
+          "descriptionEn": "Film screening in the cinema.",
+          "type": "Movie"
+        },
+        {
+          "id": "performance",
+          "name": "Performance",
+          "location": "club",
+          "startTime": "17:00",
+          "endTime": "18:00",
+          "description": "Live performance.",
+          "descriptionEn": "Live performance.",
+          "type": "Performance"
+        },
+        {
+          "id": "illusionist",
+          "name": "Illusionist",
+          "location": "club",
+          "startTime": "22:00",
+          "endTime": "23:00",
+          "description": "Magische illusieshow.",
+          "descriptionEn": "Magic illusion show.",
+          "type": "Show"
+        },
+        {
+          "id": "dj-set-1",
+          "name": "DJ set 1",
+          "location": "hangar",
+          "startTime": "10:00",
+          "endTime": "11:00",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-2",
+          "name": "DJ set 2",
+          "location": "hangar",
+          "startTime": "11:00",
+          "endTime": "12:00",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-3",
+          "name": "DJ set 3",
+          "location": "hangar",
+          "startTime": "12:30",
+          "endTime": "13:30",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-4",
+          "name": "DJ set 4",
+          "location": "hangar",
+          "startTime": "14:00",
+          "endTime": "15:00",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-5",
+          "name": "DJ set 5",
+          "location": "hangar",
+          "startTime": "15:30",
+          "endTime": "16:30",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-6",
+          "name": "DJ set 6",
+          "location": "hangar",
+          "startTime": "17:00",
+          "endTime": "18:00",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-7",
+          "name": "DJ set 7",
+          "location": "hangar",
+          "startTime": "18:30",
+          "endTime": "19:30",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-8",
+          "name": "DJ set 8",
+          "location": "hangar",
+          "startTime": "21:00",
+          "endTime": "22:00",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        }
+      ]
+    },
+    {
+      "id": "sunday",
+      "date": "2026-09-06",
+      "name": "Zondag",
+      "nameEn": "Sunday",
+      "acts": [
+        {
+          "id": "vetje-staal",
+          "name": "Vetje Staal",
+          "location": "poton",
+          "startTime": "10:30",
+          "endTime": "11:30",
+          "description": "Nederlandse muziekgroep.",
+          "descriptionEn": "Dutch music group.",
+          "type": "Band"
+        },
+        {
+          "id": "vampin-game",
+          "name": "Vampin Game",
+          "location": "poton",
+          "startTime": "13:00",
+          "endTime": "14:00",
+          "description": "Nederlandse band.",
+          "descriptionEn": "Dutch band.",
+          "type": "Band"
+        },
+        {
+          "id": "sophie-de-visser",
+          "name": "Sophie de Visser",
+          "location": "poton",
+          "startTime": "15:00",
+          "endTime": "16:00",
+          "description": "Nederlandse zangeres.",
+          "descriptionEn": "Dutch singer.",
+          "type": "Singer"
+        },
+        {
+          "id": "spinvis",
+          "name": "Spinvis",
+          "location": "poton",
+          "startTime": "17:00",
+          "endTime": "18:00",
+          "description": "Nederlandse singer-songwriter.",
+          "descriptionEn": "Dutch singer-songwriter.",
+          "type": "Singer"
+        },
+        {
+          "id": "talent-set-1-sun",
+          "name": "Talent set 1",
+          "location": "lake",
+          "startTime": "10:00",
+          "endTime": "11:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-2-sun",
+          "name": "Talent set 2",
+          "location": "lake",
+          "startTime": "11:00",
+          "endTime": "12:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-3-sun",
+          "name": "Talent set 3",
+          "location": "lake",
+          "startTime": "12:30",
+          "endTime": "13:30",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-4-sun",
+          "name": "Talent set 4",
+          "location": "lake",
+          "startTime": "14:00",
+          "endTime": "15:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-5-sun",
+          "name": "Talent set 5",
+          "location": "lake",
+          "startTime": "16:00",
+          "endTime": "17:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "talent-set-6-sun",
+          "name": "Talent set 6",
+          "location": "lake",
+          "startTime": "18:00",
+          "endTime": "19:00",
+          "description": "Showcase van getalenteerde lokale artiesten.",
+          "descriptionEn": "Showcase of talented local artists.",
+          "type": "Talent"
+        },
+        {
+          "id": "comedy-sun",
+          "name": "Comedy",
+          "location": "club",
+          "startTime": "10:30",
+          "endTime": "11:30",
+          "description": "Stand-up comedy acts.",
+          "descriptionEn": "Stand-up comedy acts.",
+          "type": "Comedy"
+        },
+        {
+          "id": "lecture-sun",
+          "name": "Lecture",
+          "location": "club",
+          "startTime": "12:00",
+          "endTime": "13:00",
+          "description": "Educational program.",
+          "descriptionEn": "Educational program.",
+          "type": "Lecture"
+        },
+        {
+          "id": "theater-sun",
+          "name": "Theater",
+          "location": "club",
+          "startTime": "13:30",
+          "endTime": "14:30",
+          "description": "Theater performances.",
+          "descriptionEn": "Theater performances.",
+          "type": "Theater"
+        },
+        {
+          "id": "movie-sun",
+          "name": "Movie",
+          "location": "club",
+          "startTime": "15:00",
+          "endTime": "16:00",
+          "description": "Film screening.",
+          "descriptionEn": "Film screening.",
+          "type": "Movie"
+        },
+        {
+          "id": "magic-show",
+          "name": "Magic Show",
+          "location": "club",
+          "startTime": "17:00",
+          "endTime": "18:00",
+          "description": "Magische show.",
+          "descriptionEn": "Magic show.",
+          "type": "Show"
+        },
+        {
+          "id": "dj-set-1-sun",
+          "name": "DJ set 1",
+          "location": "hangar",
+          "startTime": "10:00",
+          "endTime": "11:00",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-2-sun",
+          "name": "DJ set 2",
+          "location": "hangar",
+          "startTime": "11:00",
+          "endTime": "12:00",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-3-sun",
+          "name": "DJ set 3",
+          "location": "hangar",
+          "startTime": "12:30",
+          "endTime": "13:30",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-4-sun",
+          "name": "DJ set 4",
+          "location": "hangar",
+          "startTime": "14:00",
+          "endTime": "15:00",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-5-sun",
+          "name": "DJ set 5",
+          "location": "hangar",
+          "startTime": "15:30",
+          "endTime": "16:30",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-6-sun",
+          "name": "DJ set 6",
+          "location": "hangar",
+          "startTime": "17:00",
+          "endTime": "18:00",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-7-sun",
+          "name": "DJ set 7",
+          "location": "hangar",
+          "startTime": "18:30",
+          "endTime": "19:30",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        },
+        {
+          "id": "dj-set-8-sun",
+          "name": "DJ set 8",
+          "location": "hangar",
+          "startTime": "21:00",
+          "endTime": "22:00",
+          "description": "DJ set in Hangar.",
+          "descriptionEn": "DJ set in Hangar.",
+          "type": "DJ"
+        }
+      ]
+    }
+  ]
+}

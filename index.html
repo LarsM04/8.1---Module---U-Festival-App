@@ -230,7 +230,7 @@
        width: 100%;
        padding: clamp(14px, 2vw, 20px);
        background: linear-gradient(135deg, #247BA0 0%, #1f6b8f 100%);
-       border: 2px solid rgba(255, 255, 255, 0.18);
+       border: none;
        border-radius: 14px;
        color: var(--color-base);
        font-size: clamp(18px, 3vw, 22px);
@@ -240,7 +240,7 @@
        display: flex;
        justify-content: space-between;
        align-items: center;
-       transition: background 0.15s, transform 0.15s, border-color 0.15s;
+       transition: background 0.15s, transform 0.15s;
        box-shadow: 0 10px 25px rgba(36, 123, 160, 0.12);
      }
 
@@ -292,8 +292,7 @@
 
       .accordion-content-inner {
         background: var(--card-bg);
-        border: 2px solid var(--card-border);
-        border-top: none;
+        border: none;
         border-bottom-left-radius: 12px;
         border-bottom-right-radius: 12px;
         padding: clamp(14px, 2vw, 20px);
@@ -348,6 +347,190 @@
        font-weight: 700;
        color: var(--color-secondary);
      }
+
+    /* Schedule Grid Styles */
+    .schedule-grid-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      gap: 15px;
+    }
+
+    .schedule-grid-wrapper {
+      flex: 1;
+      overflow: auto;
+      border: 2px solid var(--card-border);
+      border-radius: 12px;
+      background: var(--card-bg);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .schedule-grid {
+      display: flex;
+      flex-direction: column;
+      min-width: max-content;
+      height: fit-content;
+    }
+
+    .schedule-grid-row {
+      display: flex;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .schedule-grid-row:last-child {
+      border-bottom: none;
+    }
+
+    .schedule-grid-header-row {
+      display: flex;
+      position: sticky;
+      top: 0;
+      background: var(--card-bg);
+      z-index: 10;
+      border-bottom: 2px solid var(--card-border);
+    }
+
+    .schedule-grid-location-col {
+      display: flex;
+      position: sticky;
+      left: 0;
+      min-width: 80px;
+      background: var(--card-bg);
+      z-index: 5;
+      border-right: 2px solid var(--card-border);
+    }
+
+    .schedule-grid-cell {
+      flex: 1;
+      min-width: 50px;
+      padding: 8px 4px;
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--map-text);
+      text-align: center;
+    }
+
+    .schedule-grid-time-header {
+      min-width: 50px;
+      padding: 10px 4px;
+      font-size: 12px;
+      font-weight: 700;
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+    }
+
+    .schedule-grid-location-label {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-secondary);
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .schedule-act-block {
+      flex: 1;
+      min-width: 50px;
+      padding: 6px;
+      border-right: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      cursor: pointer;
+      background: var(--card-bg);
+      transition: all 0.2s ease;
+    }
+
+    .schedule-act-block.empty {
+      background: transparent;
+    }
+
+    .schedule-act-block.has-act {
+      background: #247BA0;
+      color: white;
+      font-weight: 600;
+      font-size: 12px;
+      text-align: center;
+      border-radius: 6px;
+      margin: 2px;
+      padding: 8px 4px;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .schedule-act-block.has-act:hover {
+      opacity: 0.9;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .schedule-act-block.has-act.favorite {
+      border: 2px solid var(--color-accent);
+      box-shadow: 0 0 10px rgba(240, 50, 40, 0.3);
+    }
+
+    .schedule-act-block.has-act .act-name {
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .schedule-act-block.has-act .act-time {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .schedule-act-block.has-act .favorite-btn {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .schedule-act-block.has-act:hover .favorite-btn {
+      opacity: 1;
+    }
+
+    @media (max-width: 480px) {
+      .schedule-grid-cell {
+        min-width: 40px;
+        font-size: 11px;
+        padding: 6px 2px;
+      }
+
+      .schedule-act-block.has-act .act-name {
+        font-size: 11px;
+      }
+
+      .schedule-act-block.has-act .act-time {
+        font-size: 10px;
+      }
+    }
 
     #map.active {
       flex: 1;
@@ -602,20 +785,20 @@
 
     <!-- SCHEDULE -->
     <section id="schedule" class="page">
-       <h2 class="page-title" style="margin-bottom: 25px;">
+       <h2 class="page-title" style="margin-bottom: 20px;">
          LINE-UP'S SCHEDULE
        </h2>
 
-      <div class="schedule-tabs">
-        <button type="button" class="active">Saturday</button>
-        <button type="button">Sunday</button>
+      <div class="schedule-tabs" id="schedule-day-tabs">
+        <button type="button" class="active" data-day="saturday">Zaterdag / Saturday</button>
+        <button type="button" data-day="sunday">Zondag / Sunday</button>
       </div>
 
-       <h3 class="schedule-day-title">DAY</h3>
-
-      <div class="artist">ARTIST</div>
-      <div class="artist">ARTIST</div>
-      <div class="artist">ARTIST</div>
+      <div class="schedule-grid-container">
+        <div class="schedule-grid-wrapper">
+          <div class="schedule-grid" id="schedule-grid"></div>
+        </div>
+      </div>
     </section>
 
     <!-- MAP -->
@@ -719,6 +902,267 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         navigator.serviceWorker.register("./service-worker.js");
       });
     }
+
+    // ==================== SCHEDULE FUNCTIONALITY ====================
+    let scheduleData = null;
+    let currentDay = "saturday";
+    let favorites = JSON.parse(localStorage.getItem("ufestival-favorites")) || [];
+
+    // Load schedule data
+    async function loadScheduleData() {
+      try {
+        const response = await fetch("./data/schedule.json");
+        scheduleData = await response.json();
+        renderScheduleGrid();
+      } catch (error) {
+        console.error("Error loading schedule:", error);
+      }
+    }
+
+    // Render the schedule grid
+    function renderScheduleGrid() {
+      const gridContainer = document.getElementById("schedule-grid");
+      gridContainer.innerHTML = "";
+
+      const currentDayData = scheduleData.days.find(d => d.id === currentDay);
+      if (!currentDayData) return;
+
+      const locations = scheduleData.locations;
+      
+      // Generate time slots
+      const timeSlots = generateTimeSlots();
+      
+      // Header row with times
+      const headerRow = document.createElement("div");
+      headerRow.className = "schedule-grid-header-row";
+      
+      const headerLocationCell = document.createElement("div");
+      headerLocationCell.className = "schedule-grid-location-col";
+      const headerLocationLabel = document.createElement("div");
+      headerLocationLabel.className = "schedule-grid-location-label";
+      headerLocationLabel.textContent = "Locatie";
+      headerLocationCell.appendChild(headerLocationLabel);
+      headerRow.appendChild(headerLocationCell);
+      
+      timeSlots.forEach(time => {
+        const timeCell = document.createElement("div");
+        timeCell.className = "schedule-grid-time-header";
+        timeCell.textContent = time;
+        headerRow.appendChild(timeCell);
+      });
+      gridContainer.appendChild(headerRow);
+
+      // Location rows
+      locations.forEach(location => {
+        const row = document.createElement("div");
+        row.className = "schedule-grid-row";
+
+        // Location label
+        const locationCol = document.createElement("div");
+        locationCol.className = "schedule-grid-location-col";
+        const locationLabel = document.createElement("div");
+        locationLabel.className = "schedule-grid-location-label";
+        locationLabel.textContent = location.name;
+        locationCol.appendChild(locationLabel);
+        row.appendChild(locationCol);
+
+        // Time slots for this location
+        timeSlots.forEach(time => {
+          const cell = document.createElement("div");
+          cell.className = "schedule-act-block empty";
+
+          // Find act at this time and location
+          const act = currentDayData.acts.find(a => a.location === location.id && a.startTime === time);
+          
+          if (act) {
+            cell.classList.remove("empty");
+            cell.classList.add("has-act");
+            if (favorites.includes(act.id)) {
+              cell.classList.add("favorite");
+            }
+
+            const isFav = favorites.includes(act.id);
+            cell.innerHTML = `
+              <div style="width: 100%; cursor: pointer;" data-act-id="${act.id}">
+                <div class="act-name">${act.name}</div>
+                <div class="act-time">${act.startTime} - ${act.endTime}</div>
+              </div>
+              <button class="favorite-btn" title="Toggle favorite" data-act-id="${act.id}">
+                ${isFav ? "★" : "☆"}
+              </button>
+            `;
+
+            // Add click handler for act details
+            cell.querySelector('[data-act-id]').addEventListener("click", () => showActDetails(act));
+
+            // Add click handler for favorite button
+            cell.querySelector(".favorite-btn").addEventListener("click", (e) => {
+              e.stopPropagation();
+              toggleFavorite(act.id);
+              renderScheduleGrid();
+            });
+          }
+
+          row.appendChild(cell);
+        });
+
+        gridContainer.appendChild(row);
+      });
+    }
+
+    function generateTimeSlots() {
+      const slots = [];
+      for (let hour = 10; hour <= 23; hour++) {
+        for (let min = 0; min < 60; min += 15) {
+          slots.push(`${String(hour).padStart(2, "0")}:${String(min).padStart(2, "0")}`);
+        }
+      }
+      return slots;
+    }
+
+    function toggleFavorite(actId) {
+      const index = favorites.indexOf(actId);
+      if (index > -1) {
+        favorites.splice(index, 1);
+      } else {
+        favorites.push(actId);
+      }
+      localStorage.setItem("ufestival-favorites", JSON.stringify(favorites));
+    }
+
+    function showActDetails(act) {
+      // Create and show modal with act details
+      const modal = document.createElement("div");
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      `;
+
+      const content = document.createElement("div");
+      content.style.cssText = `
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 24px;
+        max-width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        color: var(--text);
+      `;
+
+      content.innerHTML = `
+        <h2 style="color: var(--color-secondary); margin-bottom: 12px;">${act.name}</h2>
+        <p style="margin-bottom: 8px;"><strong>Locatie:</strong> ${scheduleData.locations.find(l => l.id === act.location)?.name}</p>
+        <p style="margin-bottom: 8px;"><strong>Tijd:</strong> ${act.startTime} - ${act.endTime}</p>
+        <p style="margin-bottom: 8px;"><strong>Type:</strong> ${act.type}</p>
+        <p style="margin-bottom: 16px; margin-top: 12px; line-height: 1.6;">${act.description}</p>
+        <button style="background: var(--color-accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 700;">
+          Close
+        </button>
+      `;
+
+      const closeBtn = content.querySelector("button");
+      closeBtn.addEventListener("click", () => modal.remove());
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) modal.remove();
+      });
+
+      modal.appendChild(content);
+      document.body.appendChild(modal);
+    }
+
+    // Day tab switching
+    const dayTabs = document.querySelectorAll("#schedule-day-tabs button");
+    dayTabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        dayTabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        currentDay = tab.dataset.day;
+        renderScheduleGrid();
+      });
+    });
+
+    // Load schedule when page is loaded
+    window.addEventListener("load", loadScheduleData);
+
+    // ==================== NOTIFICATION SYSTEM ====================
+    let notificationTimers = {};
+    const notificationIntervals = [15, 10, 5]; // minutes before event
+
+    function startNotificationSystem() {
+      // Request notification permission if not already granted
+      if ("Notification" in window && Notification.permission === "default") {
+        Notification.requestPermission();
+      }
+
+      // Set up notifications for all acts
+      if (scheduleData) {
+        scheduleData.days.forEach(day => {
+          const dayDate = new Date(day.date);
+          day.acts.forEach(act => {
+            setupActNotifications(act, dayDate);
+          });
+        });
+      }
+    }
+
+    function setupActNotifications(act, dayDate) {
+      const [hours, minutes] = act.startTime.split(":").map(Number);
+      const actTime = new Date(dayDate);
+      actTime.setHours(hours, minutes, 0, 0);
+
+      notificationIntervals.forEach(minutesBefore => {
+        const notifyTime = new Date(actTime.getTime() - minutesBefore * 60000);
+        const now = new Date();
+
+        if (notifyTime > now) {
+          const timeUntilNotification = notifyTime.getTime() - now.getTime();
+          const timerKey = `${act.id}-${minutesBefore}`;
+
+          notificationTimers[timerKey] = setTimeout(() => {
+            sendNotification(act, minutesBefore);
+          }, timeUntilNotification);
+        }
+      });
+    }
+
+    function sendNotification(act, minutesBefore) {
+      if ("Notification" in window && Notification.permission === "granted") {
+        const location = scheduleData.locations.find(l => l.id === act.location);
+        const title = minutesBefore === 5 ? "🎶 Nu bezig!" : `${minutesBefore} min tot ${act.name}`;
+        const options = {
+          body: `${act.name} - ${act.startTime} @ ${location?.name}`,
+          icon: "assets/icons/logo_white.svg",
+          badge: "assets/icons/logo_white.svg",
+          tag: act.id,
+          requireInteraction: minutesBefore <= 5
+        };
+
+        if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.controller.postMessage({
+            type: "SHOW_NOTIFICATION",
+            title: title,
+            options: options
+          });
+        } else {
+          new Notification(title, options);
+        }
+      }
+    }
+
+    // Start notifications when schedule data is loaded
+    window.addEventListener("load", () => {
+      if ("Notification" in window && Notification.permission === "granted") {
+        setTimeout(startNotificationSystem, 1000);
+      }
+    });
   </script>
 
 </body>
