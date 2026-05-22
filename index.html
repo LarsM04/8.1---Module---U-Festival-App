@@ -158,6 +158,11 @@
       overflow-y: auto;
     }
 
+    body.map-page-active main {
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
+
     .page {
       display: none;
       animation: fade 0.2s ease-in-out;
@@ -577,10 +582,19 @@
       cursor: grabbing;
     }
 
+    .map-drag-surface {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      touch-action: none;
+    }
+
     .map-canvas {
       position: absolute;
       top: 0;
       left: 0;
+      z-index: 2;
+      pointer-events: none;
       will-change: transform;
     }
 
@@ -625,7 +639,8 @@
       border: none;
       background: none;
       cursor: pointer;
-      z-index: 2;
+      z-index: 3;
+      pointer-events: auto;
       transform: translate(-50%, -50%);
     }
 
@@ -1286,6 +1301,7 @@
     <section id="map" class="page">
       <div class="map-box" id="map-box">
         <div class="map-viewport" id="map-viewport">
+          <div class="map-drag-surface" id="map-drag-surface" aria-hidden="true"></div>
           <div class="map-canvas" id="map-canvas">
             <div class="map-content" id="map-content">
               <object
@@ -1377,6 +1393,8 @@
         pages.forEach(p => p.classList.remove("active"));
 
         document.getElementById(page).classList.add("active");
+
+        document.body.classList.toggle("map-page-active", page === "map");
 
         if (page === "map") {
           refreshMapLayout();
@@ -1923,6 +1941,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     class FestivalMap {
       constructor(options) {
         this.viewport = options.viewport;
+        this.dragSurface = options.dragSurface;
         this.canvas = options.canvas;
         this.content = options.content;
         this.userDot = options.userDot;
@@ -1952,10 +1971,10 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         this.onWheel = this.onWheel.bind(this);
 
         window.addEventListener("resize", this.onResize);
-        this.viewport.addEventListener("pointerdown", this.onPointerDown);
-        this.viewport.addEventListener("pointermove", this.onPointerMove);
-        this.viewport.addEventListener("pointerup", this.onPointerUp);
-        this.viewport.addEventListener("pointercancel", this.onPointerUp);
+        this.dragSurface.addEventListener("pointerdown", this.onPointerDown);
+        this.dragSurface.addEventListener("pointermove", this.onPointerMove);
+        this.dragSurface.addEventListener("pointerup", this.onPointerUp);
+        this.dragSurface.addEventListener("pointercancel", this.onPointerUp);
         this.viewport.addEventListener("wheel", this.onWheel, { passive: false });
       }
 
@@ -1969,13 +1988,16 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         this.needsFit = false;
         const scaleX = vpW / this.mapWidth;
         const scaleY = vpH / this.mapHeight;
-        // cover: vul het hele vak (geen letterbox-randen)
-        this.scale = Math.max(scaleX, scaleY);
+        const coverScale = Math.max(scaleX, scaleY);
+        const containScale = Math.min(scaleX, scaleY);
+        // Iets over cover = ruimte om horizontaal én verticaal te slepen, vak blijft gevuld
+        this.scale = coverScale * 1.06;
+        this.minScale = containScale;
+        this.maxScale = Math.max(this.maxScale, coverScale * 3);
         if (!Number.isFinite(this.scale) || this.scale <= 0) {
           this.needsFit = true;
           return;
         }
-        this.minScale = this.scale;
         this.translateX = (vpW - this.mapWidth * this.scale) / 2;
         this.translateY = (vpH - this.mapHeight * this.scale) / 2;
         this.clampTranslation();
@@ -2117,8 +2139,10 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       }
 
       onPointerDown(e) {
-        if (e.target.closest(".map-marker, .map-zoom-controls, .map-info-panel")) return;
-        this.viewport.setPointerCapture(e.pointerId);
+        if (e.target.closest(".map-zoom-controls, .map-info-panel")) return;
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+        e.preventDefault();
+        this.dragSurface.setPointerCapture(e.pointerId);
         const point = this.getViewportPoint(e.clientX, e.clientY);
         this.pointers.set(e.pointerId, point);
 
@@ -2135,6 +2159,10 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         if (!this.pointers.has(e.pointerId)) return;
         const point = this.getViewportPoint(e.clientX, e.clientY);
         this.pointers.set(e.pointerId, point);
+
+        if (this.isDragging || this.pointers.size >= 2) {
+          e.preventDefault();
+        }
 
         if (this.pointers.size >= 2) {
           const distance = this.getPinchDistance();
@@ -2170,8 +2198,8 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
           this.isDragging = false;
           this.viewport.classList.remove("is-dragging");
         }
-        if (this.viewport.hasPointerCapture(e.pointerId)) {
-          this.viewport.releasePointerCapture(e.pointerId);
+        if (this.dragSurface.hasPointerCapture(e.pointerId)) {
+          this.dragSurface.releasePointerCapture(e.pointerId);
         }
       }
 
@@ -2185,11 +2213,12 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
     async function initFestivalMap() {
       const viewport = document.getElementById("map-viewport");
+      const dragSurface = document.getElementById("map-drag-surface");
       const canvas = document.getElementById("map-canvas");
       const content = document.getElementById("map-content");
       const userDot = document.getElementById("map-user-location");
       const loadError = document.getElementById("map-load-error");
-      if (!viewport || !canvas || !content) return;
+      if (!viewport || !dragSurface || !canvas || !content) return;
 
       await loadMapMarkersData();
 
@@ -2203,6 +2232,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
       festivalMap = new FestivalMap({
         viewport,
+        dragSurface,
         canvas,
         content,
         userDot,
