@@ -544,6 +544,7 @@
 
     #map.active {
       flex: 1;
+      min-height: clamp(320px, 60vh, 720px);
     }
 
     .map-box {
@@ -551,14 +552,214 @@
       border: 2px solid var(--card-border);
       border-radius: 12px;
       flex: 1;
-      min-height: clamp(280px, 55vh, 700px);
       width: 100%;
+      height: clamp(320px, 60vh, 720px);
+      min-height: clamp(320px, 60vh, 720px);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(20px, 4vw, 28px);
-      font-weight: 400;
-      color: var(--map-text);
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      touch-action: none;
+    }
+
+    .map-viewport {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      width: 100%;
+      overflow: hidden;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    .map-viewport.is-dragging {
+      cursor: grabbing;
+    }
+
+    .map-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: 0 0;
+      will-change: transform;
+    }
+
+    .map-canvas img.map-image {
+      display: block;
+      width: 2331px;
+      height: auto;
+      max-width: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    .map-marker {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: none;
+      background: none;
+      cursor: pointer;
+      z-index: 2;
+      transform: translate(-50%, -50%);
+    }
+
+    .map-marker--wide {
+      width: 96px;
+      height: 26px;
+    }
+
+    .map-marker img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+    }
+
+    .map-marker:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+      border-radius: 50%;
+    }
+
+    .map-user-location {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #247BA0;
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 2px rgba(36, 123, 160, 0.5);
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      pointer-events: none;
+      display: none;
+    }
+
+    .map-user-location.visible {
+      display: block;
+    }
+
+    .map-user-location::after {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      background: rgba(36, 123, 160, 0.25);
+      animation: map-pulse 2s ease-out infinite;
+    }
+
+    @keyframes map-pulse {
+      0% { transform: scale(0.6); opacity: 1; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+
+    .map-zoom-controls {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      z-index: 5;
+    }
+
+    .map-zoom-controls button {
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--card-bg);
+      color: var(--color-secondary);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .map-zoom-controls button:hover {
+      background: var(--placeholder-bg);
+    }
+
+    .map-info-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 6;
+      background: var(--card-bg);
+      border-top: 2px solid var(--card-border);
+      border-radius: 12px 12px 0 0;
+      padding: 16px 18px 20px;
+      transform: translateY(110%);
+      transition: transform 0.25s ease;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.12);
+      max-height: 45%;
+      overflow-y: auto;
+    }
+
+    .map-info-panel.open {
+      transform: translateY(0);
+    }
+
+    .map-info-panel h3 {
+      color: var(--color-secondary);
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .map-info-panel .map-info-subtitle {
+      color: var(--text);
+      opacity: 0.75;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .map-info-panel .map-info-section {
+      margin-bottom: 10px;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .map-info-panel .map-info-label {
+      font-weight: 700;
+      color: var(--color-secondary);
+    }
+
+    .map-info-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      font-size: 24px;
+      line-height: 1;
+      cursor: pointer;
+      color: var(--text);
+      opacity: 0.6;
+    }
+
+    .map-info-close:hover {
+      opacity: 1;
+    }
+
+    .map-info-act-link {
+      display: inline-block;
+      margin-top: 8px;
+      color: var(--color-accent);
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: none;
+      padding: 0;
+      font-size: 15px;
+      text-decoration: underline;
     }
 
     nav {
@@ -1060,8 +1261,29 @@
 
     <!-- MAP -->
     <section id="map" class="page">
-      <div class="map-box">
-        MAP HERE
+      <div class="map-box" id="map-box">
+        <div class="map-viewport" id="map-viewport">
+          <div class="map-canvas" id="map-canvas">
+            <img
+              class="map-image"
+              id="map-image"
+              src="assets/map/map/kaart_festival_no_markers.svg"
+              alt="Kaart festivalterrein"
+              draggable="false"
+            />
+            <div class="map-user-location" id="map-user-location" title="Jouw locatie" aria-hidden="true"></div>
+          </div>
+        </div>
+        <div class="map-zoom-controls" aria-label="Zoom bediening">
+          <button type="button" id="map-zoom-in" aria-label="Inzoomen">+</button>
+          <button type="button" id="map-zoom-out" aria-label="Uitzoomen">−</button>
+        </div>
+        <div class="map-info-panel" id="map-info-panel" role="dialog" aria-labelledby="map-info-title" aria-hidden="true">
+          <button type="button" class="map-info-close" id="map-info-close" aria-label="Sluiten">×</button>
+          <h3 id="map-info-title"></h3>
+          <p class="map-info-subtitle" id="map-info-subtitle"></p>
+          <div id="map-info-body"></div>
+        </div>
       </div>
     </section>
 
@@ -1105,6 +1327,7 @@
     </button>
   </nav>
 
+  <script src="data/map-markers.js"></script>
   <script>
     const buttons = document.querySelectorAll(".nav-btn");
     const pages = document.querySelectorAll(".page");
@@ -1126,6 +1349,10 @@
         pages.forEach(p => p.classList.remove("active"));
 
         document.getElementById(page).classList.add("active");
+
+        if (page === "map") {
+          refreshMapLayout();
+        }
       });
     });
 
@@ -1503,7 +1730,506 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     window.addEventListener("load", () => {
       loadActsData();
       loadScheduleData();
+      initFestivalMap();
     });
+
+    // ==================== FESTIVAL MAP ====================
+    let mapMarkersData = null;
+    let festivalMap = null;
+
+    async function loadMapMarkersData() {
+      if (window.MAP_MARKERS_DATA) {
+        mapMarkersData = window.MAP_MARKERS_DATA;
+        return;
+      }
+      try {
+        const response = await fetch("./data/map-markers.json");
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        mapMarkersData = await response.json();
+      } catch (error) {
+        console.error("Error loading map markers:", error);
+        mapMarkersData = {
+          map: {
+            image: "assets/map/map/kaart_festival_no_markers.svg",
+            width: 2330.58,
+            height: 1353.19
+          },
+          markers: []
+        };
+      }
+    }
+
+    function refreshMapLayout() {
+      if (!festivalMap) return;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const mapImage = document.getElementById("map-image");
+          if (mapImage?.naturalWidth > 0) {
+            festivalMap.updateMapSize(mapImage.naturalWidth, mapImage.naturalHeight);
+          }
+          festivalMap.fitToViewport();
+        });
+      });
+    }
+
+    function timeToMinutes(time) {
+      const [hours, minutes] = time.split(":").map(Number);
+      return hours * 60 + minutes;
+    }
+
+    function getScheduleDayForToday() {
+      if (!scheduleData) return null;
+      const today = new Date().toISOString().slice(0, 10);
+      const match = scheduleData.days.find(d => d.date === today);
+      return match || scheduleData.days.find(d => d.id === currentDay) || scheduleData.days[0];
+    }
+
+    function getActsAtLocation(locationId) {
+      const day = getScheduleDayForToday();
+      if (!day) return [];
+      return day.acts
+        .filter(act => act.location === locationId)
+        .sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+    }
+
+    function getCurrentActAtLocation(locationId) {
+      const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
+      return getActsAtLocation(locationId).find(act => {
+        const start = timeToMinutes(act.startTime);
+        const end = timeToMinutes(act.endTime);
+        return nowMinutes >= start && nowMinutes < end;
+      }) || null;
+    }
+
+    function getNextActAtLocation(locationId) {
+      const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
+      return getActsAtLocation(locationId).find(act => timeToMinutes(act.startTime) > nowMinutes) || null;
+    }
+
+    function getFacilityLabel(facility) {
+      const labels = {
+        firstAid: "EHBO / First aid",
+        food: "Eten & drinken",
+        bar: "Bar",
+        toilet: "Toiletten",
+        merchandise: "Merchandise",
+        locker: "Lockers",
+        iceCream: "IJs"
+      };
+      return labels[facility] || facility;
+    }
+
+    function openMapInfoPanel(marker) {
+      const panel = document.getElementById("map-info-panel");
+      const title = document.getElementById("map-info-title");
+      const subtitle = document.getElementById("map-info-subtitle");
+      const body = document.getElementById("map-info-body");
+
+      title.textContent = marker.title;
+      subtitle.textContent = marker.description || "";
+      body.innerHTML = "";
+
+      if (marker.type === "stage" && marker.locationId) {
+        const location = scheduleData?.locations.find(l => l.id === marker.locationId);
+        if (location) {
+          subtitle.textContent = location.name + (marker.description ? " — " + marker.description : "");
+        }
+
+        const currentAct = getCurrentActAtLocation(marker.locationId);
+        const nextAct = getNextActAtLocation(marker.locationId);
+
+        const nowSection = document.createElement("div");
+        nowSection.className = "map-info-section";
+        nowSection.innerHTML = `<span class="map-info-label">Nu:</span> `;
+        if (currentAct) {
+          nowSection.innerHTML += `${currentAct.name} (${currentAct.startTime} – ${currentAct.endTime})`;
+          if (actsById[currentAct.id]) {
+            const link = document.createElement("button");
+            link.type = "button";
+            link.className = "map-info-act-link";
+            link.textContent = "Bekijk act";
+            link.addEventListener("click", () => {
+              closeMapInfoPanel();
+              openActDetail(currentAct.id);
+            });
+            body.appendChild(nowSection);
+            body.appendChild(link);
+          } else {
+            body.appendChild(nowSection);
+          }
+        } else {
+          nowSection.innerHTML += "Geen optreden op dit moment";
+          body.appendChild(nowSection);
+        }
+
+        const nextSection = document.createElement("div");
+        nextSection.className = "map-info-section";
+        nextSection.innerHTML = `<span class="map-info-label">Volgende:</span> `;
+        if (nextAct) {
+          nextSection.innerHTML += `${nextAct.name} om ${nextAct.startTime}`;
+        } else {
+          nextSection.innerHTML += "Geen verdere acts vandaag";
+        }
+        body.appendChild(nextSection);
+      } else if (marker.type === "facility") {
+        const info = document.createElement("div");
+        info.className = "map-info-section";
+        info.textContent = getFacilityLabel(marker.facility);
+        body.appendChild(info);
+      } else if (marker.type === "entrance") {
+        const info = document.createElement("div");
+        info.className = "map-info-section";
+        info.textContent = "Hoofdingang en uitgang van het festivalterrein.";
+        body.appendChild(info);
+      }
+
+      panel.classList.add("open");
+      panel.setAttribute("aria-hidden", "false");
+    }
+
+    function closeMapInfoPanel() {
+      const panel = document.getElementById("map-info-panel");
+      panel.classList.remove("open");
+      panel.setAttribute("aria-hidden", "true");
+      festivalMap?.clearActiveMarker();
+    }
+
+    document.getElementById("map-info-close")?.addEventListener("click", closeMapInfoPanel);
+
+    class FestivalMap {
+      constructor(options) {
+        this.viewport = options.viewport;
+        this.canvas = options.canvas;
+        this.userDot = options.userDot;
+        this.markers = [];
+        this.scale = 1;
+        this.minScale = 1;
+        this.maxScale = 4;
+        this.translateX = 0;
+        this.translateY = 0;
+        this.mapWidth = options.mapWidth;
+        this.mapHeight = options.mapHeight;
+        this.needsFit = true;
+        this.activeMarker = null;
+
+        this.isDragging = false;
+        this.lastPointer = { x: 0, y: 0 };
+        this.pointers = new Map();
+        this.lastPinchDistance = 0;
+
+        this.onResize = this.onResize.bind(this);
+        this.onPointerDown = this.onPointerDown.bind(this);
+        this.onPointerMove = this.onPointerMove.bind(this);
+        this.onPointerUp = this.onPointerUp.bind(this);
+        this.onWheel = this.onWheel.bind(this);
+
+        window.addEventListener("resize", this.onResize);
+        this.viewport.addEventListener("pointerdown", this.onPointerDown);
+        this.viewport.addEventListener("pointermove", this.onPointerMove);
+        this.viewport.addEventListener("pointerup", this.onPointerUp);
+        this.viewport.addEventListener("pointercancel", this.onPointerUp);
+        this.viewport.addEventListener("wheel", this.onWheel, { passive: false });
+      }
+
+      fitToViewport() {
+        const vpW = this.viewport.clientWidth;
+        const vpH = this.viewport.clientHeight;
+        if (vpW < 10 || vpH < 10) {
+          this.needsFit = true;
+          return;
+        }
+        this.needsFit = false;
+        const scaleX = vpW / this.mapWidth;
+        const scaleY = vpH / this.mapHeight;
+        this.scale = Math.min(scaleX, scaleY);
+        if (!Number.isFinite(this.scale) || this.scale <= 0) {
+          this.needsFit = true;
+          return;
+        }
+        this.minScale = this.scale;
+        this.translateX = (vpW - this.mapWidth * this.scale) / 2;
+        this.translateY = (vpH - this.mapHeight * this.scale) / 2;
+        this.clampTranslation();
+        this.applyTransform();
+      }
+
+      applyTransform() {
+        const scale = this.scale > 0 ? this.scale : 1;
+        this.canvas.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${scale})`;
+        const counterScale = 1 / scale;
+        this.markers.forEach(({ el }) => {
+          el.style.transform = `translate(-50%, -50%) scale(${counterScale})`;
+        });
+        if (this.userDot.classList.contains("visible")) {
+          this.userDot.style.transform = `translate(-50%, -50%) scale(${counterScale})`;
+        }
+      }
+
+      clampTranslation() {
+        const vpW = this.viewport.clientWidth;
+        const vpH = this.viewport.clientHeight;
+        const mapScreenW = this.mapWidth * this.scale;
+        const mapScreenH = this.mapHeight * this.scale;
+
+        if (mapScreenW <= vpW) {
+          this.translateX = (vpW - mapScreenW) / 2;
+        } else {
+          const minX = vpW - mapScreenW;
+          this.translateX = Math.min(0, Math.max(minX, this.translateX));
+        }
+
+        if (mapScreenH <= vpH) {
+          this.translateY = (vpH - mapScreenH) / 2;
+        } else {
+          const minY = vpH - mapScreenH;
+          this.translateY = Math.min(0, Math.max(minY, this.translateY));
+        }
+      }
+
+      zoomAt(factor, centerX, centerY) {
+        const newScale = Math.min(this.maxScale, Math.max(this.minScale, this.scale * factor));
+        const scaleRatio = newScale / this.scale;
+        this.translateX = centerX - (centerX - this.translateX) * scaleRatio;
+        this.translateY = centerY - (centerY - this.translateY) * scaleRatio;
+        this.scale = newScale;
+        this.clampTranslation();
+        this.applyTransform();
+      }
+
+      zoomIn() {
+        const cx = this.viewport.clientWidth / 2;
+        const cy = this.viewport.clientHeight / 2;
+        this.zoomAt(1.35, cx, cy);
+      }
+
+      zoomOut() {
+        const cx = this.viewport.clientWidth / 2;
+        const cy = this.viewport.clientHeight / 2;
+        this.zoomAt(1 / 1.35, cx, cy);
+      }
+
+      setUserLocation(x, y) {
+        this.userDot.style.left = `${x}%`;
+        this.userDot.style.top = `${y}%`;
+        this.userDot.classList.add("visible");
+        this.applyTransform();
+      }
+
+      addMarker(markerData, onSelect) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "map-marker" + (markerData.wide ? " map-marker--wide" : "");
+        btn.style.left = `${markerData.x}%`;
+        btn.style.top = `${markerData.y}%`;
+        btn.setAttribute("aria-label", markerData.title);
+
+        const img = document.createElement("img");
+        img.src = markerData.icon;
+        img.alt = "";
+        btn.appendChild(img);
+
+        btn.addEventListener("pointerdown", (e) => e.stopPropagation());
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          this.setActiveMarker(btn);
+          onSelect(markerData);
+        });
+
+        this.canvas.appendChild(btn);
+        this.markers.push({ el: btn, data: markerData });
+      }
+
+      setActiveMarker(el) {
+        if (this.activeMarker) {
+          this.activeMarker.style.filter = "";
+        }
+        this.activeMarker = el;
+        if (el) {
+          el.style.filter = "drop-shadow(0 0 6px rgba(240, 50, 40, 0.9))";
+        }
+      }
+
+      clearActiveMarker() {
+        this.setActiveMarker(null);
+      }
+
+      onResize() {
+        if (this.needsFit || this.scale <= 0) {
+          this.fitToViewport();
+          return;
+        }
+        this.clampTranslation();
+        this.applyTransform();
+      }
+
+      updateMapSize(width, height) {
+        if (width > 0 && height > 0) {
+          this.mapWidth = width;
+          this.mapHeight = height;
+        }
+      }
+
+      getViewportPoint(clientX, clientY) {
+        const rect = this.viewport.getBoundingClientRect();
+        return { x: clientX - rect.left, y: clientY - rect.top };
+      }
+
+      getPinchDistance() {
+        const pts = [...this.pointers.values()];
+        if (pts.length < 2) return 0;
+        const dx = pts[0].x - pts[1].x;
+        const dy = pts[0].y - pts[1].y;
+        return Math.hypot(dx, dy);
+      }
+
+      getPinchCenter() {
+        const pts = [...this.pointers.values()];
+        if (pts.length < 2) return { x: 0, y: 0 };
+        return {
+          x: (pts[0].x + pts[1].x) / 2,
+          y: (pts[0].y + pts[1].y) / 2
+        };
+      }
+
+      onPointerDown(e) {
+        if (e.target.closest(".map-marker, .map-zoom-controls, .map-info-panel")) return;
+        this.viewport.setPointerCapture(e.pointerId);
+        const point = this.getViewportPoint(e.clientX, e.clientY);
+        this.pointers.set(e.pointerId, point);
+
+        if (this.pointers.size === 2) {
+          this.lastPinchDistance = this.getPinchDistance();
+        } else if (this.pointers.size === 1) {
+          this.isDragging = true;
+          this.lastPointer = point;
+          this.viewport.classList.add("is-dragging");
+        }
+      }
+
+      onPointerMove(e) {
+        if (!this.pointers.has(e.pointerId)) return;
+        const point = this.getViewportPoint(e.clientX, e.clientY);
+        this.pointers.set(e.pointerId, point);
+
+        if (this.pointers.size >= 2) {
+          const distance = this.getPinchDistance();
+          if (this.lastPinchDistance > 0) {
+            const factor = distance / this.lastPinchDistance;
+            const center = this.getPinchCenter();
+            const newScale = Math.min(this.maxScale, Math.max(this.minScale, this.scale * factor));
+            const scaleRatio = newScale / this.scale;
+            this.translateX = center.x - (center.x - this.translateX) * scaleRatio;
+            this.translateY = center.y - (center.y - this.translateY) * scaleRatio;
+            this.scale = newScale;
+            this.clampTranslation();
+            this.applyTransform();
+          }
+          this.lastPinchDistance = distance;
+        } else if (this.isDragging && this.pointers.size === 1) {
+          const dx = point.x - this.lastPointer.x;
+          const dy = point.y - this.lastPointer.y;
+          this.translateX += dx;
+          this.translateY += dy;
+          this.lastPointer = point;
+          this.clampTranslation();
+          this.applyTransform();
+        }
+      }
+
+      onPointerUp(e) {
+        this.pointers.delete(e.pointerId);
+        if (this.pointers.size < 2) {
+          this.lastPinchDistance = 0;
+        }
+        if (this.pointers.size === 0) {
+          this.isDragging = false;
+          this.viewport.classList.remove("is-dragging");
+        }
+        if (this.viewport.hasPointerCapture(e.pointerId)) {
+          this.viewport.releasePointerCapture(e.pointerId);
+        }
+      }
+
+      onWheel(e) {
+        e.preventDefault();
+        const point = this.getViewportPoint(e.clientX, e.clientY);
+        const factor = e.deltaY < 0 ? 1.12 : 1 / 1.12;
+        this.zoomAt(factor, point.x, point.y);
+      }
+    }
+
+    async function initFestivalMap() {
+      const viewport = document.getElementById("map-viewport");
+      const canvas = document.getElementById("map-canvas");
+      const userDot = document.getElementById("map-user-location");
+      if (!viewport || !canvas) return;
+
+      await loadMapMarkersData();
+
+      const mapImage = document.getElementById("map-image");
+      if (mapMarkersData.map?.image) {
+        mapImage.src = mapMarkersData.map.image;
+      }
+
+      const mapWidth = mapMarkersData.map?.width || 2330.58;
+      const mapHeight = mapMarkersData.map?.height || 1353.19;
+      mapImage.style.width = `${Math.round(mapWidth)}px`;
+
+      festivalMap = new FestivalMap({
+        viewport,
+        canvas,
+        userDot,
+        mapWidth,
+        mapHeight
+      });
+
+      mapMarkersData.markers.forEach(marker => {
+        festivalMap.addMarker(marker, openMapInfoPanel);
+      });
+
+      const fitMap = () => {
+        if (mapImage.naturalWidth > 0 && mapImage.naturalHeight > 0) {
+          festivalMap.updateMapSize(mapImage.naturalWidth, mapImage.naturalHeight);
+        }
+        if (document.getElementById("map").classList.contains("active")) {
+          festivalMap.fitToViewport();
+        } else {
+          festivalMap.needsFit = true;
+        }
+      };
+
+      mapImage.addEventListener("error", () => {
+        console.error("Kaartafbeelding kon niet laden:", mapImage.src);
+        viewport.innerHTML = '<p style="padding:16px;color:var(--color-secondary);text-align:center;">Kaart kon niet laden. Open de app via een lokale server (Live Server of XAMPP).</p>';
+      });
+
+      if (mapImage.complete && mapImage.naturalWidth > 0) {
+        fitMap();
+      } else {
+        mapImage.addEventListener("load", fitMap, { once: true });
+      }
+
+      const mapResizeObserver = new ResizeObserver(() => {
+        if (document.getElementById("map").classList.contains("active")) {
+          festivalMap.onResize();
+        }
+      });
+      mapResizeObserver.observe(viewport);
+
+      document.getElementById("map-zoom-in")?.addEventListener("click", () => festivalMap.zoomIn());
+      document.getElementById("map-zoom-out")?.addEventListener("click", () => festivalMap.zoomOut());
+
+      // Voorlopige gebruikerslocatie bij ingang; later uit te breiden met GPS-kalibratie
+      festivalMap.setUserLocation(69, 85);
+
+      const mapPage = document.getElementById("map");
+      const mapPageObserver = new MutationObserver(() => {
+        if (mapPage.classList.contains("active")) {
+          refreshMapLayout();
+        }
+      });
+      mapPageObserver.observe(mapPage, { attributes: true, attributeFilter: ["class"] });
+    }
 
     // ==================== NOTIFICATION SYSTEM ====================
     let notificationTimers = {};

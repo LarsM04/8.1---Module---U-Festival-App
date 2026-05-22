@@ -1,0 +1,13 @@
+# Render.com – Static Site configuratie
+# Zie README.md voor stap-voor-stap instructies
+
+services:
+  - type: web
+    name: u-festival-app
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: .
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: public, max-age=3600
