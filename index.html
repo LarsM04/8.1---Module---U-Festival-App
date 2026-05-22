@@ -548,7 +548,7 @@
     }
 
     .map-box {
-      background: var(--map-bg);
+      background: #3c824a;
       border: 2px solid var(--card-border);
       border-radius: 12px;
       flex: 1;
@@ -570,6 +570,7 @@
       overflow: hidden;
       touch-action: none;
       cursor: grab;
+      background: #3c824a;
     }
 
     .map-viewport.is-dragging {
@@ -1968,7 +1969,8 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         this.needsFit = false;
         const scaleX = vpW / this.mapWidth;
         const scaleY = vpH / this.mapHeight;
-        this.scale = Math.min(scaleX, scaleY);
+        // cover: vul het hele vak (geen letterbox-randen)
+        this.scale = Math.max(scaleX, scaleY);
         if (!Number.isFinite(this.scale) || this.scale <= 0) {
           this.needsFit = true;
           return;
@@ -2000,18 +2002,18 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         const vpH = this.viewport.clientHeight;
         const mapScreenW = this.mapWidth * this.scale;
         const mapScreenH = this.mapHeight * this.scale;
+        const minX = vpW - mapScreenW;
+        const minY = vpH - mapScreenH;
 
         if (mapScreenW <= vpW) {
           this.translateX = (vpW - mapScreenW) / 2;
         } else {
-          const minX = vpW - mapScreenW;
           this.translateX = Math.min(0, Math.max(minX, this.translateX));
         }
 
         if (mapScreenH <= vpH) {
           this.translateY = (vpH - mapScreenH) / 2;
         } else {
-          const minY = vpH - mapScreenH;
           this.translateY = Math.min(0, Math.max(minY, this.translateY));
         }
       }
