@@ -2,7 +2,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>U Festival PWA</title>
 
   <link rel="manifest" href="manifest.json" />
@@ -154,11 +154,13 @@
       min-height: 0;
       width: 100%;
       padding: clamp(12px, 2vw, 24px);
-      padding-bottom: 100px;
+      padding-bottom: max(100px, calc(72px + env(safe-area-inset-bottom, 0px) + 20px));
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
     }
 
-    body.map-page-active main {
+    main:has(> #map.active) {
       overflow: hidden;
       overscroll-behavior: none;
     }
@@ -220,6 +222,7 @@
 
     #home .card.acts-card {
       overflow: visible;
+      margin-bottom: 8px;
     }
 
      .hero {
@@ -806,12 +809,15 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      height: 72px;
+      height: calc(72px + env(safe-area-inset-bottom, 0px));
+      padding-bottom: env(safe-area-inset-bottom, 0px);
       background: var(--color-accent);
       display: flex;
       justify-content: space-around;
       align-items: center;
-      padding: 0 8px;
+      padding-left: 8px;
+      padding-right: 8px;
+      box-sizing: border-box;
     }
 
     nav button {
@@ -855,7 +861,7 @@
       }
 
       nav {
-        height: 64px;
+        height: calc(64px + env(safe-area-inset-bottom, 0px));
       }
 
       nav button img {
@@ -864,7 +870,7 @@
       }
 
       main {
-        padding-bottom: 88px;
+        padding-bottom: max(88px, calc(64px + env(safe-area-inset-bottom, 0px) + 24px));
       }
 
       body.act-detail-open main {
@@ -1070,6 +1076,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      padding-bottom: 12px;
     }
 
     .act-list-item {
@@ -1393,8 +1400,6 @@
         pages.forEach(p => p.classList.remove("active"));
 
         document.getElementById(page).classList.add("active");
-
-        document.body.classList.toggle("map-page-active", page === "map");
 
         if (page === "map") {
           refreshMapLayout();
@@ -1963,19 +1968,101 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         this.lastPointer = { x: 0, y: 0 };
         this.pointers = new Map();
         this.lastPinchDistance = 0;
+        this.touchPinching = false;
+        this.lastTouchDistance = 0;
 
         this.onResize = this.onResize.bind(this);
         this.onPointerDown = this.onPointerDown.bind(this);
         this.onPointerMove = this.onPointerMove.bind(this);
         this.onPointerUp = this.onPointerUp.bind(this);
         this.onWheel = this.onWheel.bind(this);
+        this.onTouchStart = this.onTouchStart.bind(this);
+        this.onTouchMove = this.onTouchMove.bind(this);
+        this.onTouchEnd = this.onTouchEnd.bind(this);
 
         window.addEventListener("resize", this.onResize);
         this.dragSurface.addEventListener("pointerdown", this.onPointerDown);
         this.dragSurface.addEventListener("pointermove", this.onPointerMove);
         this.dragSurface.addEventListener("pointerup", this.onPointerUp);
         this.dragSurface.addEventListener("pointercancel", this.onPointerUp);
+        this.dragSurface.addEventListener("touchstart", this.onTouchStart, { passive: false });
+        this.dragSurface.addEventListener("touchmove", this.onTouchMove, { passive: false });
+        this.dragSurface.addEventListener("touchend", this.onTouchEnd, { passive: false });
+        this.dragSurface.addEventListener("touchcancel", this.onTouchEnd, { passive: false });
         this.viewport.addEventListener("wheel", this.onWheel, { passive: false });
+      }
+
+      getTouchDistance(touches) {
+        if (touches.length < 2) return 0;
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.hypot(dx, dy);
+      }
+
+      getTouchCenterViewport(touches) {
+        const cx = (touches[0].clientX + touches[1].clientX) / 2;
+        const cy = (touches[0].clientY + touches[1].clientY) / 2;
+        return this.getViewportPoint(cx, cy);
+      }
+
+      onTouchStart(e) {
+        if (e.target.closest(".map-zoom-controls, .map-info-panel")) return;
+        if (e.touches.length === 2) {
+          e.preventDefault();
+          this.touchPinching = true;
+          this.isDragging = false;
+          this.viewport.classList.remove("is-dragging");
+          this.lastTouchDistance = this.getTouchDistance(e.touches);
+          this.pointers.clear();
+        }
+      }
+
+      onTouchMove(e) {
+        if (e.touches.length === 2 && this.touchPinching) {
+          e.preventDefault();
+          const distance = this.getTouchDistance(e.touches);
+          if (this.lastTouchDistance > 0) {
+            const factor = distance / this.lastTouchDistance;
+            const center = this.getTouchCenterViewport(e.touches);
+            this.zoomAt(factor, center.x, center.y);
+          }
+          this.lastTouchDistance = distance;
+          return;
+        }
+
+        if (e.touches.length === 1 && !this.touchPinching) {
+          const touch = e.touches[0];
+          const point = this.getViewportPoint(touch.clientX, touch.clientY);
+          if (!this.isDragging) {
+            this.isDragging = true;
+            this.lastPointer = point;
+            this.viewport.classList.add("is-dragging");
+          } else {
+            e.preventDefault();
+            const dx = point.x - this.lastPointer.x;
+            const dy = point.y - this.lastPointer.y;
+            this.translateX += dx;
+            this.translateY += dy;
+            this.lastPointer = point;
+            this.clampTranslation();
+            this.applyTransform();
+          }
+        }
+      }
+
+      onTouchEnd(e) {
+        if (e.touches.length < 2) {
+          this.touchPinching = false;
+          this.lastTouchDistance = 0;
+        }
+        if (e.touches.length === 0) {
+          this.isDragging = false;
+          this.viewport.classList.remove("is-dragging");
+        } else if (e.touches.length === 1) {
+          const touch = e.touches[0];
+          this.lastPointer = this.getViewportPoint(touch.clientX, touch.clientY);
+          this.isDragging = true;
+        }
       }
 
       fitToViewport() {
@@ -2139,16 +2226,21 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       }
 
       onPointerDown(e) {
+        if (this.touchPinching) return;
+        if (e.pointerType === "touch") return;
         if (e.target.closest(".map-zoom-controls, .map-info-panel")) return;
         if (e.pointerType === "mouse" && e.button !== 0) return;
+
         e.preventDefault();
         this.dragSurface.setPointerCapture(e.pointerId);
         const point = this.getViewportPoint(e.clientX, e.clientY);
         this.pointers.set(e.pointerId, point);
 
-        if (this.pointers.size === 2) {
+        if (this.pointers.size >= 2) {
+          this.isDragging = false;
+          this.viewport.classList.remove("is-dragging");
           this.lastPinchDistance = this.getPinchDistance();
-        } else if (this.pointers.size === 1) {
+        } else {
           this.isDragging = true;
           this.lastPointer = point;
           this.viewport.classList.add("is-dragging");
@@ -2156,26 +2248,21 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       }
 
       onPointerMove(e) {
+        if (this.touchPinching) return;
+        if (e.pointerType === "touch") return;
         if (!this.pointers.has(e.pointerId)) return;
+
         const point = this.getViewportPoint(e.clientX, e.clientY);
         this.pointers.set(e.pointerId, point);
-
-        if (this.isDragging || this.pointers.size >= 2) {
-          e.preventDefault();
-        }
+        e.preventDefault();
 
         if (this.pointers.size >= 2) {
+          this.isDragging = false;
           const distance = this.getPinchDistance();
           if (this.lastPinchDistance > 0) {
             const factor = distance / this.lastPinchDistance;
             const center = this.getPinchCenter();
-            const newScale = Math.min(this.maxScale, Math.max(this.minScale, this.scale * factor));
-            const scaleRatio = newScale / this.scale;
-            this.translateX = center.x - (center.x - this.translateX) * scaleRatio;
-            this.translateY = center.y - (center.y - this.translateY) * scaleRatio;
-            this.scale = newScale;
-            this.clampTranslation();
-            this.applyTransform();
+            this.zoomAt(factor, center.x, center.y);
           }
           this.lastPinchDistance = distance;
         } else if (this.isDragging && this.pointers.size === 1) {
@@ -2190,6 +2277,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       }
 
       onPointerUp(e) {
+        if (e.pointerType === "touch") return;
         this.pointers.delete(e.pointerId);
         if (this.pointers.size < 2) {
           this.lastPinchDistance = 0;
@@ -2197,6 +2285,9 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         if (this.pointers.size === 0) {
           this.isDragging = false;
           this.viewport.classList.remove("is-dragging");
+        } else if (this.pointers.size === 1) {
+          this.lastPointer = [...this.pointers.values()][0];
+          this.isDragging = true;
         }
         if (this.dragSurface.hasPointerCapture(e.pointerId)) {
           this.dragSurface.releasePointerCapture(e.pointerId);
