@@ -584,14 +584,36 @@
       will-change: transform;
     }
 
-    .map-canvas img.map-image {
+    .map-content {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .map-content .map-image {
       display: block;
-      width: 2331px;
-      height: auto;
-      max-width: none;
+      width: 100%;
+      height: 100%;
+      border: none;
       user-select: none;
       -webkit-user-drag: none;
       pointer-events: none;
+    }
+
+    .map-load-error {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+      color: var(--color-secondary);
+      background: var(--map-bg);
+      z-index: 4;
+    }
+
+    .map-load-error.visible {
+      display: flex;
     }
 
     .map-marker {
@@ -1264,14 +1286,19 @@
       <div class="map-box" id="map-box">
         <div class="map-viewport" id="map-viewport">
           <div class="map-canvas" id="map-canvas">
-            <img
-              class="map-image"
-              id="map-image"
-              src="assets/map/map/kaart_festival_no_markers.svg"
-              alt="Kaart festivalterrein"
-              draggable="false"
-            />
-            <div class="map-user-location" id="map-user-location" title="Jouw locatie" aria-hidden="true"></div>
+            <div class="map-content" id="map-content">
+              <object
+                class="map-image"
+                id="map-image"
+                type="image/svg+xml"
+                data="assets/map/map/kaart_festival_no_markers.svg"
+                aria-label="Kaart festivalterrein"
+              ></object>
+              <div class="map-user-location" id="map-user-location" title="Jouw locatie" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div class="map-load-error" id="map-load-error" role="alert">
+            Kaartafbeelding kon niet laden. Controleer of het bestand op de server staat.
           </div>
         </div>
         <div class="map-zoom-controls" aria-label="Zoom bediening">
@@ -1763,10 +1790,6 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       if (!festivalMap) return;
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          const mapImage = document.getElementById("map-image");
-          if (mapImage?.naturalWidth > 0) {
-            festivalMap.updateMapSize(mapImage.naturalWidth, mapImage.naturalHeight);
-          }
           festivalMap.fitToViewport();
         });
       });
@@ -1900,6 +1923,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       constructor(options) {
         this.viewport = options.viewport;
         this.canvas = options.canvas;
+        this.content = options.content;
         this.userDot = options.userDot;
         this.markers = [];
         this.scale = 1;
@@ -1911,6 +1935,9 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         this.mapHeight = options.mapHeight;
         this.needsFit = true;
         this.activeMarker = null;
+
+        this.content.style.width = `${this.mapWidth}px`;
+        this.content.style.height = `${this.mapHeight}px`;
 
         this.isDragging = false;
         this.lastPointer = { x: 0, y: 0 };
@@ -2035,7 +2062,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
           onSelect(markerData);
         });
 
-        this.canvas.appendChild(btn);
+        this.content.appendChild(btn);
         this.markers.push({ el: btn, data: markerData });
       }
 
@@ -2060,13 +2087,6 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         }
         this.clampTranslation();
         this.applyTransform();
-      }
-
-      updateMapSize(width, height) {
-        if (width > 0 && height > 0) {
-          this.mapWidth = width;
-          this.mapHeight = height;
-        }
       }
 
       getViewportPoint(clientX, clientY) {
@@ -2161,23 +2181,25 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     async function initFestivalMap() {
       const viewport = document.getElementById("map-viewport");
       const canvas = document.getElementById("map-canvas");
+      const content = document.getElementById("map-content");
       const userDot = document.getElementById("map-user-location");
-      if (!viewport || !canvas) return;
+      const loadError = document.getElementById("map-load-error");
+      if (!viewport || !canvas || !content) return;
 
       await loadMapMarkersData();
 
       const mapImage = document.getElementById("map-image");
       if (mapMarkersData.map?.image) {
-        mapImage.src = mapMarkersData.map.image;
+        mapImage.setAttribute("data", mapMarkersData.map.image);
       }
 
       const mapWidth = mapMarkersData.map?.width || 2330.58;
       const mapHeight = mapMarkersData.map?.height || 1353.19;
-      mapImage.style.width = `${Math.round(mapWidth)}px`;
 
       festivalMap = new FestivalMap({
         viewport,
         canvas,
+        content,
         userDot,
         mapWidth,
         mapHeight
@@ -2188,9 +2210,6 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       });
 
       const fitMap = () => {
-        if (mapImage.naturalWidth > 0 && mapImage.naturalHeight > 0) {
-          festivalMap.updateMapSize(mapImage.naturalWidth, mapImage.naturalHeight);
-        }
         if (document.getElementById("map").classList.contains("active")) {
           festivalMap.fitToViewport();
         } else {
@@ -2199,15 +2218,21 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       };
 
       mapImage.addEventListener("error", () => {
-        console.error("Kaartafbeelding kon niet laden:", mapImage.src);
-        viewport.innerHTML = '<p style="padding:16px;color:var(--color-secondary);text-align:center;">Kaart kon niet laden. Open de app via een lokale server (Live Server of XAMPP).</p>';
+        console.error("Kaartafbeelding kon niet laden:", mapImage.getAttribute("data"));
+        loadError?.classList.add("visible");
       });
 
-      if (mapImage.complete && mapImage.naturalWidth > 0) {
+      mapImage.addEventListener("load", () => {
+        loadError?.classList.remove("visible");
         fitMap();
-      } else {
-        mapImage.addEventListener("load", fitMap, { once: true });
-      }
+      }, { once: true });
+
+      // object-element: fit na korte delay als load-event uitblijft
+      setTimeout(() => {
+        if (!loadError?.classList.contains("visible")) {
+          fitMap();
+        }
+      }, 300);
 
       const mapResizeObserver = new ResizeObserver(() => {
         if (document.getElementById("map").classList.contains("active")) {
@@ -2226,9 +2251,15 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       const mapPageObserver = new MutationObserver(() => {
         if (mapPage.classList.contains("active")) {
           refreshMapLayout();
+          setTimeout(refreshMapLayout, 150);
+          setTimeout(refreshMapLayout, 500);
         }
       });
       mapPageObserver.observe(mapPage, { attributes: true, attributeFilter: ["class"] });
+
+      if (mapPage.classList.contains("active")) {
+        refreshMapLayout();
+      }
     }
 
     // ==================== NOTIFICATION SYSTEM ====================
