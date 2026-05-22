@@ -1135,18 +1135,18 @@
       <img src="assets/icons/logo_white.svg" alt="" />
     </a>
 
-    <button type="button" class="header-back-btn" id="act-back-btn" aria-label="Terug">
+    <button type="button" class="header-back-btn" id="act-back-btn" data-i18n-aria="header.back" aria-label="Terug">
       <span class="back-arrow" aria-hidden="true"></span>
     </button>
 
-    <h1>Festival</h1>
+    <h1 data-i18n="header.festival">Festival</h1>
 
     <div class="header-actions">
-      <button type="button" class="icon-btn" id="contrast-toggle" aria-label="Contrast wijzigen">
+      <button type="button" class="icon-btn" id="contrast-toggle" data-i18n-aria="header.contrast" aria-label="Contrast wijzigen">
         <img src="assets/icons/contrast.svg" alt="" class="icon-contrast" />
       </button>
-      <button type="button" class="icon-btn" aria-label="Taal wijzigen">
-        <img src="assets/icons/Flag_of_the_Netherlands.svg" alt="Nederlands" class="icon-flag" />
+      <button type="button" class="icon-btn" id="lang-toggle" data-i18n-aria="header.langSwitchAria" aria-label="Schakel naar Engels">
+        <img src="assets/icons/flag-for-flag-united-kingdom-svgrepo-com.svg" alt="" class="icon-flag" id="lang-toggle-img" />
       </button>
     </div>
   </header>
@@ -1155,13 +1155,13 @@
 
     <!-- HOME -->
     <section id="home" class="page active">
-      <div class="card hero">
+      <div class="card hero" data-i18n-html="home.hero">
         WELCOME TO <br />
         U FESTIVAL
       </div>
 
       <div class="card acts-card">
-        <h2 class="page-title" style="margin-bottom: 16px; font-size: clamp(22px, 4vw, 28px);">
+        <h2 class="page-title" style="margin-bottom: 16px; font-size: clamp(22px, 4vw, 28px);" data-i18n="home.acts">
           Acts
         </h2>
         <div class="acts-list" id="acts-list"></div>
@@ -1171,130 +1171,60 @@
 <!-- INFO -->
       <section id="info" class="page">
         <h2 class="page-title">
-          FESTIVAL INFORMATION<br />
-          <span style="font-size: clamp(18px, 3vw, 22px); font-weight: 400;">FESTIVAL INFORMATIE</span>
+          <span data-i18n="info.title">FESTIVAL INFORMATIE</span><br />
+          <span style="font-size: clamp(18px, 3vw, 22px); font-weight: 400;" data-i18n="info.subtitle">FESTIVAL INFORMATION</span>
         </h2>
 
-<div class="accordion-item">
-           <button type="button" class="accordion-header">
-             Algemeen & contact
-             <span class="accordion-icon">▼</span>
-           </button>
-           <div class="accordion-content-inner">
-             <p>
-               Het ❤️U Festival is voor (nieuwe) studenten in de regio Utrecht en is een aanvulling op UIT.
-             </p>
-             <h4>Adres</h4>
-             <p>
-               <strong>Locatie:</strong> Strijkviertel, Utrecht<br />
-               <strong>Navigatieadres:</strong> Strijkviertelweg, Utrecht
-             </p>
-             <h4>Datum & Openingstijden</h4>
-             <p>
-               Zaterdag 5 september 2026 - 12:00 tot 23:00 uur
-             </p>
-           </div>
-         </div>
+        <div class="accordion-item" data-i18n-section="general">
+          <button type="button" class="accordion-header" data-i18n="info.sections.general.title">
+            Algemeen & contact
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content-inner" data-i18n-html="info.sections.general.body"></div>
+        </div>
 
-         <div class="accordion-item">
-           <button type="button" class="accordion-header">
-             Bereikbaarheid
-             <span class="accordion-icon">▼</span>
-           </button>
-           <div class="accordion-content-inner">
-             <h4>Fiets</h4>
-             <p>
-               Er is een grote gratis fietsenstalling aanwezig waar je jouw fiets de gehele dag kunt stallen.
-             </p>
-             <h4>Auto</h4>
-             <p>
-               Je kunt een parkingticket aanschaffen. Parkeren kan op P+R Papendorp, volg hiervoor de borden 'P online ticket'. Heb je geen ticket van te voren gekocht? Dan kun je bij de parkeerwachter op locatie een parkeerticket aanschaffen (PIN ONLY). Let wel op: VOL=VOL
-             </p>
-             <h4>OV</h4>
-             <p>
-               Kom je met het openbaar vervoer naar Lief? Plan dan je trip via <a href="https://9292.nl/" target="_blank">9292.nl</a>.
-             </p>
-             <h4>Shuttlebus</h4>
-             <p>
-               Vanaf Utrecht Centraal kun je onze gratis shuttlebus richting het festivalterrein pakken. Je vindt deze bus op het centraal station aan de Mineurslaan. Volg de witte bordjes met zwarte pijlen én ' ❤️U Festival'.
-             </p>
-             <p>
-               De bus rijdt tussen 12:00 uur & 19:00 uur richting het festival en vanaf 21:00 uur kun je weer instappen om richting het station te gaan.
-             </p>
-             <h4>Taxi + Kiss & Ride</h4>
-             <p>
-               Navigeer naar Strijkviertel, De Meern (Utrecht). Volg de borden "Kiss & Ride ❤️U Festival", zodra je in de buurt bent van het festivalterrein.
-             </p>
-           </div>
-         </div>
+        <div class="accordion-item" data-i18n-section="access">
+          <button type="button" class="accordion-header" data-i18n="info.sections.access.title">
+            Bereikbaarheid
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content-inner" data-i18n-html="info.sections.access.body"></div>
+        </div>
 
-         <div class="accordion-item">
-           <button type="button" class="accordion-header">
-             Lockers
-             <span class="accordion-icon">▼</span>
-           </button>
-           <div class="accordion-content-inner">
-             <p>
-               Op het festivalterrein zijn kluisjes aanwezig waar je je spullen veilig kunt opbergen!
-             </p>
-             <p>
-               Hier passen 3 à 4 jassen in. Goed om te weten: je kunt je kluisje gedurende de hele dag openen en sluiten zo vaak je wilt.
-             </p>
-             <p>
-               Het is niet mogelijk om online een kluisje te reserveren.
-             </p>
-           </div>
-         </div>
+        <div class="accordion-item" data-i18n-section="lockers">
+          <button type="button" class="accordion-header" data-i18n="info.sections.lockers.title">
+            Lockers
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content-inner" data-i18n-html="info.sections.lockers.body"></div>
+        </div>
 
-         <div class="accordion-item">
-           <button type="button" class="accordion-header">
-             FAQ
-             <span class="accordion-icon">▼</span>
-           </button>
-           <div class="accordion-content-inner">
-             <h4>Ik gebruik medicatie. Wat nu?</h4>
-             <p>
-               Het is toegestaan om medicijnen mee te nemen in een dosis die je maximaal nodig hebt op 1 dag. Een doktersverklaring/medicatiepaspoort is noodzakelijk.
-             </p>
-             <p>
-               De beveiliging zal jouw documentatie beoordelen en de medicijnen controleren. Het kan zijn dat de EHBO jouw medicijnen (bijvoorbeeld als deze gevaarlijk zijn i.c.m. alcohol) in bewaring neemt en je deze enkel kan innemen bij de EHBO.
-             </p>
-             <h4>Mag ik het festivalterrein tussentijds verlaten?</h4>
-             <p>
-               Nee, helaas is dat niet mogelijk. Om de veiligheid van alle bezoekers te kunnen waarborgen, kunnen we het niet toestaan dat het festivalterrein tussentijds verlaten wordt. Wij hebben namelijk geen zicht op hetgeen wat een bezoeker buiten het festivalterrein doet en ik welke staat deze het terrein weer betreedt. Hier kunnen dan ook geen uitzonderingen voor gemaakt worden. Wij hebben genoeg loungeplekken, foodstands & barren om het een hele dag uit te kunnen houden.
-             </p>
-             <h4>Zijn er lockers?</h4>
-             <p>
-               Yes, deze zijn er! Op het terrein kun je medium & grote lockers huren.
-             </p>
-           </div>
-         </div>
+        <div class="accordion-item" data-i18n-section="faq">
+          <button type="button" class="accordion-header" data-i18n="info.sections.faq.title">
+            FAQ
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content-inner" data-i18n-html="info.sections.faq.body"></div>
+        </div>
 
-         <div class="accordion-item">
-           <button type="button" class="accordion-header">
-             Golden-GLU
-             <span class="accordion-icon">▼</span>
-           </button>
-           <div class="accordion-content-inner">
-             <p>
-               Studenten van het GLU hebben tijdens het festival speciale privileges en zijn herkenbaar aan een gouden armbandje.
-             </p>
-             <p>
-               Met dit gouden armbandje kunnen ze tijdens het festival gebruik maken van de gouden toiletten en met goud gemarkeerde bestelpunten aan de bars zonder in een rij te hoeven staan.
-             </p>
-           </div>
-         </div>
+        <div class="accordion-item" data-i18n-section="glu">
+          <button type="button" class="accordion-header" data-i18n="info.sections.glu.title">
+            Golden-GLU
+            <span class="accordion-icon">▼</span>
+          </button>
+          <div class="accordion-content-inner" data-i18n-html="info.sections.glu.body"></div>
+        </div>
       </section>
 
     <!-- SCHEDULE -->
     <section id="schedule" class="page">
-       <h2 class="page-title" style="margin-bottom: 20px;">
-         LINE-UP'S SCHEDULE
+       <h2 class="page-title" style="margin-bottom: 20px;" data-i18n="schedule.title">
+         LINE-UP'S SCHEMA
        </h2>
 
       <div class="schedule-tabs" id="schedule-day-tabs">
-        <button type="button" class="active" data-day="saturday">Zaterdag / Saturday</button>
-        <button type="button" data-day="sunday">Zondag / Sunday</button>
+        <button type="button" class="active" data-day="saturday" data-i18n="schedule.saturday">Zaterdag</button>
+        <button type="button" data-day="sunday" data-i18n="schedule.sunday">Zondag</button>
       </div>
 
       <div class="schedule-grid-container">
@@ -1316,21 +1246,22 @@
                 id="map-image"
                 type="image/svg+xml"
                 data="assets/map/map/kaart_festival_no_markers.svg"
+                data-i18n-aria="map.mapAlt"
                 aria-label="Kaart festivalterrein"
               ></object>
-              <div class="map-user-location" id="map-user-location" title="Jouw locatie" aria-hidden="true"></div>
+              <div class="map-user-location" id="map-user-location" data-i18n-title="map.userLocation" title="Jouw locatie" aria-hidden="true"></div>
             </div>
           </div>
-          <div class="map-load-error" id="map-load-error" role="alert">
+          <div class="map-load-error" id="map-load-error" role="alert" data-i18n="map.loadError">
             Kaartafbeelding kon niet laden. Controleer of het bestand op de server staat.
           </div>
         </div>
-        <div class="map-zoom-controls" aria-label="Zoom bediening">
-          <button type="button" id="map-zoom-in" aria-label="Inzoomen">+</button>
-          <button type="button" id="map-zoom-out" aria-label="Uitzoomen">−</button>
+        <div class="map-zoom-controls" data-i18n-aria="map.zoomControls" aria-label="Zoom bediening">
+          <button type="button" id="map-zoom-in" data-i18n-aria="map.zoomIn" aria-label="Inzoomen">+</button>
+          <button type="button" id="map-zoom-out" data-i18n-aria="map.zoomOut" aria-label="Uitzoomen">−</button>
         </div>
         <div class="map-info-panel" id="map-info-panel" role="dialog" aria-labelledby="map-info-title" aria-hidden="true">
-          <button type="button" class="map-info-close" id="map-info-close" aria-label="Sluiten">×</button>
+          <button type="button" class="map-info-close" id="map-info-close" data-i18n-aria="map.close" aria-label="Sluiten">×</button>
           <h3 id="map-info-title"></h3>
           <p class="map-info-subtitle" id="map-info-subtitle"></p>
           <div id="map-info-body"></div>
@@ -1344,7 +1275,7 @@
       <div class="act-detail-body">
         <div class="act-detail-header">
           <h2 class="act-detail-name" id="act-detail-name"></h2>
-          <button type="button" class="act-favorite-btn" id="act-detail-favorite" aria-label="Favoriet">
+          <button type="button" class="act-favorite-btn" id="act-detail-favorite" data-i18n-aria="act.favorite" aria-label="Favoriet">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="#F03228" stroke-width="2"/>
             </svg>
@@ -1354,32 +1285,138 @@
         <div class="act-video-wrapper">
           <iframe id="act-detail-video" title="Act video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-        <a class="act-video-fallback" id="act-detail-video-link" href="#" target="_blank" rel="noopener noreferrer">Bekijk op YouTube</a>
+        <a class="act-video-fallback" id="act-detail-video-link" href="#" target="_blank" rel="noopener noreferrer" data-i18n="act.youtube">Bekijk op YouTube</a>
       </div>
     </section>
 
   </main>
 
   <nav>
-    <button class="nav-btn active" data-page="home" aria-label="Home">
+    <button class="nav-btn active" data-page="home" data-i18n-aria="nav.home" aria-label="Home">
       <img src="assets/icons/home.svg" alt="" />
     </button>
 
-    <button class="nav-btn" data-page="info" aria-label="Info">
+    <button class="nav-btn" data-page="info" data-i18n-aria="nav.info" aria-label="Info">
       <img src="assets/icons/info.svg" alt="" />
     </button>
 
-    <button class="nav-btn" data-page="schedule" aria-label="Line-up">
+    <button class="nav-btn" data-page="schedule" data-i18n-aria="nav.schedule" aria-label="Line-up">
       <img src="assets/icons/music.svg" alt="" />
     </button>
 
-    <button class="nav-btn" data-page="map" aria-label="Kaart">
+    <button class="nav-btn" data-page="map" data-i18n-aria="nav.map" aria-label="Kaart">
       <img src="assets/icons/location.svg" alt="" />
     </button>
   </nav>
 
+  <script src="data/i18n.js"></script>
   <script src="data/map-markers.js"></script>
   <script>
+    // ==================== LANGUAGE / i18n ====================
+    let currentLang = localStorage.getItem("ufestival-lang") || "nl";
+
+    function t(key) {
+      const parts = key.split(".");
+      let value = window.I18N[currentLang];
+      for (const part of parts) {
+        value = value?.[part];
+      }
+      if (value === undefined && currentLang !== "nl") {
+        value = window.I18N.nl;
+        for (const part of parts) {
+          value = value?.[part];
+        }
+      }
+      return value ?? key;
+    }
+
+    function getActDescription(act) {
+      if (currentLang === "en" && act.descriptionEn) return act.descriptionEn;
+      return act.description;
+    }
+
+    function getMarkerTitle(marker) {
+      if (marker.type === "facility" && marker.facility) {
+        return t(`map.facilities.${marker.facility}`);
+      }
+      if (marker.type === "entrance") {
+        return currentLang === "en" ? "Entrance / Exit" : marker.title;
+      }
+      return marker.title;
+    }
+
+    function getMarkerDescription(marker) {
+      if (marker.type === "stage" && marker.locationId) {
+        return t(`map.stages.${marker.locationId}`);
+      }
+      if (marker.type === "entrance") {
+        return t("map.entranceInfo");
+      }
+      return currentLang === "en" ? (marker.descriptionEn || marker.description || "") : (marker.description || "");
+    }
+
+    function updateLangToggleButton() {
+      const img = document.getElementById("lang-toggle-img");
+      const btn = document.getElementById("lang-toggle");
+      if (!img || !btn) return;
+      if (currentLang === "nl") {
+        img.src = "assets/icons/flag-for-flag-united-kingdom-svgrepo-com.svg";
+        btn.setAttribute("aria-label", t("header.langSwitchAria"));
+      } else {
+        img.src = "assets/icons/Flag_of_the_Netherlands.svg";
+        btn.setAttribute("aria-label", t("header.langSwitchAria"));
+      }
+    }
+
+    function applyLanguage(lang) {
+      currentLang = lang === "en" ? "en" : "nl";
+      localStorage.setItem("ufestival-lang", currentLang);
+      document.documentElement.lang = currentLang;
+
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        const text = t(key);
+        const icon = el.querySelector(".accordion-icon");
+        if (icon) {
+          el.textContent = "";
+          el.append(document.createTextNode(text + " "));
+          el.appendChild(icon);
+        } else {
+          el.textContent = text;
+        }
+      });
+
+      document.querySelectorAll("[data-i18n-html]").forEach(el => {
+        el.innerHTML = t(el.dataset.i18nHtml);
+      });
+
+      document.querySelectorAll("[data-i18n-aria]").forEach(el => {
+        el.setAttribute("aria-label", t(el.dataset.i18nAria));
+      });
+
+      document.querySelectorAll("[data-i18n-title]").forEach(el => {
+        el.setAttribute("title", t(el.dataset.i18nTitle));
+      });
+
+      updateLangToggleButton();
+
+      if (scheduleData) renderScheduleGrid();
+      if (mapMarkersData && festivalMap) {
+        festivalMap.markers.forEach(({ el, data }) => {
+          el.setAttribute("aria-label", getMarkerTitle(data));
+        });
+      }
+      if (currentActId && actsById[currentActId]) {
+        document.getElementById("act-detail-video-link").textContent = t("act.youtube");
+      }
+    }
+
+    function toggleLanguage() {
+      applyLanguage(currentLang === "nl" ? "en" : "nl");
+    }
+
+    document.getElementById("lang-toggle")?.addEventListener("click", toggleLanguage);
+
     const buttons = document.querySelectorAll(".nav-btn");
     const pages = document.querySelectorAll(".page");
 
@@ -1622,7 +1659,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       headerLocationCell.className = "schedule-grid-location-col";
       const headerLocationLabel = document.createElement("div");
       headerLocationLabel.className = "schedule-grid-location-label";
-      headerLocationLabel.textContent = "Locatie";
+      headerLocationLabel.textContent = t("schedule.location");
       headerLocationCell.appendChild(headerLocationLabel);
       headerRow.appendChild(headerLocationCell);
       
@@ -1747,12 +1784,12 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
       content.innerHTML = `
         <h2 style="color: var(--color-secondary); margin-bottom: 12px;">${act.name}</h2>
-        <p style="margin-bottom: 8px;"><strong>Locatie:</strong> ${scheduleData.locations.find(l => l.id === act.location)?.name}</p>
-        <p style="margin-bottom: 8px;"><strong>Tijd:</strong> ${act.startTime} - ${act.endTime}</p>
-        <p style="margin-bottom: 8px;"><strong>Type:</strong> ${act.type}</p>
-        <p style="margin-bottom: 16px; margin-top: 12px; line-height: 1.6;">${act.description}</p>
+        <p style="margin-bottom: 8px;"><strong>${t("schedule.locationLabel")}</strong> ${scheduleData.locations.find(l => l.id === act.location)?.name}</p>
+        <p style="margin-bottom: 8px;"><strong>${t("schedule.timeLabel")}</strong> ${act.startTime} - ${act.endTime}</p>
+        <p style="margin-bottom: 8px;"><strong>${t("schedule.typeLabel")}</strong> ${act.type}</p>
+        <p style="margin-bottom: 16px; margin-top: 12px; line-height: 1.6;">${getActDescription(act)}</p>
         <button style="background: var(--color-accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 700;">
-          Close
+          ${t("schedule.close")}
         </button>
       `;
 
@@ -1779,6 +1816,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
     // Load data when page is loaded
     window.addEventListener("load", () => {
+      applyLanguage(currentLang);
       loadActsData();
       loadScheduleData();
       initFestivalMap();
@@ -1854,16 +1892,9 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     }
 
     function getFacilityLabel(facility) {
-      const labels = {
-        firstAid: "EHBO / First aid",
-        food: "Eten & drinken",
-        bar: "Bar",
-        toilet: "Toiletten",
-        merchandise: "Merchandise",
-        locker: "Lockers",
-        iceCream: "IJs"
-      };
-      return labels[facility] || facility;
+      const key = `map.facilities.${facility}`;
+      const label = t(key);
+      return label === key ? facility : label;
     }
 
     function openMapInfoPanel(marker) {
@@ -1872,14 +1903,14 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       const subtitle = document.getElementById("map-info-subtitle");
       const body = document.getElementById("map-info-body");
 
-      title.textContent = marker.title;
-      subtitle.textContent = marker.description || "";
+      title.textContent = getMarkerTitle(marker);
+      subtitle.textContent = getMarkerDescription(marker);
       body.innerHTML = "";
 
       if (marker.type === "stage" && marker.locationId) {
         const location = scheduleData?.locations.find(l => l.id === marker.locationId);
         if (location) {
-          subtitle.textContent = location.name + (marker.description ? " — " + marker.description : "");
+          subtitle.textContent = location.name + " — " + getMarkerDescription(marker);
         }
 
         const currentAct = getCurrentActAtLocation(marker.locationId);
@@ -1887,14 +1918,14 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
         const nowSection = document.createElement("div");
         nowSection.className = "map-info-section";
-        nowSection.innerHTML = `<span class="map-info-label">Nu:</span> `;
+        nowSection.innerHTML = `<span class="map-info-label">${t("map.now")}</span> `;
         if (currentAct) {
           nowSection.innerHTML += `${currentAct.name} (${currentAct.startTime} – ${currentAct.endTime})`;
           if (actsById[currentAct.id]) {
             const link = document.createElement("button");
             link.type = "button";
             link.className = "map-info-act-link";
-            link.textContent = "Bekijk act";
+            link.textContent = t("map.viewAct");
             link.addEventListener("click", () => {
               closeMapInfoPanel();
               openActDetail(currentAct.id);
@@ -1905,17 +1936,17 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
             body.appendChild(nowSection);
           }
         } else {
-          nowSection.innerHTML += "Geen optreden op dit moment";
+          nowSection.innerHTML += t("map.noActNow");
           body.appendChild(nowSection);
         }
 
         const nextSection = document.createElement("div");
         nextSection.className = "map-info-section";
-        nextSection.innerHTML = `<span class="map-info-label">Volgende:</span> `;
+        nextSection.innerHTML = `<span class="map-info-label">${t("map.next")}</span> `;
         if (nextAct) {
-          nextSection.innerHTML += `${nextAct.name} om ${nextAct.startTime}`;
+          nextSection.innerHTML += `${nextAct.name} ${t("map.nextAt")} ${nextAct.startTime}`;
         } else {
-          nextSection.innerHTML += "Geen verdere acts vandaag";
+          nextSection.innerHTML += t("map.noActNext");
         }
         body.appendChild(nextSection);
       } else if (marker.type === "facility") {
@@ -1926,7 +1957,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       } else if (marker.type === "entrance") {
         const info = document.createElement("div");
         info.className = "map-info-section";
-        info.textContent = "Hoofdingang en uitgang van het festivalterrein.";
+        info.textContent = t("map.entranceInfo");
         body.appendChild(info);
       }
 
@@ -2162,7 +2193,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         btn.className = "map-marker" + (markerData.wide ? " map-marker--wide" : "");
         btn.style.left = `${markerData.x}%`;
         btn.style.top = `${markerData.y}%`;
-        btn.setAttribute("aria-label", markerData.title);
+        btn.setAttribute("aria-label", getMarkerTitle(markerData));
 
         const img = document.createElement("img");
         img.src = markerData.icon;
@@ -2432,7 +2463,9 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     function sendNotification(act, minutesBefore) {
       if ("Notification" in window && Notification.permission === "granted") {
         const location = scheduleData.locations.find(l => l.id === act.location);
-        const title = minutesBefore === 5 ? "🎶 Nu bezig!" : `${minutesBefore} min tot ${act.name}`;
+        const title = minutesBefore === 5
+          ? t("notify.now")
+          : `${minutesBefore} ${t("notify.minutesBefore")} ${act.name}`;
         const options = {
           body: `${act.name} - ${act.startTime} @ ${location?.name}`,
           icon: "assets/icons/logo_white.svg",
