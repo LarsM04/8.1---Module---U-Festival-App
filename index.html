@@ -1335,12 +1335,36 @@
       return act.description;
     }
 
+    function getActTagline(act) {
+      return currentLang === "en"
+        ? (act.taglineEn || act.taglineNl || act.tagline || "")
+        : (act.taglineNl || act.taglineEn || act.tagline || "");
+    }
+
+    function getActBio(act) {
+      return currentLang === "en"
+        ? (act.bioEn || act.bioNl || act.bio || "")
+        : (act.bioNl || act.bioEn || act.bio || "");
+    }
+
+    function getLocationName(location) {
+      if (!location) return "";
+      if (currentLang === "nl" && location.nameNl) return location.nameNl;
+      if (currentLang === "en" && location.nameEn) return location.nameEn;
+      return location.name;
+    }
+
+    function getActTypeLabel(type) {
+      const label = t(`schedule.types.${type}`);
+      return label === `schedule.types.${type}` ? type : label;
+    }
+
     function getMarkerTitle(marker) {
       if (marker.type === "facility" && marker.facility) {
         return t(`map.facilities.${marker.facility}`);
       }
       if (marker.type === "entrance") {
-        return currentLang === "en" ? "Entrance / Exit" : marker.title;
+        return t("map.entrance");
       }
       return marker.title;
     }
@@ -1406,8 +1430,16 @@
           el.setAttribute("aria-label", getMarkerTitle(data));
         });
       }
+      if (actsData?.acts?.length) renderActsList();
+
       if (currentActId && actsById[currentActId]) {
+        document.getElementById("act-detail-bio").textContent = getActBio(actsById[currentActId]);
         document.getElementById("act-detail-video-link").textContent = t("act.youtube");
+      }
+
+      const mapPanel = document.getElementById("map-info-panel");
+      if (activeMapMarker && mapPanel?.classList.contains("open")) {
+        openMapInfoPanel(activeMapMarker);
       }
     }
 
@@ -1531,7 +1563,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
           <img src="${act.image}" alt="" loading="lazy" />
           <div class="act-list-item-info">
             <div class="act-list-item-name">${act.name}</div>
-            <div class="act-list-item-tagline">${act.tagline}</div>
+            <div class="act-list-item-tagline">${getActTagline(act)}</div>
           </div>
         </button>
       `).join("");
@@ -1582,7 +1614,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       document.getElementById("act-detail-image").src = act.image;
       document.getElementById("act-detail-image").alt = act.name;
       document.getElementById("act-detail-name").textContent = act.name;
-      document.getElementById("act-detail-bio").textContent = act.bio;
+      document.getElementById("act-detail-bio").textContent = getActBio(act);
       document.getElementById("act-detail-video").src = getYoutubeEmbedUrl(act);
       document.getElementById("act-detail-video-link").href = getYoutubeWatchUrl(act);
 
@@ -1681,7 +1713,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         locationCol.className = "schedule-grid-location-col";
         const locationLabel = document.createElement("div");
         locationLabel.className = "schedule-grid-location-label";
-        locationLabel.textContent = location.name;
+        locationLabel.textContent = getLocationName(location);
         locationCol.appendChild(locationLabel);
         row.appendChild(locationCol);
 
@@ -1706,7 +1738,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
                 <div class="act-name">${act.name}</div>
                 <div class="act-time">${act.startTime} - ${act.endTime}</div>
               </div>
-              <button class="favorite-btn" title="Toggle favorite" data-act-id="${act.id}">
+              <button class="favorite-btn" title="${t("schedule.favoriteToggle")}" data-act-id="${act.id}">
                 ${isFav ? "★" : "☆"}
               </button>
             `;
@@ -1784,9 +1816,9 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
       content.innerHTML = `
         <h2 style="color: var(--color-secondary); margin-bottom: 12px;">${act.name}</h2>
-        <p style="margin-bottom: 8px;"><strong>${t("schedule.locationLabel")}</strong> ${scheduleData.locations.find(l => l.id === act.location)?.name}</p>
+        <p style="margin-bottom: 8px;"><strong>${t("schedule.locationLabel")}</strong> ${getLocationName(scheduleData.locations.find(l => l.id === act.location))}</p>
         <p style="margin-bottom: 8px;"><strong>${t("schedule.timeLabel")}</strong> ${act.startTime} - ${act.endTime}</p>
-        <p style="margin-bottom: 8px;"><strong>${t("schedule.typeLabel")}</strong> ${act.type}</p>
+        <p style="margin-bottom: 8px;"><strong>${t("schedule.typeLabel")}</strong> ${getActTypeLabel(act.type)}</p>
         <p style="margin-bottom: 16px; margin-top: 12px; line-height: 1.6;">${getActDescription(act)}</p>
         <button style="background: var(--color-accent); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 700;">
           ${t("schedule.close")}
@@ -1825,6 +1857,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     // ==================== FESTIVAL MAP ====================
     let mapMarkersData = null;
     let festivalMap = null;
+    let activeMapMarker = null;
 
     async function loadMapMarkersData() {
       if (window.MAP_MARKERS_DATA) {
@@ -1898,6 +1931,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     }
 
     function openMapInfoPanel(marker) {
+      activeMapMarker = marker;
       const panel = document.getElementById("map-info-panel");
       const title = document.getElementById("map-info-title");
       const subtitle = document.getElementById("map-info-subtitle");
@@ -1910,7 +1944,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       if (marker.type === "stage" && marker.locationId) {
         const location = scheduleData?.locations.find(l => l.id === marker.locationId);
         if (location) {
-          subtitle.textContent = location.name + " — " + getMarkerDescription(marker);
+          subtitle.textContent = getLocationName(location) + " — " + getMarkerDescription(marker);
         }
 
         const currentAct = getCurrentActAtLocation(marker.locationId);
@@ -1966,6 +2000,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     }
 
     function closeMapInfoPanel() {
+      activeMapMarker = null;
       const panel = document.getElementById("map-info-panel");
       panel.classList.remove("open");
       panel.setAttribute("aria-hidden", "true");

@@ -14,12 +14,12 @@ window.I18N = {
       map: "Kaart"
     },
     home: {
-      hero: "WELCOME TO <br />U FESTIVAL",
-      acts: "Acts"
+      hero: "WELKOM OP HET <br />U FESTIVAL",
+      acts: "Artiesten"
     },
     info: {
       title: "FESTIVAL INFORMATIE",
-      subtitle: "FESTIVAL INFORMATION",
+      subtitle: "Informatie voor bezoekers",
       sections: {
         general: {
           title: "Algemeen & contact",
@@ -68,14 +68,26 @@ window.I18N = {
       }
     },
     schedule: {
-      title: "LINE-UP'S SCHEMA",
+      title: "LINE-UP SCHEMA",
       saturday: "Zaterdag",
       sunday: "Zondag",
       location: "Locatie",
       locationLabel: "Locatie:",
       timeLabel: "Tijd:",
       typeLabel: "Type:",
-      close: "Sluiten"
+      close: "Sluiten",
+      favoriteToggle: "Favoriet wisselen",
+      types: {
+        DJ: "DJ",
+        Band: "Band",
+        "Hip-hop": "Hip-hop",
+        Pop: "Pop",
+        Theater: "Theater",
+        Film: "Film",
+        Cabaret: "Cabaret",
+        Show: "Show",
+        Educatie: "Educatie"
+      }
     },
     map: {
       zoomControls: "Zoom bediening",
@@ -88,7 +100,8 @@ window.I18N = {
       now: "Nu:",
       next: "Volgende:",
       noActNow: "Geen optreden op dit moment",
-      noActNext: "Geen verdere acts vandaag",
+      noActNext: "Geen verdere optredens vandaag",
+      entrance: "Ingang / Uitgang",
       nextAt: "om",
       viewAct: "Bekijk act",
       entranceInfo: "Hoofdingang en uitgang van het festivalterrein.",
@@ -133,11 +146,11 @@ window.I18N = {
     },
     home: {
       hero: "WELCOME TO <br />U FESTIVAL",
-      acts: "Acts"
+      acts: "Artists"
     },
     info: {
       title: "FESTIVAL INFORMATION",
-      subtitle: "FESTIVAL INFORMATIE",
+      subtitle: "Visitor information",
       sections: {
         general: {
           title: "General & contact",
@@ -193,7 +206,19 @@ window.I18N = {
       locationLabel: "Location:",
       timeLabel: "Time:",
       typeLabel: "Type:",
-      close: "Close"
+      close: "Close",
+      favoriteToggle: "Toggle favourite",
+      types: {
+        DJ: "DJ",
+        Band: "Band",
+        "Hip-hop": "Hip-hop",
+        Pop: "Pop",
+        Theater: "Theatre",
+        Film: "Film",
+        Cabaret: "Cabaret",
+        Show: "Show",
+        Educatie: "Education"
+      }
     },
     map: {
       zoomControls: "Zoom controls",
@@ -209,6 +234,7 @@ window.I18N = {
       noActNext: "No more acts today",
       nextAt: "at",
       viewAct: "View act",
+      entrance: "Entrance / Exit",
       entranceInfo: "Main entrance and exit of the festival site.",
       facilities: {
         firstAid: "First aid",
