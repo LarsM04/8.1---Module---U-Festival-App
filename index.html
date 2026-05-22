@@ -580,13 +580,13 @@
       position: absolute;
       top: 0;
       left: 0;
-      transform-origin: 0 0;
       will-change: transform;
     }
 
     .map-content {
       position: relative;
       flex-shrink: 0;
+      transform-origin: 0 0;
     }
 
     .map-content .map-image {
@@ -1982,13 +1982,16 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
       applyTransform() {
         const scale = this.scale > 0 ? this.scale : 1;
-        this.canvas.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${scale})`;
-        const counterScale = 1 / scale;
+        // Echte pixelgrootte i.p.v. CSS scale() — SVG blijft vector-scherp bij inzoomen
+        this.content.style.width = `${this.mapWidth * scale}px`;
+        this.content.style.height = `${this.mapHeight * scale}px`;
+        this.canvas.style.transform = `translate(${this.translateX}px, ${this.translateY}px)`;
+        const markerTransform = "translate(-50%, -50%)";
         this.markers.forEach(({ el }) => {
-          el.style.transform = `translate(-50%, -50%) scale(${counterScale})`;
+          el.style.transform = markerTransform;
         });
         if (this.userDot.classList.contains("visible")) {
-          this.userDot.style.transform = `translate(-50%, -50%) scale(${counterScale})`;
+          this.userDot.style.transform = markerTransform;
         }
       }
 
