@@ -1220,6 +1220,46 @@
       margin-bottom: 18px;
     }
 
+    .qr-code {
+      width: 220px;
+      height: 220px;
+      border: 2px solid var(--card-border);
+      border-radius: 24px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0;
+      margin: 0 auto;
+    }
+
+    .qr-code canvas,
+    .qr-code svg,
+    .qr-code table {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: none !important;
+    }
+    
+    .qr-code canvas {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 220px !important;
+      max-height: 220px !important;
+    }
+    
+    .qr-code svg {
+      width: 220px !important;
+      height: 220px !important;
+    }
+    
+    .qr-code table {
+      width: auto !important;
+      height: auto !important;
+    }
+
     .qr-placeholder {
       position: relative;
       width: 220px;
@@ -1491,12 +1531,7 @@
       <h2 id="qr-popup-title">QR-code app</h2>
       <p>Scan de QR-code om de app te downloaden. Je kan deze melding later altijd weer openen met de knop rechtsboven.</p>
       <div class="qr-popup-preview">
-        <div class="qr-placeholder" aria-hidden="true">
-          <div class="qr-dot qr-dot-top-left"></div>
-          <div class="qr-dot qr-dot-top-right"></div>
-          <div class="qr-dot qr-dot-bottom-left"></div>
-          <div class="qr-grid"></div>
-        </div>
+        <div id="qr-code" class="qr-code" aria-label="QR-code om de app te downloaden"></div>
       </div>
       <div class="qr-popup-actions">
         <button type="button" class="qr-popup-action" id="qr-download-btn">Download app</button>
@@ -1508,6 +1543,7 @@
 
   <script src="data/i18n.js"></script>
   <script src="data/map-markers.js"></script>
+  <script src="js/qrcode.min.js"></script>
   <script>
     // ==================== LANGUAGE / i18n ====================
     let currentLang = localStorage.getItem("ufestival-lang") || "nl";
@@ -1704,7 +1740,36 @@
     const qrPopupClose = document.getElementById("qr-popup-close");
     const qrPopupCloseBottom = document.getElementById("qr-popup-close-bottom");
     const qrDownloadBtn = document.getElementById("qr-download-btn");
+    const qrCodeTarget = document.getElementById("qr-code");
     let deferredInstallPrompt = null;
+    let qrCodeGenerator = null;
+    const qrCodeUrl = window.location.href;
+
+    function initQRCode() {
+      if (!qrCodeTarget) return;
+      
+      // Wait for QRCode library if not ready
+      if (typeof QRCode === "undefined") {
+        setTimeout(initQRCode, 100);
+        return;
+      }
+      
+      try {
+        qrCodeTarget.innerHTML = "";
+        qrCodeGenerator = new QRCode(qrCodeTarget, {
+          text: qrCodeUrl,
+          width: 220,
+          height: 220,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+        // Show popup after QR code is generated
+        setTimeout(showQRPopup, 50);
+      } catch (error) {
+        console.error("QR Code generation failed:", error);
+      }
+    }
 
     window.addEventListener("beforeinstallprompt", event => {
       event.preventDefault();
@@ -2091,7 +2156,10 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       loadActsData();
       loadScheduleData();
       initFestivalMap();
-      showQRPopup();
+      // Initialize QR code with a small delay to ensure library is ready
+      setTimeout(() => {
+        initQRCode();
+      }, 50);
     });
 
     // ==================== FESTIVAL MAP ====================
