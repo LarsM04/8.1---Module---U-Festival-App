@@ -1226,38 +1226,53 @@
       border: 2px solid var(--card-border);
       border-radius: 24px;
       background: #ffffff;
+      margin: 0 auto;
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
-      padding: 0;
-      margin: 0 auto;
     }
 
-    .qr-code canvas,
-    .qr-code svg,
-    .qr-code table {
-      display: block !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      border: none !important;
-    }
-    
-    .qr-code canvas {
-      width: 100% !important;
-      height: 100% !important;
+    .qr-code > * {
       max-width: 220px !important;
       max-height: 220px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .qr-code canvas {
+      display: block !important;
+      width: 220px !important;
+      height: 220px !important;
     }
     
     .qr-code svg {
+      display: block !important;
       width: 220px !important;
       height: 220px !important;
     }
     
     .qr-code table {
-      width: auto !important;
-      height: auto !important;
+      border-collapse: collapse !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      display: table !important;
+      background: white;
+    }
+    
+    .qr-code table tr,
+    .qr-code table td {
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      display: table-cell !important;
+    }
+
+    .qr-code img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain;
+      display: block;
     }
 
     .qr-placeholder {
@@ -1531,7 +1546,9 @@
       <h2 id="qr-popup-title">QR-code app</h2>
       <p>Scan de QR-code om de app te downloaden. Je kan deze melding later altijd weer openen met de knop rechtsboven.</p>
       <div class="qr-popup-preview">
-        <div id="qr-code" class="qr-code" aria-label="QR-code om de app te downloaden"></div>
+        <div id="qr-code" class="qr-code" aria-label="QR-code om de app te downloaden">
+          <img id="qr-static" src="assets/qr/qr-code.svg" alt="QR-code" />
+        </div>
       </div>
       <div class="qr-popup-actions">
         <button type="button" class="qr-popup-action" id="qr-download-btn">Download app</button>
@@ -1744,9 +1761,10 @@
     let deferredInstallPrompt = null;
     let qrCodeGenerator = null;
     const qrCodeUrl = window.location.href;
+    let qrCodeInitialized = false;
 
     function initQRCode() {
-      if (!qrCodeTarget) return;
+      if (!qrCodeTarget || qrCodeInitialized) return;
       
       // Wait for QRCode library if not ready
       if (typeof QRCode === "undefined") {
@@ -1754,7 +1772,9 @@
         return;
       }
       
+      qrCodeInitialized = true;
       try {
+        console.log("Generating QR code for:", qrCodeUrl);
         qrCodeTarget.innerHTML = "";
         qrCodeGenerator = new QRCode(qrCodeTarget, {
           text: qrCodeUrl,
@@ -1762,12 +1782,12 @@
           height: 220,
           colorDark: "#000000",
           colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.M
+          correctLevel: QRCode.CorrectLevel.H
         });
-        // Show popup after QR code is generated
-        setTimeout(showQRPopup, 50);
+        console.log("QR code generated successfully");
       } catch (error) {
         console.error("QR Code generation failed:", error);
+        qrCodeInitialized = false;
       }
     }
 
