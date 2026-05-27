@@ -1,9 +1,55 @@
+const CACHE_NAME = "ufestival-cache-v1";
+const URLS_TO_CACHE = [
+  "./",
+  "./index.html",
+  "./manifest.json",
+  "./assets/icons/logoWhite.png",
+  "./assets/icons/logo_white.svg",
+  "./assets/icons/logoBlack.png",
+  "./js/qrcode.min.js",
+  "./js/qr.js",
+  "./data/acts.json",
+  "./data/schedule.json",
+  "./data/map-markers.json",
+  "./data/i18n.js",
+  "./data/map-markers.js"
+];
+
 self.addEventListener("install", (event) => {
-  console.log("Service Worker geïnstalleerd");
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(URLS_TO_CACHE))
+      .then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) =>
+      Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      )
+    ).then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener("fetch", (event) => {
-  // later caching toevoegen
+  if (event.request.method !== "GET") {
+    return;
+  }
+
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(event.request).catch(() => caches.match("./"));
+    })
+  );
 });
 
 // Handle messages from the main app
