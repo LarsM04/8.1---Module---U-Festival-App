@@ -1,0 +1,157 @@
+{
+  "note": "Dit is een VOORSTEL gebaseerd op de schema-afbeelding; wijzigingen zijn gemarkeerd als 'uncertain'. Bevestig of pas aan voordat je deze naar het live `schedule.json` wilt toepassen.",
+  "proposedChanges": {
+    "saturday": {
+      "poton": [
+        { "id": "armin-van-buuren", "proposedStartTime": "10:15", "proposedEndTime": "11:45", "uncertain": true },
+        { "id": "kensington", "proposedStartTime": "12:15", "proposedEndTime": "13:15", "uncertain": true },
+        { "id": "de-staat", "proposedStartTime": "14:15", "proposedEndTime": "15:15", "uncertain": true },
+        { "id": "navarone", "proposedStartTime": "16:45", "proposedEndTime": "18:15", "uncertain": true },
+        { "id": "dotan", "proposedStartTime": "19:15", "proposedEndTime": "20:30", "uncertain": true },
+        { "id": "froukje", "proposedStartTime": "22:15", "proposedEndTime": "23:00", "uncertain": true }
+      ]
+    },
+    "sunday": {
+      "note": "De afbeelding toont andere hoofdacts op Pôton (o.a. Martin Garrix, Within Temptation, Chef'Special, Eefje de Visser, Spinvis). Wil je dat ik ook de artiesten vervang in `schedule.json` of alleen tijden aanpas voor de bestaande items?",
+      "poton": [
+        { "id": "vetje-staal", "comment": "origineel in JSON — afbeelding toont ander act; geen tijdsvoorstel gedaan" },
+        { "id": "vampin-game", "comment": "origineel in JSON — afbeelding toont ander act; geen tijdsvoorstel gedaan" },
+        { "id": "sophie-de-visser", "comment": "origineel in JSON — afbeelding toont ander act; geen tijdsvoorstel gedaan" },
+        { "id": "spinvis", "comment": "origineel in JSON — afbeelding toont Spinvis later in de avond; wil je ik tijdsaanpassing voorstel?", "uncertain": true }
+      ]
+    }
+  },
+  "base": 
+  {
+    "festival": {
+      "name": "U Festival 2026",
+      "date": "2026-09-05",
+      "location": "Strijkviertel, Utrecht",
+      "timezone": "Europe/Amsterdam"
+    },
+    "locations": [
+      { "id": "poton", "name": "Pôton", "color": "#247BA0" },
+      { "id": "lake", "name": "The Lake", "color": "#247BA0" },
+      { "id": "club", "name": "The Club", "color": "#247BA0" },
+      { "id": "hangar", "name": "Hangar", "color": "#247BA0" }
+    ],
+    "days": [
+      {
+        "id": "saturday",
+        "date": "2026-09-05",
+        "name": "Zaterdag",
+        "nameEn": "Saturday",
+        "acts": [
+          {
+            "id": "armin-van-buuren",
+            "name": "Armin van Buuren",
+            "location": "poton",
+            "startTime": "10:00",
+            "endTime": "11:00",
+            "description": "Wereldfaam DJ en producer uit Leiden. Armin van Buuren staat bekend om zijn progressive trance-sets.",
+            "descriptionEn": "World-famous DJ and producer from Leiden. Known for his progressive trance sets.",
+            "type": "DJ"
+          },
+          {
+            "id": "kensington",
+            "name": "Kensington",
+            "location": "poton",
+            "startTime": "12:00",
+            "endTime": "13:00",
+            "description": "Nederlandse rockband uit Amsterdam met catchy gitaarriffs en energieke live performances.",
+            "descriptionEn": "Dutch rock band from Amsterdam with catchy guitar riffs and energetic live performances.",
+            "type": "Band"
+          },
+          {
+            "id": "de-staat",
+            "name": "De Staat",
+            "location": "poton",
+            "startTime": "14:00",
+            "endTime": "15:00",
+            "description": "Nederlandse psychedelische rockband uit Utrecht. Bekend om hun experimentele geluid.",
+            "descriptionEn": "Dutch psychedelic rock band from Utrecht. Known for their experimental sound.",
+            "type": "Band"
+          },
+          {
+            "id": "navarone",
+            "name": "Navarone",
+            "location": "poton",
+            "startTime": "16:00",
+            "endTime": "17:00",
+            "description": "Nederlandse rapper en muziekproducent. Bekent voor zijn intelligente teksten.",
+            "descriptionEn": "Dutch rapper and music producer. Known for his intelligent lyrics.",
+            "type": "Hip-hop"
+          },
+          {
+            "id": "dotan",
+            "name": "Dotan",
+            "location": "poton",
+            "startTime": "17:00",
+            "endTime": "18:00",
+            "description": "Nederlandse singer-songwriter uit Amsterdam. Uitvoerder van popmuziek met diepgaande nummers.",
+            "descriptionEn": "Dutch singer-songwriter from Amsterdam. Performer of pop music with profound songs.",
+            "type": "Pop"
+          },
+          {
+            "id": "froukje",
+            "name": "Froukje",
+            "location": "poton",
+            "startTime": "22:00",
+            "endTime": "23:00",
+            "description": "Nederlandse zangeres. Bekend om haar warme stem en emotionele performances.",
+            "descriptionEn": "Dutch singer. Known for her warm voice and emotional performances.",
+            "type": "Pop"
+          }
+        ]
+      },
+      {
+        "id": "sunday",
+        "date": "2026-09-06",
+        "name": "Zondag",
+        "nameEn": "Sunday",
+        "acts": [
+          {
+            "id": "vetje-staal",
+            "name": "Vetje Staal",
+            "location": "poton",
+            "startTime": "10:30",
+            "endTime": "11:30",
+            "description": "Nederlandse muziekgroep.",
+            "descriptionEn": "Dutch music group.",
+            "type": "Band"
+          },
+          {
+            "id": "vampin-game",
+            "name": "Vampin Game",
+            "location": "poton",
+            "startTime": "13:00",
+            "endTime": "14:00",
+            "description": "Nederlandse band.",
+            "descriptionEn": "Dutch band.",
+            "type": "Band"
+          },
+          {
+            "id": "sophie-de-visser",
+            "name": "Sophie de Visser",
+            "location": "poton",
+            "startTime": "15:00",
+            "endTime": "16:00",
+            "description": "Nederlandse zangeres.",
+            "descriptionEn": "Dutch singer.",
+            "type": "Singer"
+          },
+          {
+            "id": "spinvis",
+            "name": "Spinvis",
+            "location": "poton",
+            "startTime": "17:00",
+            "endTime": "18:00",
+            "description": "Nederlandse singer-songwriter.",
+            "descriptionEn": "Dutch singer-songwriter.",
+            "type": "Singer"
+          }
+        ]
+      }
+    ]
+  }
+}
