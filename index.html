@@ -377,17 +377,22 @@
        gap: 8px;
      }
 
-     .schedule-grid-wrapper {
-       overflow: auto;
-       border: 2px solid var(--card-border);
-       border-radius: 12px;
-       background: var(--card-bg);
-       display: flex;
-       flex-direction: column;
-       width: 100%;
-       max-width: 100%;
-       max-height: clamp(280px, 55vh, 600px);
-     }
+.schedule-grid-wrapper {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: none;
+        border: 2px solid var(--card-border);
+        border-radius: 12px;
+        background: var(--card-bg);
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 100%;
+        max-height: clamp(280px, 55vh, 600px);
+        touch-action: pan-x;
+        user-select: none;
+      }
 
 .schedule-grid {
         display: flex;
@@ -491,7 +496,6 @@
         transition: all 0.2s ease;
         flex-basis: 0;
         box-sizing: border-box;
-        border: 1px solid var(--card-border);
       }
 
 .schedule-act-block.empty {
