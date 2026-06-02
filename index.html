@@ -226,36 +226,204 @@
       color: var(--text);
     }
 
-    #home.active {
-      gap: clamp(12px, 2vw, 20px);
-      flex: none;
-      min-height: auto;
-    }
-
-    #home .card {
-      flex: 0 0 auto;
-      margin-bottom: 0;
-      min-height: auto;
-    }
-
-    #home .card.hero {
-      min-height: clamp(120px, 22vh, 280px);
-    }
-
-    #home .card.acts-card {
-      overflow: visible;
-      margin-bottom: 8px;
-    }
-
-     .hero {
-       text-align: center;
-       font-size: clamp(22px, 4vw, 32px);
-       font-weight: 700;
-       color: var(--color-secondary);
-       display: flex;
-       align-items: center;
-       justify-content: center;
+     #home.active {
+       gap: clamp(12px, 2vw, 20px);
+       flex: none;
+       min-height: auto;
      }
+
+     #home .card {
+       flex: 0 0 auto;
+       margin-bottom: 0;
+       min-height: auto;
+     }
+
+     #home .card.hero {
+       min-height: clamp(180px, 30vh, 340px);
+     }
+
+     #home .card.acts-card {
+       overflow: visible;
+       margin-bottom: 8px;
+     }
+
+      .hero {
+        text-align: center;
+        font-size: clamp(28px, 5vw, 42px);
+        font-weight: 700;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        border: none;
+        background: transparent;
+        padding: 0;
+      }
+
+      .hero-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+      }
+
+      .hero-bg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 40%;
+        display: block;
+      }
+
+      .hero-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.3) 0%,
+          rgba(0, 0, 0, 0.55) 50%,
+          rgba(0, 0, 0, 0.7) 100%
+        );
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        padding: clamp(24px, 4vw, 40px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+      }
+
+      .hero-content .hero-title {
+        font-size: clamp(28px, 6vw, 48px);
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        line-height: 1.15;
+        color: #fff;
+      }
+
+      .hero-content .hero-subtitle {
+        font-size: clamp(12px, 2vw, 16px);
+        font-weight: 400;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        opacity: 0.85;
+        color: #fff;
+      }
+
+      .hero-content .hero-date {
+        display: inline-block;
+        margin-top: 6px;
+        padding: 5px 18px;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        border-radius: 30px;
+        font-size: clamp(11px, 1.8vw, 14px);
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+
+      /* ==================== STAGES SHOWCASE ==================== */
+      .stages-showcase {
+        background: transparent;
+        border: none;
+        padding: 0;
+        min-height: auto;
+      }
+
+      .stages-showcase .section-title {
+        font-size: clamp(22px, 4vw, 28px);
+        font-weight: 700;
+        color: var(--color-secondary);
+        margin-bottom: 14px;
+      }
+
+      .stages-scroll {
+        display: flex;
+        gap: 14px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px;
+        scrollbar-width: none;
+      }
+
+      .stages-scroll::-webkit-scrollbar {
+        display: none;
+      }
+
+      .stage-card {
+        flex: 0 0 clamp(200px, 60vw, 280px);
+        height: clamp(140px, 28vw, 200px);
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        scroll-snap-align: start;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      .stage-card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+      }
+
+      .stage-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 0.5s ease;
+      }
+
+      .stage-card:hover img {
+        transform: scale(1.08);
+      }
+
+      .stage-card-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          transparent 30%,
+          rgba(0, 0, 0, 0.7) 100%
+        );
+        display: flex;
+        align-items: flex-end;
+        padding: 16px;
+        pointer-events: none;
+      }
+
+      .stage-card-label {
+        color: #fff;
+        font-size: clamp(16px, 3vw, 22px);
+        font-weight: 700;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+      }
+
+      .stages-scroll-hint {
+        text-align: center;
+        font-size: 12px;
+        color: var(--text);
+        opacity: 0.45;
+        margin-top: 6px;
+        font-style: italic;
+      }
 
 .placeholder {
        background: var(--placeholder-bg);
@@ -2166,13 +2334,51 @@
 
     <!-- HOME -->
     <section id="home" class="page active">
-      <div class="card hero" data-i18n-html="home.hero">
-        WELCOME TO <br />
-        U FESTIVAL
+      <div class="card hero">
+        <div class="hero-bg">
+          <img src="assets/ponton.png" alt="U Festival Ponton Stage" loading="eager" />
+        </div>
+        <div class="hero-content">
+          <span class="hero-subtitle" data-i18n="home.heroWelcome">WELCOME TO</span>
+          <span class="hero-title">U FESTIVAL</span>
+          <span class="hero-date">12 — 13 JULI 2025</span>
+        </div>
       </div>
 
       <!-- Countdown Timer -->
       <div class="card countdown-card" id="countdown-card"></div>
+
+      <!-- Stages Showcase -->
+      <section class="card stages-showcase">
+        <h2 class="section-title" data-i18n="home.stages">Stages</h2>
+        <div class="stages-scroll" id="stages-scroll">
+          <div class="stage-card">
+            <img src="assets/ponton.png" alt="Ponton Stage" loading="lazy" />
+            <div class="stage-card-overlay">
+              <span class="stage-card-label">Ponton</span>
+            </div>
+          </div>
+          <div class="stage-card">
+            <img src="assets/the lake.png" alt="The Lake Stage" loading="lazy" />
+            <div class="stage-card-overlay">
+              <span class="stage-card-label">The Lake</span>
+            </div>
+          </div>
+          <div class="stage-card">
+            <img src="assets/the club.png" alt="The Club Stage" loading="lazy" />
+            <div class="stage-card-overlay">
+              <span class="stage-card-label">The Club</span>
+            </div>
+          </div>
+          <div class="stage-card">
+            <img src="assets/hangar.png" alt="Hangar Stage" loading="lazy" />
+            <div class="stage-card-overlay">
+              <span class="stage-card-label">Hangar</span>
+            </div>
+          </div>
+        </div>
+        <div class="stages-scroll-hint" data-i18n="home.scrollHint">← Swipe voor meer →</div>
+      </section>
 
       <!-- Live Feed -->
       <div class="card live-feed-card" id="live-feed-card">

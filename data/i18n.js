@@ -30,7 +30,10 @@ window.I18N = {
       liveNowEmpty: "Er speelt momenteel geen act.",
       liveNext: "Hierna",
       livePopular: "Populair",
-      liveFavCount: "favoriet"
+      liveFavCount: "favoriet",
+      heroWelcome: "WELKOM BIJ",
+      stages: "Stages",
+      scrollHint: "← Swipe voor meer →"
     },
     info: {
       title: "FESTIVAL INFORMATIE",
@@ -217,7 +220,10 @@ window.I18N = {
       liveNowEmpty: "No acts performing right now.",
       liveNext: "Up Next",
       livePopular: "Popular",
-      liveFavCount: "favourite"
+      liveFavCount: "favourite",
+      heroWelcome: "WELCOME TO",
+      stages: "Stages",
+      scrollHint: "← Swipe for more →"
     },
     info: {
       title: "FESTIVAL INFORMATION",
