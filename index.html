@@ -157,8 +157,8 @@
       flex-direction: column;
       min-height: 0;
       width: 100%;
-      padding: clamp(12px, 2vw, 24px);
-      padding-bottom: max(120px, calc(72px + env(safe-area-inset-bottom, 0px) + 20px));
+       padding: clamp(12px, 2vw, 24px) clamp(12px, 2vw, 24px) max(120px, calc(72px + env(safe-area-inset-bottom, 0px) + 20px));
+       padding-top: max(clamp(12px, 2vw, 24px), 70px);
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-y: contain;
@@ -927,13 +927,15 @@
         height: 28px;
       }
 
-      main {
-        padding-bottom: max(120px, calc(64px + env(safe-area-inset-bottom, 0px) + 24px));
-      }
-
-      body.act-detail-open main {
-        padding-bottom: max(120px, calc(64px + env(safe-area-inset-bottom, 0px) + 24px));
-      }
+       main {
+         padding-bottom: max(120px, calc(64px + env(safe-area-inset-bottom, 0px) + 24px));
+         padding-top: max(clamp(12px, 2vw, 24px), 60px);
+       }
+ 
+       body.act-detail-open main {
+         padding-bottom: max(120px, calc(64px + env(safe-area-inset-bottom, 0px) + 24px));
+         padding-top: max(clamp(12px, 2vw, 24px), 60px);
+       }
 
       .schedule-tabs {
         flex-direction: column;
