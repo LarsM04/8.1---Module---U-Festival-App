@@ -1226,6 +1226,37 @@
       fill: var(--color-accent);
     }
 
+    .act-detail-schedule-info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: clamp(16px, 3vw, 24px);
+    }
+
+    .act-schedule-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: var(--placeholder-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 20px;
+      font-size: clamp(13px, 2.2vw, 15px);
+      font-weight: 700;
+      color: var(--color-secondary);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .act-schedule-badge:hover {
+      transform: translateY(-1px);
+      border-color: var(--color-secondary);
+    }
+
+    .act-schedule-badge .badge-icon {
+      font-size: 1.1em;
+      line-height: 1;
+    }
+
     .act-detail-bio {
       font-size: clamp(15px, 2.5vw, 17px);
       line-height: 1.65;
@@ -2542,6 +2573,7 @@
             </svg>
           </button>
         </div>
+        <div class="act-detail-schedule-info" id="act-detail-schedule-info"></div>
         <p class="act-detail-bio" id="act-detail-bio"></p>
         <div class="act-video-wrapper">
           <iframe id="act-detail-video" title="Act video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -2768,6 +2800,7 @@
       if (currentActId && actsById[currentActId]) {
         document.getElementById("act-detail-bio").textContent = getActBio(actsById[currentActId]);
         document.getElementById("act-detail-video-link").textContent = t("act.youtube");
+        renderActDetailScheduleInfo(currentActId);
       }
 
       const mapPanel = document.getElementById("map-info-panel");
@@ -3120,6 +3153,53 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       }
     }
 
+    function renderActDetailScheduleInfo(actId) {
+      const container = document.getElementById("act-detail-schedule-info");
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (!scheduleData) return;
+
+      const actPerformances = [];
+      scheduleData.days.forEach(day => {
+        day.acts.forEach(scheduledAct => {
+          if (scheduledAct.id === actId) {
+            actPerformances.push({
+              dayId: day.id,
+              dayName: currentLang === "en" ? (day.nameEn || day.name) : day.name,
+              locationId: scheduledAct.location,
+              startTime: scheduledAct.startTime,
+              endTime: scheduledAct.endTime
+            });
+          }
+        });
+      });
+
+      if (actPerformances.length === 0) return;
+
+      actPerformances.forEach(perf => {
+        const location = scheduleData.locations.find(l => l.id === perf.locationId);
+        const stageName = location ? getLocationName(location) : perf.locationId;
+        const dayLabel = t(`schedule.${perf.dayId}`) || perf.dayName;
+
+        const dayBadge = document.createElement("span");
+        dayBadge.className = "act-schedule-badge";
+        dayBadge.innerHTML = `<span class="badge-icon" aria-hidden="true">📅</span> ${dayLabel}`;
+
+        const stageBadge = document.createElement("span");
+        stageBadge.className = "act-schedule-badge";
+        stageBadge.innerHTML = `<span class="badge-icon" aria-hidden="true">📍</span> ${stageName}`;
+
+        const timeBadge = document.createElement("span");
+        timeBadge.className = "act-schedule-badge";
+        timeBadge.innerHTML = `<span class="badge-icon" aria-hidden="true">🕒</span> ${perf.startTime} - ${perf.endTime}`;
+
+        container.appendChild(dayBadge);
+        container.appendChild(stageBadge);
+        container.appendChild(timeBadge);
+      });
+    }
+
     function openActDetail(actId) {
       const act = actsById[actId];
       if (!act) return;
@@ -3135,6 +3215,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       document.getElementById("act-detail-video").src = getYoutubeEmbedUrl(act);
       document.getElementById("act-detail-video-link").href = getYoutubeWatchUrl(act);
 
+      renderActDetailScheduleInfo(actId);
       updateActFavoriteButton();
 
       pages.forEach(p => p.classList.remove("active"));
