@@ -181,6 +181,14 @@
       width: 100%;
       min-height: 0;
       overflow: visible;
+      padding-bottom: max(140px, calc(72px + env(safe-area-inset-bottom, 0px) + 24px));
+    }
+
+    .page.active::after {
+      content: '';
+      display: block;
+      height: 140px;
+      flex-shrink: 0;
     }
 
     .page-title {
@@ -1003,7 +1011,7 @@
       background: transparent;
       color: var(--text);
       padding: clamp(18px, 4vw, 28px);
-      padding-bottom: clamp(28px, 6vw, 40px);
+      padding-bottom: max(clamp(28px, 6vw, 40px), 140px);
       flex: 1;
     }
 
@@ -1070,7 +1078,7 @@
     .act-video-fallback {
       display: inline-block;
       margin-top: 12px;
-      margin-bottom: clamp(24px, 4vw, 32px);
+      margin-bottom: max(clamp(24px, 4vw, 32px), 120px);
       font-size: 15px;
       font-weight: 700;
       color: var(--color-secondary);
