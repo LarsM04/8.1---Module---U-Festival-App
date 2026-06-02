@@ -158,7 +158,7 @@
       min-height: 0;
       width: 100%;
       padding: clamp(12px, 2vw, 24px);
-      padding-bottom: max(100px, calc(72px + env(safe-area-inset-bottom, 0px) + 20px));
+      padding-bottom: max(120px, calc(72px + env(safe-area-inset-bottom, 0px) + 20px));
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       overscroll-behavior-y: contain;
@@ -927,11 +927,11 @@
       }
 
       main {
-        padding-bottom: max(88px, calc(64px + env(safe-area-inset-bottom, 0px) + 24px));
+        padding-bottom: max(120px, calc(64px + env(safe-area-inset-bottom, 0px) + 24px));
       }
 
       body.act-detail-open main {
-        padding-bottom: 88px;
+        padding-bottom: max(120px, calc(64px + env(safe-area-inset-bottom, 0px) + 24px));
       }
 
       .schedule-tabs {
@@ -954,7 +954,7 @@
     /* Act detail page */
     body.act-detail-open main {
       padding: 0;
-      padding-bottom: max(100px, calc(72px + env(safe-area-inset-bottom, 0px) + 20px));
+      padding-bottom: max(120px, calc(72px + env(safe-area-inset-bottom, 0px) + 20px));
     }
 
     body.act-detail-open .header-logo {
