@@ -12,6 +12,16 @@
   <meta name="apple-mobile-web-app-title" content="U Festival" />
   <link rel="apple-touch-icon" href="assets/icons/logoWhite.png" />
 
+  <script>
+    // Capture PWA install prompt as early as possible in lifecycle
+    window.deferredInstallPrompt = null;
+    window.addEventListener("beforeinstallprompt", event => {
+      event.preventDefault();
+      window.deferredInstallPrompt = event;
+      console.log("PWA install prompt captured early in <head>");
+    });
+  </script>
+
    <style>
      @import url('https://fonts.googleapis.com/css2?family=Sansation:ital,wght@0,300;0,400;0,700;1,300&display=swap');
 
@@ -1422,6 +1432,174 @@
       opacity: 0.82;
       text-align: center;
     }
+
+    /* ==================== PWA INSTALLATION GUIDE POPUP ==================== */
+    .pwa-guide-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1300;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    .pwa-guide-overlay.open {
+      display: flex;
+    }
+
+    .pwa-guide-panel {
+      width: min(480px, 100%);
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 24px;
+      padding: 28px;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+      color: var(--text);
+      animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(40px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .pwa-guide-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      border: none;
+      background: none;
+      color: var(--color-secondary);
+      font-size: 28px;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    .pwa-guide-close:hover {
+      opacity: 1;
+    }
+
+    .pwa-guide-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .pwa-guide-logo {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid var(--card-border);
+    }
+
+    .pwa-guide-title h2 {
+      font-size: clamp(20px, 4vw, 24px);
+      color: var(--color-secondary);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .pwa-guide-title p {
+      font-size: 14px;
+      opacity: 0.7;
+      margin: 0;
+    }
+
+    .pwa-guide-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 10px;
+    }
+
+    .pwa-guide-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .pwa-guide-step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(240, 50, 40, 0.2);
+    }
+
+    .pwa-guide-step-content {
+      font-size: 15px;
+      line-height: 1.5;
+      padding-top: 2px;
+    }
+
+    .pwa-guide-step-content strong {
+      color: var(--color-secondary);
+    }
+
+    .pwa-guide-step-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--placeholder-bg);
+      border-radius: 6px;
+      padding: 4px 6px;
+      margin: 0 4px;
+      border: 1px solid var(--card-border);
+      vertical-align: middle;
+    }
+
+    .pwa-guide-step-icon img,
+    .pwa-guide-step-icon svg {
+      height: 16px;
+      width: auto;
+      display: block;
+    }
+
+    .pwa-guide-footer {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .pwa-guide-btn {
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 20px;
+      cursor: pointer;
+      font-weight: 700;
+      background: var(--color-accent);
+      color: #fff;
+      text-transform: uppercase;
+      transition: background 0.15s, transform 0.15s;
+      box-shadow: 0 6px 20px rgba(240, 50, 40, 0.25);
+    }
+
+    .pwa-guide-btn:hover {
+      background: #d82b22;
+      transform: translateY(-1px);
+    }
   </style>
 </head>
 
@@ -1626,6 +1804,45 @@
         <button type="button" class="qr-popup-action secondary" id="qr-popup-close-bottom">Sluiten</button>
       </div>
       <p class="qr-popup-status" id="qr-popup-status">Open deze melding later via de QR-knop rechtsboven.</p>
+    </div>
+  </div>
+
+  <div id="pwa-guide-overlay" class="pwa-guide-overlay" aria-hidden="true">
+    <div class="pwa-guide-panel" role="dialog" aria-modal="true" aria-labelledby="pwa-guide-title">
+      <button type="button" class="pwa-guide-close" id="pwa-guide-close" aria-label="Sluiten">×</button>
+      
+      <div class="pwa-guide-header">
+        <img class="pwa-guide-logo" src="assets/icons/logoWhite.png" alt="U Festival Logo" />
+        <div class="pwa-guide-title">
+          <h2 id="pwa-guide-title-text">Installeer U Festival</h2>
+          <p id="pwa-guide-subtitle-text">Voeg de app toe aan je startscherm</p>
+        </div>
+      </div>
+
+      <div class="pwa-guide-steps" id="pwa-guide-steps-container">
+        <div class="pwa-guide-step">
+          <div class="pwa-guide-step-num">1</div>
+          <div class="pwa-guide-step-content" id="pwa-step1-text">
+            Open het <strong>browsermenu</strong> of tik op de <strong>Deel-knop</strong>.
+          </div>
+        </div>
+        <div class="pwa-guide-step">
+          <div class="pwa-guide-step-num">2</div>
+          <div class="pwa-guide-step-content" id="pwa-step2-text">
+            Kies voor <strong>'Zet op beginscherm'</strong> of <strong>'App installeren'</strong>.
+          </div>
+        </div>
+        <div class="pwa-guide-step">
+          <div class="pwa-guide-step-num">3</div>
+          <div class="pwa-guide-step-content" id="pwa-step3-text">
+            Bevestig de installatie om U Festival altijd direct bij de hand te hebben!
+          </div>
+        </div>
+      </div>
+
+      <div class="pwa-guide-footer">
+        <button type="button" class="pwa-guide-btn" id="pwa-guide-btn-close">Begrepen</button>
+      </div>
     </div>
   </div>
 
@@ -1834,6 +2051,102 @@
     const qrCodeUrl = window.location.href;
     let qrCodeInitialized = false;
 
+    // ==================== PWA INSTALLATION GUIDE ====================
+    const pwaGuideOverlay = document.getElementById("pwa-guide-overlay");
+    const pwaGuideClose = document.getElementById("pwa-guide-close");
+    const pwaGuideBtnClose = document.getElementById("pwa-guide-btn-close");
+
+    const pwaTranslations = {
+      nl: {
+        title: "Installeer U Festival",
+        subtitle: "Voeg de app toe aan je startscherm",
+        closeBtn: "Begrepen",
+        iOS: [
+          "Tik op de <strong>Deel-knop</strong> <span class='pwa-guide-step-icon'><svg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' style='stroke: var(--color-secondary); stroke-width: 2;'><path d='M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M12 3v13M9 6l3-3 3 3'/></svg></span> in Safari's navigatiebalk.",
+          "Scroll naar beneden en tik op <strong>'Zet op beginscherm'</strong> <span class='pwa-guide-step-icon'><svg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' style='stroke: var(--color-secondary); stroke-width: 2;'><path d='M12 5v14M5 12h14'/></svg></span>.",
+          "Tik rechtsboven op <strong>'Voeg toe'</strong>."
+        ],
+        Android: [
+          "Tik op het <strong>menu</strong> (de drie puntjes <span class='pwa-guide-step-icon'><svg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' style='fill: var(--color-secondary);'><circle cx='12' cy='5' r='2'/><circle cx='12' cy='12' r='2'/><circle cx='12' cy='19' r='2'/></svg></span>) rechtsboven.",
+          "Kies voor <strong>'App installeren'</strong> of <strong>'Toevoegen aan startscherm'</strong>.",
+          "Bevestig de melding om de app op je telefoon te installeren."
+        ],
+        Desktop: [
+          "Klik op het <strong>installatie-icoon</strong> (computer met pijl) in de adresbalk van je browser.",
+          "Of open het browsermenu rechtsboven en kies <strong>'U Festival installeren...'</strong>.",
+          "De app verschijnt nu in je startmenu of op je bureaublad!"
+        ]
+      },
+      en: {
+        title: "Install U Festival",
+        subtitle: "Add the app to your home screen",
+        closeBtn: "Got it",
+        iOS: [
+          "Tap the <strong>Share button</strong> <span class='pwa-guide-step-icon'><svg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' style='stroke: var(--color-secondary); stroke-width: 2;'><path d='M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M12 3v13M9 6l3-3 3 3'/></svg></span> in Safari's navigation bar.",
+          "Scroll down and tap <strong>'Add to Home Screen'</strong> <span class='pwa-guide-step-icon'><svg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' style='stroke: var(--color-secondary); stroke-width: 2;'><path d='M12 5v14M5 12h14'/></svg></span>.",
+          "Tap <strong>'Add'</strong> in the top right corner."
+        ],
+        Android: [
+          "Tap the <strong>menu</strong> (the three dots <span class='pwa-guide-step-icon'><svg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' style='fill: var(--color-secondary);'><circle cx='12' cy='5' r='2'/><circle cx='12' cy='12' r='2'/><circle cx='12' cy='19' r='2'/></svg></span>) in the top-right corner.",
+          "Choose <strong>'Install app'</strong> or <strong>'Add to Home screen'</strong>.",
+          "Confirm the prompt to install the app on your device."
+        ],
+        Desktop: [
+          "Click the <strong>install icon</strong> (computer with down arrow) in your browser's address bar.",
+          "Or open the browser menu in the top right and select <strong>'Install U Festival...'</strong>.",
+          "The app will now appear in your start menu or on your desktop!"
+        ]
+      }
+    };
+
+    function getMobileOS() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        return "iOS";
+      }
+      if (/android/i.test(userAgent)) {
+        return "Android";
+      }
+      return "Desktop";
+    }
+
+    function showPWAGuide() {
+      // Sluit eerst de QR-popup als die openstaat
+      closeQRPopup();
+      
+      const os = getMobileOS();
+      const lang = currentLang === "en" ? "en" : "nl";
+      const trans = pwaTranslations[lang];
+      
+      document.getElementById("pwa-guide-title-text").textContent = trans.title;
+      document.getElementById("pwa-guide-subtitle-text").textContent = trans.subtitle;
+      pwaGuideBtnClose.textContent = trans.closeBtn;
+      
+      const steps = trans[os];
+      const stepsContainer = document.getElementById("pwa-guide-steps-container");
+      
+      stepsContainer.innerHTML = steps.map((stepText, index) => `
+        <div class="pwa-guide-step">
+          <div class="pwa-guide-step-num">${index + 1}</div>
+          <div class="pwa-guide-step-content">${stepText}</div>
+        </div>
+      `).join("");
+      
+      pwaGuideOverlay?.classList.add("open");
+      pwaGuideOverlay?.setAttribute("aria-hidden", "false");
+    }
+
+    function closePWAGuide() {
+      pwaGuideOverlay?.classList.remove("open");
+      pwaGuideOverlay?.setAttribute("aria-hidden", "true");
+    }
+
+    pwaGuideClose?.addEventListener("click", closePWAGuide);
+    pwaGuideBtnClose?.addEventListener("click", closePWAGuide);
+    pwaGuideOverlay?.addEventListener("click", event => {
+      if (event.target === pwaGuideOverlay) closePWAGuide();
+    });
+
     function initQRCode() {
       if (!qrCodeTarget || qrCodeInitialized) return;
       
@@ -1865,6 +2178,7 @@
     window.addEventListener("beforeinstallprompt", event => {
       event.preventDefault();
       deferredInstallPrompt = event;
+      window.deferredInstallPrompt = event;
     });
 
     function showQRPopup() {
@@ -1885,14 +2199,16 @@
       if (event.target === qrPopupOverlay) closeQRPopup();
     });
     qrDownloadBtn?.addEventListener("click", async () => {
-      if (deferredInstallPrompt) {
-        deferredInstallPrompt.prompt();
-        const choice = await deferredInstallPrompt.userChoice;
+      const activePrompt = window.deferredInstallPrompt || deferredInstallPrompt;
+      if (activePrompt) {
+        activePrompt.prompt();
+        const choice = await activePrompt.userChoice;
         if (choice.outcome === "accepted") {
+          window.deferredInstallPrompt = null;
           deferredInstallPrompt = null;
         }
       } else {
-        alert("Je browser kan deze app niet automatisch installeren.\n\nOpen het browsermenu en kies 'Add to Home screen' of 'Toevoegen aan beginscherm'.");
+        showPWAGuide();
       }
     });
 
@@ -1923,9 +2239,17 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
     // Service worker registreren
     if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js");
-      });
+      const registerSW = () => {
+        navigator.serviceWorker.register("./service-worker.js")
+          .then(reg => console.log("Service Worker registered with scope:", reg.scope))
+          .catch(err => console.error("Service Worker registration failed:", err));
+      };
+
+      if (document.readyState === "complete") {
+        registerSW();
+      } else {
+        window.addEventListener("load", registerSW);
+      }
     }
 
     // ==================== ACTS & DETAIL PAGE ====================
