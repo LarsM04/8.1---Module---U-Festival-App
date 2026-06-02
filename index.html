@@ -44,6 +44,7 @@
      }
 
      [data-theme="dark"] {
+       --color-secondary: #4ca5d4;
        --bg: var(--color-primary);
        --text: var(--color-base);
        --card-bg: #111111;
@@ -1393,7 +1394,7 @@
       cursor: pointer;
       border: 2px solid var(--card-border);
       background: linear-gradient(135deg, rgba(240, 50, 40, 0.08), rgba(36, 123, 160, 0.08));
-      color: var(--color-primary);
+      color: var(--text);
       font-size: clamp(16px, 2.5vw, 18px);
       font-weight: 700;
       border-radius: 16px;
@@ -1401,6 +1402,10 @@
       align-items: center;
       justify-content: center;
       min-height: 84px;
+    }
+
+    [data-theme="dark"] .scan-qr-card {
+      background: linear-gradient(135deg, rgba(240, 50, 40, 0.18), rgba(36, 123, 160, 0.18));
     }
 
     .scan-qr-card:hover {
