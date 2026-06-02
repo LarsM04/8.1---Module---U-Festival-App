@@ -1,4 +1,4 @@
-const CACHE_NAME = "ufestival-cache-v2";
+const CACHE_NAME = "ufestival-cache-v3";
 const URLS_TO_CACHE = [
   "./",
   "./index.html",
@@ -10,6 +10,7 @@ const URLS_TO_CACHE = [
   "./js/qr.js",
   "./data/acts.json",
   "./data/schedule.json",
+  "./data/news.json",
   "./data/map-markers.json",
   "./data/i18n.js",
   "./data/map-markers.js"

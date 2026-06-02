@@ -15,7 +15,22 @@ window.I18N = {
     },
     home: {
       hero: "WELKOM OP HET <br />U FESTIVAL",
-      acts: "Artiesten"
+      acts: "Artiesten",
+      news: "Nieuws",
+      noNews: "Geen nieuwsberichten op dit moment.",
+      scanQr: "Scan de app via QR-code",
+      countdownDays: "dagen",
+      countdownHours: "uur",
+      countdownMinutes: "min",
+      countdownSeconds: "sec",
+      countdownUntil: "tot U Festival",
+      countdownLive: "🎉 U Festival is NU bezig!",
+      countdownPassed: "U Festival 2026 is afgelopen.",
+      liveNow: "Nu Live",
+      liveNowEmpty: "Er speelt momenteel geen act.",
+      liveNext: "Hierna",
+      livePopular: "Populair",
+      liveFavCount: "favoriet"
     },
     info: {
       title: "FESTIVAL INFORMATIE",
@@ -77,6 +92,9 @@ window.I18N = {
       typeLabel: "Type:",
       close: "Sluiten",
       favoriteToggle: "Favoriet wisselen",
+      filterAll: "Alles",
+      filterFavorites: "Favorieten",
+      scrollHint: "← Scroll voor meer →",
       types: {
         DJ: "DJ",
         Band: "Band",
@@ -86,7 +104,13 @@ window.I18N = {
         Film: "Film",
         Cabaret: "Cabaret",
         Show: "Show",
-        Educatie: "Educatie"
+        Educatie: "Educatie",
+        Talent: "Talent",
+        Comedy: "Comedy",
+        Lecture: "Lezing",
+        Movie: "Film",
+        Performance: "Performance",
+        Singer: "Zanger"
       }
     },
     map: {
@@ -125,9 +149,41 @@ window.I18N = {
       favorite: "Favoriet",
       youtube: "Bekijk op YouTube"
     },
+    qr: {
+      title: "QR-code app",
+      description: "Scan de QR-code om de app te downloaden. Je kan deze melding later altijd weer openen met de knop rechtsboven.",
+      download: "Download app",
+      close: "Sluiten",
+      status: "Open deze melding later via de QR-knop rechtsboven."
+    },
+    mySchedule: {
+      title: "MIJN SCHEMA",
+      empty: "Je hebt nog geen favorieten. Voeg acts toe via het schema of de artiestenlijst!",
+      overlap: "⚠️ Overlapt met",
+      notifyInfo: "Je krijgt een melding 15 min van tevoren",
+      stage: "Podium"
+    },
     notify: {
       now: "🎶 Nu bezig!",
       minutesBefore: "min tot"
+    },
+    legend: {
+      title: "Legenda",
+      stage: "Podium",
+      food: "Eten",
+      bar: "Drank",
+      toilet: "WC",
+      merchandise: "Merchandise",
+      locker: "Locker",
+      iceCream: "IJs",
+      firstAid: "EHBO",
+      entrance: "Ingang / Uitgang",
+      you: "Jouw locatie"
+    },
+    gps: {
+      centerOnMe: "Centreer op mijn locatie",
+      unavailable: "GPS niet beschikbaar",
+      outsideFestival: "Je bevindt je buiten het festivalterrein"
     }
   },
   en: {
@@ -146,7 +202,22 @@ window.I18N = {
     },
     home: {
       hero: "WELCOME TO <br />U FESTIVAL",
-      acts: "Artists"
+      acts: "Artists",
+      news: "News",
+      noNews: "No news at the moment.",
+      scanQr: "Scan the app via QR code",
+      countdownDays: "days",
+      countdownHours: "hrs",
+      countdownMinutes: "min",
+      countdownSeconds: "sec",
+      countdownUntil: "until U Festival",
+      countdownLive: "🎉 U Festival is LIVE now!",
+      countdownPassed: "U Festival 2026 has ended.",
+      liveNow: "Live Now",
+      liveNowEmpty: "No acts performing right now.",
+      liveNext: "Up Next",
+      livePopular: "Popular",
+      liveFavCount: "favourite"
     },
     info: {
       title: "FESTIVAL INFORMATION",
@@ -208,6 +279,9 @@ window.I18N = {
       typeLabel: "Type:",
       close: "Close",
       favoriteToggle: "Toggle favourite",
+      filterAll: "All",
+      filterFavorites: "Favourites",
+      scrollHint: "← Scroll for more →",
       types: {
         DJ: "DJ",
         Band: "Band",
@@ -217,7 +291,13 @@ window.I18N = {
         Film: "Film",
         Cabaret: "Cabaret",
         Show: "Show",
-        Educatie: "Education"
+        Educatie: "Education",
+        Talent: "Talent",
+        Comedy: "Comedy",
+        Lecture: "Lecture",
+        Movie: "Movie",
+        Performance: "Performance",
+        Singer: "Singer"
       }
     },
     map: {
@@ -256,9 +336,41 @@ window.I18N = {
       favorite: "Favourite",
       youtube: "Watch on YouTube"
     },
+    qr: {
+      title: "QR code app",
+      description: "Scan the QR code to download the app. You can always reopen this dialog using the button in the top right.",
+      download: "Download app",
+      close: "Close",
+      status: "Reopen this dialog via the QR button in the top right."
+    },
+    mySchedule: {
+      title: "MY SCHEDULE",
+      empty: "You have no favourites yet. Add acts via the schedule or the artist list!",
+      overlap: "⚠️ Overlaps with",
+      notifyInfo: "You'll get a notification 15 min before",
+      stage: "Stage"
+    },
     notify: {
       now: "🎶 On now!",
       minutesBefore: "min until"
+    },
+    legend: {
+      title: "Legend",
+      stage: "Stage",
+      food: "Food",
+      bar: "Drinks",
+      toilet: "Toilets",
+      merchandise: "Merchandise",
+      locker: "Lockers",
+      iceCream: "Ice cream",
+      firstAid: "First aid",
+      entrance: "Entrance / Exit",
+      you: "Your location"
+    },
+    gps: {
+      centerOnMe: "Centre on my location",
+      unavailable: "GPS not available",
+      outsideFestival: "You are outside the festival grounds"
     }
   }
 };

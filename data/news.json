@@ -1,0 +1,31 @@
+{
+  "news": [
+    {
+      "id": "new-stage",
+      "date": "2026-08-28",
+      "titleNl": "🎪 Nieuw podium aangekondigd!",
+      "titleEn": "🎪 New stage announced!",
+      "bodyNl": "The Hangar is officieel toegevoegd aan het festivalterrein! Non-stop house, techno en dance van 10:00 tot middernacht.",
+      "bodyEn": "The Hangar has been officially added to the festival grounds! Non-stop house, techno and dance from 10:00 till midnight.",
+      "tag": "lineup"
+    },
+    {
+      "id": "shuttle-update",
+      "date": "2026-09-01",
+      "titleNl": "🚌 Shuttlebus schema bijgewerkt",
+      "titleEn": "🚌 Shuttle bus schedule updated",
+      "bodyNl": "De gratis shuttlebus rijdt nu ook vanaf station Leidsche Rijn. Vertrek elke 15 minuten tussen 11:00 en 19:00.",
+      "bodyEn": "The free shuttle bus now also departs from Leidsche Rijn station. Departures every 15 minutes between 11:00 and 19:00.",
+      "tag": "transport"
+    },
+    {
+      "id": "golden-glu",
+      "date": "2026-09-03",
+      "titleNl": "🏅 Golden-GLU armbandjes ophalen",
+      "titleEn": "🏅 Collect your Golden-GLU wristbands",
+      "bodyNl": "GLU-studenten kunnen hun gouden armbandje ophalen bij de informatiebalie vanaf 11:00 op festivaldag. Vergeet je studentenpas niet!",
+      "bodyEn": "GLU students can collect their golden wristband at the information desk from 11:00 on festival day. Don't forget your student ID!",
+      "tag": "info"
+    }
+  ]
+}
