@@ -954,7 +954,7 @@
     /* Act detail page */
     body.act-detail-open main {
       padding: 0;
-      padding-bottom: 72px;
+      padding-bottom: max(100px, calc(72px + env(safe-area-inset-bottom, 0px) + 20px));
     }
 
     body.act-detail-open .header-logo {
@@ -988,6 +988,7 @@
       padding: 0;
       gap: 0;
       background: var(--bg);
+      overflow: visible;
     }
 
     .act-hero {
