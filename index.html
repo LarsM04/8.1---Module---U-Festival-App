@@ -3793,7 +3793,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       }
 
       onTouchStart(e) {
-        if (e.target.closest(".map-zoom-controls, .map-info-panel")) return;
+        if (e.target.closest(".map-zoom-controls, .map-info-panel, .map-legend, .map-gps-btn")) return;
         if (e.touches.length === 2) {
           e.preventDefault();
           this.touchPinching = true;
@@ -4015,7 +4015,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       onPointerDown(e) {
         if (this.touchPinching) return;
         if (e.pointerType === "touch") return;
-        if (e.target.closest(".map-zoom-controls, .map-info-panel")) return;
+        if (e.target.closest(".map-zoom-controls, .map-info-panel, .map-legend, .map-gps-btn")) return;
         if (e.pointerType === "mouse" && e.button !== 0) return;
 
         e.preventDefault();
