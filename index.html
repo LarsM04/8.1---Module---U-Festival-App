@@ -3092,8 +3092,14 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
     async function loadActsData() {
       try {
-        const response = await fetch("./data/acts.json");
-        actsData = await response.json();
+        // CMS override: check localStorage first
+        const cmsActs = localStorage.getItem("cms-acts");
+        if (cmsActs) {
+          actsData = JSON.parse(cmsActs);
+        } else {
+          const response = await fetch("./data/acts.json");
+          actsData = await response.json();
+        }
         actsById = {};
         actsData.acts.forEach(act => {
           actsById[act.id] = act;
@@ -3292,8 +3298,14 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     // Load schedule data
     async function loadScheduleData() {
       try {
-        const response = await fetch("./data/schedule.json");
-        scheduleData = await response.json();
+        // CMS override: check localStorage first
+        const cmsSchedule = localStorage.getItem("cms-schedule");
+        if (cmsSchedule) {
+          scheduleData = JSON.parse(cmsSchedule);
+        } else {
+          const response = await fetch("./data/schedule.json");
+          scheduleData = await response.json();
+        }
         renderScheduleFilters();
         renderScheduleGrid();
       } catch (error) {
@@ -3583,8 +3595,14 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
     async function loadNewsData() {
       try {
-        const response = await fetch("./data/news.json");
-        newsData = await response.json();
+        // CMS override: check localStorage first
+        const cmsNews = localStorage.getItem("cms-news");
+        if (cmsNews) {
+          newsData = JSON.parse(cmsNews);
+        } else {
+          const response = await fetch("./data/news.json");
+          newsData = await response.json();
+        }
         renderNews();
       } catch (error) {
         console.error("Error loading news:", error);
@@ -3850,8 +3868,43 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       }
     });
 
+    // ==================== CMS OVERRIDES ====================
+    function applyCMSOverrides() {
+      // Theme overrides
+      const cmsTheme = localStorage.getItem("cms-theme");
+      if (cmsTheme) {
+        try {
+          const theme = JSON.parse(cmsTheme);
+          const root = document.documentElement;
+          if (theme.accent) root.style.setProperty("--color-accent", theme.accent);
+          if (theme.base) root.style.setProperty("--color-base", theme.base);
+          if (theme.primary) root.style.setProperty("--color-primary", theme.primary);
+          if (theme.secondary) root.style.setProperty("--color-secondary", theme.secondary);
+          if (theme.info) root.style.setProperty("--color-info", theme.info);
+          // Update nav and accent-dependent elements
+          const nav = document.querySelector("nav");
+          if (nav && theme.accent) nav.style.background = theme.accent;
+        } catch (e) { /* ignore parse errors */ }
+      }
+
+      // Hero / Festival info overrides
+      const cmsFestival = localStorage.getItem("cms-festival");
+      if (cmsFestival) {
+        try {
+          const fest = JSON.parse(cmsFestival);
+          const heroTitle = document.querySelector(".hero-title");
+          const heroSubtitle = document.querySelector(".hero-subtitle");
+          const heroDate = document.querySelector(".hero-date");
+          if (heroTitle && fest.heroTitle) heroTitle.textContent = fest.heroTitle;
+          if (heroSubtitle && fest.heroSubtitle) heroSubtitle.textContent = fest.heroSubtitle;
+          if (heroDate && fest.heroDate) heroDate.textContent = fest.heroDate;
+        } catch (e) { /* ignore parse errors */ }
+      }
+    }
+
     // Load data when page is loaded
     window.addEventListener("load", () => {
+      applyCMSOverrides();
       applyLanguage(currentLang);
       loadActsData();
       loadScheduleData();

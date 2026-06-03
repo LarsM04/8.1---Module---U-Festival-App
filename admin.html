@@ -1,0 +1,2263 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>U Festival CMS — Admin</title>
+  <link rel="icon" href="assets/icons/logoWhite.png" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+      --cms-bg: #0a0a0f;
+      --cms-surface: #12121a;
+      --cms-surface-2: #1a1a26;
+      --cms-surface-3: #222233;
+      --cms-border: rgba(255,255,255,0.08);
+      --cms-border-hover: rgba(255,255,255,0.15);
+      --cms-text: #e8e8f0;
+      --cms-text-muted: #8888a0;
+      --cms-accent: #F03228;
+      --cms-accent-hover: #d82b22;
+      --cms-secondary: #247BA0;
+      --cms-secondary-hover: #2f8eb5;
+      --cms-success: #22c55e;
+      --cms-warning: #f59e0b;
+      --cms-danger: #ef4444;
+      --cms-info: #3b82f6;
+      --cms-radius: 12px;
+      --cms-radius-sm: 8px;
+      --cms-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      --cms-transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--cms-bg);
+      color: var(--cms-text);
+      min-height: 100vh;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ==================== LOGIN SCREEN ==================== */
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--cms-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .login-screen.hidden {
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .login-card {
+      width: min(420px, 90%);
+      background: var(--cms-surface);
+      border: 1px solid var(--cms-border);
+      border-radius: 24px;
+      padding: 48px 36px;
+      text-align: center;
+      box-shadow: var(--cms-shadow), 0 0 120px rgba(240, 50, 40, 0.08);
+    }
+
+    .login-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      border: 2px solid var(--cms-border);
+    }
+
+    .login-card h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      background: linear-gradient(135deg, var(--cms-accent), var(--cms-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .login-card p {
+      color: var(--cms-text-muted);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .login-input-group {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--cms-surface-2);
+      border: 2px solid var(--cms-border);
+      border-radius: var(--cms-radius);
+      color: var(--cms-text);
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color var(--cms-transition);
+    }
+
+    .login-input:focus {
+      border-color: var(--cms-accent);
+    }
+
+    .login-input::placeholder {
+      color: var(--cms-text-muted);
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--cms-accent), #c42520);
+      border: none;
+      border-radius: var(--cms-radius);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform var(--cms-transition), box-shadow var(--cms-transition);
+      margin-top: 8px;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(240, 50, 40, 0.3);
+    }
+
+    .login-error {
+      color: var(--cms-danger);
+      font-size: 13px;
+      margin-top: 12px;
+      min-height: 20px;
+    }
+
+    .login-setup-info {
+      color: var(--cms-text-muted);
+      font-size: 12px;
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+
+    .login-setup-info a {
+      color: var(--cms-secondary);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    /* ==================== MAIN LAYOUT ==================== */
+    .cms-app {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .cms-app.visible {
+      display: flex;
+    }
+
+    /* ==================== SIDEBAR ==================== */
+    .cms-sidebar {
+      width: 260px;
+      background: var(--cms-surface);
+      border-right: 1px solid var(--cms-border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 100;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px 20px;
+      border-bottom: 1px solid var(--cms-border);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .sidebar-brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+    }
+
+    .sidebar-brand-text {
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--cms-accent), var(--cms-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .sidebar-subtitle {
+      font-size: 11px;
+      color: var(--cms-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-left: 48px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 10px;
+      overflow-y: auto;
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--cms-text-muted);
+      padding: 12px 12px 6px;
+      font-weight: 600;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--cms-radius-sm);
+      color: var(--cms-text-muted);
+      cursor: pointer;
+      transition: all var(--cms-transition);
+      border: none;
+      background: none;
+      width: 100%;
+      font-family: inherit;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    .sidebar-item:hover {
+      background: var(--cms-surface-2);
+      color: var(--cms-text);
+    }
+
+    .sidebar-item.active {
+      background: rgba(240, 50, 40, 0.12);
+      color: var(--cms-accent);
+      font-weight: 600;
+    }
+
+    .sidebar-item .sidebar-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--cms-border);
+    }
+
+    .sidebar-logout {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: var(--cms-radius-sm);
+      color: var(--cms-text-muted);
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      font-family: inherit;
+      font-size: 13px;
+      transition: all var(--cms-transition);
+    }
+
+    .sidebar-logout:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--cms-danger);
+    }
+
+    /* ==================== MAIN CONTENT ==================== */
+    .cms-main {
+      flex: 1;
+      margin-left: 260px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cms-topbar {
+      height: 64px;
+      background: var(--cms-surface);
+      border-bottom: 1px solid var(--cms-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cms-content {
+      flex: 1;
+      padding: 28px;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    /* ==================== SECTION PANELS ==================== */
+    .cms-section {
+      display: none;
+      animation: sectionFade 0.25s ease;
+    }
+
+    .cms-section.active {
+      display: block;
+    }
+
+    @keyframes sectionFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ==================== CARDS ==================== */
+    .cms-card {
+      background: var(--cms-surface);
+      border: 1px solid var(--cms-border);
+      border-radius: var(--cms-radius);
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: border-color var(--cms-transition);
+    }
+
+    .cms-card:hover {
+      border-color: var(--cms-border-hover);
+    }
+
+    .cms-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .cms-card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--cms-text);
+    }
+
+    .cms-card-subtitle {
+      font-size: 12px;
+      color: var(--cms-text-muted);
+      margin-top: 2px;
+    }
+
+    /* ==================== FORM ELEMENTS ==================== */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--cms-text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--cms-surface-2);
+      border: 1px solid var(--cms-border);
+      border-radius: var(--cms-radius-sm);
+      color: var(--cms-text);
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color var(--cms-transition);
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      border-color: var(--cms-secondary);
+    }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder {
+      color: var(--cms-text-muted);
+      opacity: 0.6;
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-color-input {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-color-input input[type="color"] {
+      width: 44px;
+      height: 36px;
+      border: 2px solid var(--cms-border);
+      border-radius: var(--cms-radius-sm);
+      cursor: pointer;
+      background: transparent;
+      padding: 2px;
+    }
+
+    /* ==================== BUTTONS ==================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: var(--cms-radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all var(--cms-transition);
+    }
+
+    .btn-primary {
+      background: var(--cms-accent);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--cms-accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--cms-secondary);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: var(--cms-secondary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--cms-border);
+      color: var(--cms-text-muted);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--cms-text-muted);
+      color: var(--cms-text);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--cms-danger);
+    }
+
+    .btn-danger:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+
+    .btn-success {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--cms-success);
+    }
+
+    .btn-success:hover {
+      background: rgba(34, 197, 94, 0.25);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--cms-radius-sm);
+      background: var(--cms-surface-2);
+      border: 1px solid var(--cms-border);
+      color: var(--cms-text-muted);
+      cursor: pointer;
+      font-size: 16px;
+      transition: all var(--cms-transition);
+    }
+
+    .btn-icon:hover {
+      background: var(--cms-surface-3);
+      color: var(--cms-text);
+    }
+
+    /* ==================== DATA TABLE ==================== */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--cms-text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--cms-border);
+    }
+
+    .data-table td {
+      padding: 12px 14px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--cms-border);
+      vertical-align: middle;
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .data-table .td-actions {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .data-table .td-actions button {
+      margin-left: 6px;
+    }
+
+    .data-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 1px solid var(--cms-border);
+    }
+
+    /* ==================== MODAL ==================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-panel {
+      width: min(600px, 100%);
+      max-height: 85vh;
+      background: var(--cms-surface);
+      border: 1px solid var(--cms-border);
+      border-radius: 20px;
+      overflow-y: auto;
+      animation: modalSlide 0.25s ease;
+    }
+
+    @keyframes modalSlide {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--cms-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      background: var(--cms-surface);
+      z-index: 1;
+    }
+
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--cms-surface-2);
+      border: none;
+      color: var(--cms-text-muted);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close:hover {
+      color: var(--cms-text);
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--cms-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* ==================== TOAST ==================== */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 3000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast {
+      padding: 12px 20px;
+      background: var(--cms-surface-2);
+      border: 1px solid var(--cms-border);
+      border-radius: var(--cms-radius);
+      color: var(--cms-text);
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      animation: toastIn 0.3s ease;
+      box-shadow: var(--cms-shadow);
+      min-width: 250px;
+    }
+
+    .toast.success { border-color: var(--cms-success); }
+    .toast.error { border-color: var(--cms-danger); }
+    .toast.info { border-color: var(--cms-info); }
+
+    @keyframes toastIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* ==================== STATS CARDS ==================== */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--cms-surface);
+      border: 1px solid var(--cms-border);
+      border-radius: var(--cms-radius);
+      padding: 20px;
+      transition: border-color var(--cms-transition);
+    }
+
+    .stat-card:hover {
+      border-color: var(--cms-border-hover);
+    }
+
+    .stat-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--cms-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ==================== EMPTY STATE ==================== */
+    .empty-state {
+      text-align: center;
+      padding: 48px 20px;
+      color: var(--cms-text-muted);
+    }
+
+    .empty-state .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .empty-state p {
+      margin-bottom: 16px;
+    }
+
+    /* ==================== PREVIEW ==================== */
+    .preview-frame-container {
+      border: 1px solid var(--cms-border);
+      border-radius: var(--cms-radius);
+      overflow: hidden;
+      background: white;
+      aspect-ratio: 9/16;
+      max-height: 600px;
+      width: 100%;
+      max-width: 340px;
+      margin: 0 auto;
+    }
+
+    .preview-frame-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ==================== BADGE ==================== */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .badge-accent {
+      background: rgba(240, 50, 40, 0.15);
+      color: var(--cms-accent);
+    }
+
+    .badge-secondary {
+      background: rgba(36, 123, 160, 0.15);
+      color: var(--cms-secondary);
+    }
+
+    .badge-success {
+      background: rgba(34, 197, 94, 0.15);
+      color: var(--cms-success);
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 768px) {
+      .cms-sidebar {
+        transform: translateX(-100%);
+      }
+
+      .cms-sidebar.open {
+        transform: translateX(0);
+      }
+
+      .cms-main {
+        margin-left: 0;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-menu-btn {
+        display: flex !important;
+      }
+    }
+
+    .topbar-menu-btn {
+      display: none;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--cms-radius-sm);
+      background: var(--cms-surface-2);
+      border: 1px solid var(--cms-border);
+      color: var(--cms-text);
+      font-size: 20px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ==================== SECTION HEADER ==================== */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .section-header h2 {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .section-header-sub {
+      color: var(--cms-text-muted);
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    /* ==================== PREVIEW LAYOUT ==================== */
+    .preview-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px;
+    }
+
+    @media (max-width: 1100px) {
+      .preview-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ==================== COLOR SWATCH ==================== */
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 2px solid var(--cms-border);
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* ==================== ITEM LIST ==================== */
+    .item-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .item-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      background: var(--cms-surface-2);
+      border: 1px solid var(--cms-border);
+      border-radius: var(--cms-radius-sm);
+      transition: border-color var(--cms-transition);
+    }
+
+    .item-card:hover {
+      border-color: var(--cms-border-hover);
+    }
+
+    .item-card-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-card-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .item-card-meta {
+      font-size: 12px;
+      color: var(--cms-text-muted);
+    }
+
+    .item-card-actions {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== LOGIN SCREEN ==================== -->
+  <div class="login-screen" id="login-screen">
+    <div class="login-card">
+      <img class="login-logo" src="assets/icons/logoWhite.png" alt="U Festival" />
+      <h1>U Festival CMS</h1>
+      <p>Log in om de website te beheren</p>
+      <div id="login-form">
+        <div class="login-input-group">
+          <input type="password" class="login-input" id="login-password" placeholder="Wachtwoord" autocomplete="current-password" />
+        </div>
+        <button class="login-btn" id="login-btn" type="button">Inloggen</button>
+        <div class="login-error" id="login-error"></div>
+      </div>
+      <div id="setup-form" style="display:none;">
+        <p style="margin-bottom:16px; color: var(--cms-warning); font-size:13px;">⚠️ Nog geen wachtwoord ingesteld. Stel nu je CMS-wachtwoord in.</p>
+        <div class="login-input-group">
+          <input type="password" class="login-input" id="setup-password" placeholder="Nieuw wachtwoord" autocomplete="new-password" />
+        </div>
+        <div class="login-input-group">
+          <input type="password" class="login-input" id="setup-password-confirm" placeholder="Bevestig wachtwoord" autocomplete="new-password" />
+        </div>
+        <button class="login-btn" id="setup-btn" type="button">Wachtwoord instellen</button>
+        <div class="login-error" id="setup-error"></div>
+      </div>
+      <div class="login-setup-info" id="login-setup-info">
+        <a id="change-password-link" style="display:none;">Wachtwoord wijzigen</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN APP ==================== -->
+  <div class="cms-app" id="cms-app">
+    <!-- SIDEBAR -->
+    <aside class="cms-sidebar" id="cms-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <img src="assets/icons/logoWhite.png" alt="" />
+          <span class="sidebar-brand-text">CMS</span>
+        </div>
+        <div class="sidebar-subtitle">U Festival Admin</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Overzicht</div>
+        <button class="sidebar-item active" data-section="dashboard">
+          <span class="sidebar-icon">📊</span> Dashboard
+        </button>
+
+        <div class="sidebar-section-label">Content</div>
+        <button class="sidebar-item" data-section="acts">
+          <span class="sidebar-icon">🎤</span> Artiesten
+        </button>
+        <button class="sidebar-item" data-section="schedule">
+          <span class="sidebar-icon">📅</span> Schema
+        </button>
+        <button class="sidebar-item" data-section="news">
+          <span class="sidebar-icon">📰</span> Nieuws
+        </button>
+        <button class="sidebar-item" data-section="locations">
+          <span class="sidebar-icon">📍</span> Locaties
+        </button>
+
+        <div class="sidebar-section-label">Instellingen</div>
+        <button class="sidebar-item" data-section="festival">
+          <span class="sidebar-icon">🎪</span> Festival Info
+        </button>
+        <button class="sidebar-item" data-section="theme">
+          <span class="sidebar-icon">🎨</span> Thema
+        </button>
+        <button class="sidebar-item" data-section="export">
+          <span class="sidebar-icon">💾</span> Export / Import
+        </button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="sidebar-logout" id="logout-btn">
+          <span>🚪</span> Uitloggen
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="cms-main">
+      <header class="cms-topbar">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button class="topbar-menu-btn" id="topbar-menu-btn">☰</button>
+          <span class="topbar-title" id="topbar-title">Dashboard</span>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-success btn-sm" id="save-all-btn">💾 Opslaan</button>
+          <a href="index.html" target="_blank" class="btn btn-outline btn-sm">🌐 Bekijk site</a>
+        </div>
+      </header>
+
+      <div class="cms-content">
+
+        <!-- ==================== DASHBOARD ==================== -->
+        <section class="cms-section active" id="section-dashboard">
+          <div class="section-header">
+            <div>
+              <h2>Dashboard</h2>
+              <div class="section-header-sub">Overzicht van je festival content</div>
+            </div>
+          </div>
+          <div class="stats-grid" id="stats-grid"></div>
+
+          <div class="cms-card">
+            <div class="cms-card-header">
+              <div>
+                <div class="cms-card-title">Live Preview</div>
+                <div class="cms-card-subtitle">Zo ziet de app er nu uit</div>
+              </div>
+              <button class="btn btn-outline btn-sm" onclick="document.getElementById('preview-frame').src = 'index.html?' + Date.now();">🔄 Vernieuw</button>
+            </div>
+            <div class="preview-frame-container">
+              <iframe id="preview-frame" src="index.html"></iframe>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================== ARTIESTEN ==================== -->
+        <section class="cms-section" id="section-acts">
+          <div class="section-header">
+            <div>
+              <h2>Artiesten</h2>
+              <div class="section-header-sub">Beheer alle festival artiesten</div>
+            </div>
+            <button class="btn btn-primary" onclick="CMS.openActModal()">+ Artiest toevoegen</button>
+          </div>
+          <div class="cms-card">
+            <div id="acts-list-container"></div>
+          </div>
+        </section>
+
+        <!-- ==================== SCHEMA ==================== -->
+        <section class="cms-section" id="section-schedule">
+          <div class="section-header">
+            <div>
+              <h2>Schema</h2>
+              <div class="section-header-sub">Beheer het programma-schema</div>
+            </div>
+            <button class="btn btn-primary" onclick="CMS.openScheduleActModal()">+ Act toevoegen</button>
+          </div>
+          <div class="cms-card" style="margin-bottom:16px;">
+            <div style="display:flex;gap:10px;align-items:center;">
+              <label class="form-label" style="margin:0;">Dag:</label>
+              <select class="form-select" id="schedule-day-select" style="width:auto;" onchange="CMS.renderScheduleList()">
+                <option value="saturday">Zaterdag</option>
+                <option value="sunday">Zondag</option>
+              </select>
+            </div>
+          </div>
+          <div class="cms-card">
+            <div id="schedule-list-container"></div>
+          </div>
+        </section>
+
+        <!-- ==================== NIEUWS ==================== -->
+        <section class="cms-section" id="section-news">
+          <div class="section-header">
+            <div>
+              <h2>Nieuws</h2>
+              <div class="section-header-sub">Nieuwsberichten op de homepage</div>
+            </div>
+            <button class="btn btn-primary" onclick="CMS.openNewsModal()">+ Bericht toevoegen</button>
+          </div>
+          <div class="cms-card">
+            <div id="news-list-container"></div>
+          </div>
+        </section>
+
+        <!-- ==================== LOCATIES ==================== -->
+        <section class="cms-section" id="section-locations">
+          <div class="section-header">
+            <div>
+              <h2>Locaties / Stages</h2>
+              <div class="section-header-sub">Podia en locaties beheren</div>
+            </div>
+            <button class="btn btn-primary" onclick="CMS.openLocationModal()">+ Locatie toevoegen</button>
+          </div>
+          <div class="cms-card">
+            <div id="locations-list-container"></div>
+          </div>
+        </section>
+
+        <!-- ==================== FESTIVAL INFO ==================== -->
+        <section class="cms-section" id="section-festival">
+          <div class="section-header">
+            <div>
+              <h2>Festival Informatie</h2>
+              <div class="section-header-sub">Algemene festival gegevens en hero-sectie</div>
+            </div>
+          </div>
+          <div class="cms-card">
+            <div class="cms-card-header">
+              <div class="cms-card-title">Algemeen</div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Festival naam</label>
+                <input type="text" class="form-input" id="festival-name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Locatie</label>
+                <input type="text" class="form-input" id="festival-location" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Start datum</label>
+                <input type="date" class="form-input" id="festival-date" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Eind datum</label>
+                <input type="date" class="form-input" id="festival-end-date" />
+              </div>
+            </div>
+          </div>
+
+          <div class="cms-card">
+            <div class="cms-card-header">
+              <div class="cms-card-title">Hero Sectie (Homepage)</div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Hero titel</label>
+                <input type="text" class="form-input" id="hero-title" placeholder="U FESTIVAL" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hero subtitel</label>
+                <input type="text" class="form-input" id="hero-subtitle" placeholder="WELCOME TO" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hero datum-tekst</label>
+              <input type="text" class="form-input" id="hero-date" placeholder="12 — 13 JULI 2025" />
+            </div>
+          </div>
+
+          <button class="btn btn-primary" onclick="CMS.saveFestivalInfo()">💾 Festival info opslaan</button>
+        </section>
+
+        <!-- ==================== THEMA ==================== -->
+        <section class="cms-section" id="section-theme">
+          <div class="section-header">
+            <div>
+              <h2>Thema & Kleuren</h2>
+              <div class="section-header-sub">Pas de kleuren van de festival-app aan</div>
+            </div>
+          </div>
+          <div class="cms-card">
+            <div class="form-row-3">
+              <div class="form-group">
+                <label class="form-label">Accent kleur</label>
+                <div class="form-color-input">
+                  <input type="color" id="theme-accent" value="#F03228" />
+                  <input type="text" class="form-input" id="theme-accent-hex" value="#F03228" style="flex:1" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Primaire kleur</label>
+                <div class="form-color-input">
+                  <input type="color" id="theme-primary" value="#000000" />
+                  <input type="text" class="form-input" id="theme-primary-hex" value="#000000" style="flex:1" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Secundaire kleur</label>
+                <div class="form-color-input">
+                  <input type="color" id="theme-secondary" value="#247BA0" />
+                  <input type="text" class="form-input" id="theme-secondary-hex" value="#247BA0" style="flex:1" />
+                </div>
+              </div>
+            </div>
+            <div class="form-row-3">
+              <div class="form-group">
+                <label class="form-label">Achtergrond kleur</label>
+                <div class="form-color-input">
+                  <input type="color" id="theme-base" value="#FFFFFF" />
+                  <input type="text" class="form-input" id="theme-base-hex" value="#FFFFFF" style="flex:1" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Info kleur</label>
+                <div class="form-color-input">
+                  <input type="color" id="theme-info" value="#E3B505" />
+                  <input type="text" class="form-input" id="theme-info-hex" value="#E3B505" style="flex:1" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="CMS.saveTheme()">💾 Thema opslaan</button>
+        </section>
+
+        <!-- ==================== EXPORT / IMPORT ==================== -->
+        <section class="cms-section" id="section-export">
+          <div class="section-header">
+            <div>
+              <h2>Export / Import</h2>
+              <div class="section-header-sub">Download of upload JSON-bestanden (optioneel)</div>
+            </div>
+          </div>
+          <div class="cms-card">
+            <div class="cms-card-header">
+              <div class="cms-card-title">Exporteer JSON-bestanden</div>
+            </div>
+            <p style="color:var(--cms-text-muted);font-size:13px;margin-bottom:16px;">
+              Wijzigingen worden automatisch opgeslagen en zijn direct zichtbaar op de site. 
+              Gebruik export alleen als je een backup wilt of de bestanden wilt delen.
+            </p>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <button class="btn btn-outline" onclick="CMS.exportJSON('acts')">📥 acts.json</button>
+              <button class="btn btn-outline" onclick="CMS.exportJSON('schedule')">📥 schedule.json</button>
+              <button class="btn btn-outline" onclick="CMS.exportJSON('news')">📥 news.json</button>
+              <button class="btn btn-outline" onclick="CMS.exportAllJSON()">📥 Alles exporteren</button>
+            </div>
+          </div>
+          <div class="cms-card">
+            <div class="cms-card-header">
+              <div class="cms-card-title">Importeer JSON-bestand</div>
+            </div>
+            <p style="color:var(--cms-text-muted);font-size:13px;margin-bottom:16px;">
+              Upload een JSON-bestand om data te importeren.
+            </p>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <select class="form-select" id="import-type" style="width:auto;">
+                <option value="acts">acts.json</option>
+                <option value="schedule">schedule.json</option>
+                <option value="news">news.json</option>
+              </select>
+              <input type="file" accept=".json" id="import-file" style="display:none;" />
+              <button class="btn btn-secondary" onclick="document.getElementById('import-file').click();">📂 Bestand kiezen</button>
+            </div>
+          </div>
+          <div class="cms-card">
+            <div class="cms-card-header">
+              <div class="cms-card-title">Alle CMS-data wissen</div>
+            </div>
+            <p style="color:var(--cms-text-muted);font-size:13px;margin-bottom:16px;">
+              Verwijder alle CMS-wijzigingen uit localStorage. De site laadt dan weer de originele JSON-bestanden.
+            </p>
+            <button class="btn btn-danger" onclick="CMS.resetAllData()">🗑️ Alle CMS-data wissen</button>
+          </div>
+        </section>
+
+      </div><!-- /cms-content -->
+    </div><!-- /cms-main -->
+  </div><!-- /cms-app -->
+
+  <!-- ==================== MODAL ==================== -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <h2 id="modal-title">Bewerken</h2>
+        <button class="modal-close" onclick="CMS.closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+      <div class="modal-footer" id="modal-footer"></div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // ==================== CMS CORE ====================
+    const CMS = {
+      data: {
+        acts: null,
+        schedule: null,
+        news: null,
+        festival: null,
+        theme: null
+      },
+
+      // ==================== AUTH ====================
+      init() {
+        this.checkAuth();
+        this.bindEvents();
+      },
+
+      checkAuth() {
+        const hasPassword = localStorage.getItem('cms-password-hash');
+        if (!hasPassword) {
+          // Show setup form
+          document.getElementById('login-form').style.display = 'none';
+          document.getElementById('setup-form').style.display = 'block';
+        } else {
+          document.getElementById('login-form').style.display = 'block';
+          document.getElementById('setup-form').style.display = 'none';
+          document.getElementById('change-password-link').style.display = 'inline';
+        }
+      },
+
+      async hashPassword(password) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password + 'ufestival-cms-salt');
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      },
+
+      async setupPassword() {
+        const pw = document.getElementById('setup-password').value;
+        const confirm = document.getElementById('setup-password-confirm').value;
+        const errorEl = document.getElementById('setup-error');
+
+        if (!pw || pw.length < 4) {
+          errorEl.textContent = 'Wachtwoord moet minimaal 4 tekens zijn.';
+          return;
+        }
+        if (pw !== confirm) {
+          errorEl.textContent = 'Wachtwoorden komen niet overeen.';
+          return;
+        }
+
+        const hash = await this.hashPassword(pw);
+        localStorage.setItem('cms-password-hash', hash);
+        errorEl.textContent = '';
+        this.toast('Wachtwoord ingesteld!', 'success');
+        this.checkAuth();
+      },
+
+      async login() {
+        const pw = document.getElementById('login-password').value;
+        const errorEl = document.getElementById('login-error');
+
+        if (!pw) {
+          errorEl.textContent = 'Voer je wachtwoord in.';
+          return;
+        }
+
+        const hash = await this.hashPassword(pw);
+        const stored = localStorage.getItem('cms-password-hash');
+
+        if (hash === stored) {
+          sessionStorage.setItem('cms-authed', 'true');
+          document.getElementById('login-screen').classList.add('hidden');
+          document.getElementById('cms-app').classList.add('visible');
+          await this.loadAllData();
+          this.renderDashboard();
+        } else {
+          errorEl.textContent = 'Onjuist wachtwoord.';
+        }
+      },
+
+      logout() {
+        sessionStorage.removeItem('cms-authed');
+        document.getElementById('login-screen').classList.remove('hidden');
+        document.getElementById('cms-app').classList.remove('visible');
+        document.getElementById('login-password').value = '';
+      },
+
+      // ==================== DATA LOADING ====================
+      async loadAllData() {
+        // Load acts
+        const storedActs = localStorage.getItem('cms-acts');
+        if (storedActs) {
+          this.data.acts = JSON.parse(storedActs);
+        } else {
+          try {
+            const res = await fetch('./data/acts.json');
+            this.data.acts = await res.json();
+          } catch (e) {
+            this.data.acts = { acts: [] };
+          }
+        }
+
+        // Load schedule
+        const storedSchedule = localStorage.getItem('cms-schedule');
+        if (storedSchedule) {
+          this.data.schedule = JSON.parse(storedSchedule);
+        } else {
+          try {
+            const res = await fetch('./data/schedule.json');
+            this.data.schedule = await res.json();
+          } catch (e) {
+            this.data.schedule = { festival: {}, locations: [], days: [] };
+          }
+        }
+
+        // Load news
+        const storedNews = localStorage.getItem('cms-news');
+        if (storedNews) {
+          this.data.news = JSON.parse(storedNews);
+        } else {
+          try {
+            const res = await fetch('./data/news.json');
+            this.data.news = await res.json();
+          } catch (e) {
+            this.data.news = { news: [] };
+          }
+        }
+
+        // Load festival info
+        const storedFestival = localStorage.getItem('cms-festival');
+        if (storedFestival) {
+          this.data.festival = JSON.parse(storedFestival);
+        } else {
+          this.data.festival = {
+            name: this.data.schedule?.festival?.name || 'U Festival 2026',
+            location: this.data.schedule?.festival?.location || 'Strijkviertel, Utrecht',
+            date: this.data.schedule?.festival?.date || '2026-09-05',
+            endDate: '2026-09-06',
+            heroTitle: 'U FESTIVAL',
+            heroSubtitle: 'WELCOME TO',
+            heroDate: '12 — 13 JULI 2025'
+          };
+        }
+
+        // Load theme
+        const storedTheme = localStorage.getItem('cms-theme');
+        if (storedTheme) {
+          this.data.theme = JSON.parse(storedTheme);
+        } else {
+          this.data.theme = {
+            accent: '#F03228',
+            primary: '#000000',
+            secondary: '#247BA0',
+            base: '#FFFFFF',
+            info: '#E3B505'
+          };
+        }
+
+        this.populateFestivalForm();
+        this.populateThemeForm();
+      },
+
+      saveData(key) {
+        localStorage.setItem(`cms-${key}`, JSON.stringify(this.data[key]));
+        this.refreshPreview();
+      },
+
+      saveAll() {
+        this.saveData('acts');
+        this.saveData('schedule');
+        this.saveData('news');
+        this.saveData('festival');
+        this.saveData('theme');
+        this.toast('Alle wijzigingen opgeslagen!', 'success');
+      },
+
+      // ==================== EVENTS ====================
+      bindEvents() {
+        // Login
+        document.getElementById('login-btn').addEventListener('click', () => this.login());
+        document.getElementById('login-password').addEventListener('keydown', e => {
+          if (e.key === 'Enter') this.login();
+        });
+        document.getElementById('setup-btn').addEventListener('click', () => this.setupPassword());
+        document.getElementById('setup-password-confirm').addEventListener('keydown', e => {
+          if (e.key === 'Enter') this.setupPassword();
+        });
+        document.getElementById('change-password-link').addEventListener('click', () => {
+          document.getElementById('login-form').style.display = 'none';
+          document.getElementById('setup-form').style.display = 'block';
+          document.getElementById('change-password-link').style.display = 'none';
+        });
+
+        // Session check
+        if (sessionStorage.getItem('cms-authed') === 'true' && localStorage.getItem('cms-password-hash')) {
+          document.getElementById('login-screen').classList.add('hidden');
+          document.getElementById('cms-app').classList.add('visible');
+          this.loadAllData().then(() => this.renderDashboard());
+        }
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', () => this.logout());
+
+        // Save all
+        document.getElementById('save-all-btn').addEventListener('click', () => this.saveAll());
+
+        // Sidebar nav
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+          item.addEventListener('click', () => {
+            document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            const section = item.dataset.section;
+            document.querySelectorAll('.cms-section').forEach(s => s.classList.remove('active'));
+            document.getElementById(`section-${section}`).classList.add('active');
+            document.getElementById('topbar-title').textContent = item.textContent.trim();
+            this.renderSection(section);
+            // Close mobile sidebar
+            document.getElementById('cms-sidebar').classList.remove('open');
+          });
+        });
+
+        // Mobile menu
+        document.getElementById('topbar-menu-btn').addEventListener('click', () => {
+          document.getElementById('cms-sidebar').classList.toggle('open');
+        });
+
+        // Import file
+        document.getElementById('import-file').addEventListener('change', (e) => {
+          this.importFile(e.target.files[0]);
+        });
+
+        // Color sync
+        ['accent', 'primary', 'secondary', 'base', 'info'].forEach(key => {
+          const colorInput = document.getElementById(`theme-${key}`);
+          const hexInput = document.getElementById(`theme-${key}-hex`);
+          if (colorInput && hexInput) {
+            colorInput.addEventListener('input', () => { hexInput.value = colorInput.value; });
+            hexInput.addEventListener('input', () => {
+              if (/^#[0-9A-Fa-f]{6}$/.test(hexInput.value)) {
+                colorInput.value = hexInput.value;
+              }
+            });
+          }
+        });
+      },
+
+      renderSection(section) {
+        switch (section) {
+          case 'dashboard': this.renderDashboard(); break;
+          case 'acts': this.renderActsList(); break;
+          case 'schedule': this.renderScheduleList(); break;
+          case 'news': this.renderNewsList(); break;
+          case 'locations': this.renderLocationsList(); break;
+          case 'festival': this.populateFestivalForm(); break;
+          case 'theme': this.populateThemeForm(); break;
+        }
+      },
+
+      // ==================== DASHBOARD ====================
+      renderDashboard() {
+        const grid = document.getElementById('stats-grid');
+        const actCount = this.data.acts?.acts?.length || 0;
+        const newsCount = this.data.news?.news?.length || 0;
+        const locationCount = this.data.schedule?.locations?.length || 0;
+        let scheduleCount = 0;
+        this.data.schedule?.days?.forEach(d => { scheduleCount += d.acts?.length || 0; });
+
+        grid.innerHTML = `
+          <div class="stat-card">
+            <div class="stat-icon">🎤</div>
+            <div class="stat-value">${actCount}</div>
+            <div class="stat-label">Artiesten</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📅</div>
+            <div class="stat-value">${scheduleCount}</div>
+            <div class="stat-label">Schema items</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📰</div>
+            <div class="stat-value">${newsCount}</div>
+            <div class="stat-label">Nieuwsberichten</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📍</div>
+            <div class="stat-value">${locationCount}</div>
+            <div class="stat-label">Locaties</div>
+          </div>
+        `;
+      },
+
+      // ==================== ACTS ====================
+      renderActsList() {
+        const container = document.getElementById('acts-list-container');
+        const acts = this.data.acts?.acts || [];
+        if (acts.length === 0) {
+          container.innerHTML = `<div class="empty-state"><div class="empty-icon">🎤</div><p>Nog geen artiesten.</p><button class="btn btn-primary" onclick="CMS.openActModal()">+ Eerste artiest toevoegen</button></div>`;
+          return;
+        }
+        container.innerHTML = `<div class="item-list">${acts.map((act, i) => `
+          <div class="item-card">
+            <img class="data-thumb" src="${act.image || 'assets/icons/logoWhite.png'}" alt="" onerror="this.src='assets/icons/logoWhite.png'" />
+            <div class="item-card-info">
+              <div class="item-card-name">${act.name}</div>
+              <div class="item-card-meta">${act.taglineNl || act.tagline || ''}</div>
+            </div>
+            <div class="item-card-actions">
+              <button class="btn btn-outline btn-sm" onclick="CMS.openActModal(${i})">✏️ Bewerk</button>
+              <button class="btn btn-danger btn-sm" onclick="CMS.deleteAct(${i})">🗑️</button>
+            </div>
+          </div>
+        `).join('')}</div>`;
+      },
+
+      openActModal(index = null) {
+        const act = index !== null ? this.data.acts.acts[index] : null;
+        const isEdit = act !== null;
+
+        document.getElementById('modal-title').textContent = isEdit ? 'Artiest bewerken' : 'Artiest toevoegen';
+        document.getElementById('modal-body').innerHTML = `
+          <div class="form-group">
+            <label class="form-label">Naam</label>
+            <input type="text" class="form-input" id="act-name" value="${act?.name || ''}" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">ID (uniek, geen spaties)</label>
+            <input type="text" class="form-input" id="act-id" value="${act?.id || ''}" ${isEdit ? 'readonly style="opacity:0.6"' : ''} placeholder="bijv. armin-van-buuren" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Tagline NL</label>
+              <input type="text" class="form-input" id="act-tagline-nl" value="${act?.taglineNl || ''}" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tagline EN</label>
+              <input type="text" class="form-input" id="act-tagline-en" value="${act?.taglineEn || ''}" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bio NL</label>
+            <textarea class="form-textarea" id="act-bio-nl">${act?.bioNl || ''}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bio EN</label>
+            <textarea class="form-textarea" id="act-bio-en">${act?.bioEn || ''}</textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Afbeelding URL</label>
+              <input type="text" class="form-input" id="act-image" value="${act?.image || ''}" placeholder="assets/artists/image.png" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Video URL (YouTube)</label>
+              <input type="text" class="form-input" id="act-video" value="${act?.videoUrl || ''}" placeholder="https://youtube.com/watch?v=..." />
+            </div>
+          </div>
+        `;
+
+        document.getElementById('modal-footer').innerHTML = `
+          <button class="btn btn-outline" onclick="CMS.closeModal()">Annuleren</button>
+          <button class="btn btn-primary" onclick="CMS.saveAct(${index})">${isEdit ? 'Opslaan' : 'Toevoegen'}</button>
+        `;
+
+        this.openModal();
+
+        // Auto-generate ID from name
+        if (!isEdit) {
+          document.getElementById('act-name').addEventListener('input', (e) => {
+            document.getElementById('act-id').value = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+          });
+        }
+      },
+
+      saveAct(index) {
+        const act = {
+          id: document.getElementById('act-id').value.trim(),
+          name: document.getElementById('act-name').value.trim(),
+          taglineNl: document.getElementById('act-tagline-nl').value.trim(),
+          taglineEn: document.getElementById('act-tagline-en').value.trim(),
+          bioNl: document.getElementById('act-bio-nl').value.trim(),
+          bioEn: document.getElementById('act-bio-en').value.trim(),
+          image: document.getElementById('act-image').value.trim(),
+          videoUrl: document.getElementById('act-video').value.trim()
+        };
+
+        if (!act.id || !act.name) {
+          this.toast('Naam en ID zijn verplicht.', 'error');
+          return;
+        }
+
+        if (index !== null) {
+          this.data.acts.acts[index] = act;
+        } else {
+          this.data.acts.acts.push(act);
+        }
+
+        this.saveData('acts');
+        this.closeModal();
+        this.renderActsList();
+        this.toast(index !== null ? 'Artiest bijgewerkt!' : 'Artiest toegevoegd!', 'success');
+      },
+
+      deleteAct(index) {
+        if (!confirm(`Weet je zeker dat je "${this.data.acts.acts[index].name}" wilt verwijderen?`)) return;
+        this.data.acts.acts.splice(index, 1);
+        this.saveData('acts');
+        this.renderActsList();
+        this.toast('Artiest verwijderd.', 'info');
+      },
+
+      // ==================== SCHEDULE ====================
+      renderScheduleList() {
+        const container = document.getElementById('schedule-list-container');
+        const dayId = document.getElementById('schedule-day-select').value;
+        const day = this.data.schedule?.days?.find(d => d.id === dayId);
+        const acts = day?.acts || [];
+
+        if (acts.length === 0) {
+          container.innerHTML = `<div class="empty-state"><div class="empty-icon">📅</div><p>Geen acts op deze dag.</p></div>`;
+          return;
+        }
+
+        const sorted = [...acts].sort((a, b) => {
+          if (a.location !== b.location) return a.location.localeCompare(b.location);
+          return a.startTime.localeCompare(b.startTime);
+        });
+
+        container.innerHTML = `
+          <table class="data-table">
+            <thead><tr>
+              <th>Naam</th><th>Locatie</th><th>Tijd</th><th>Type</th><th></th>
+            </tr></thead>
+            <tbody>${sorted.map((act, i) => {
+              const realIndex = acts.indexOf(act);
+              return `<tr>
+                <td><strong>${act.name}</strong></td>
+                <td><span class="badge badge-secondary">${act.location}</span></td>
+                <td>${act.startTime} – ${act.endTime}</td>
+                <td><span class="badge badge-accent">${act.type || '-'}</span></td>
+                <td class="td-actions">
+                  <button class="btn btn-outline btn-sm" onclick="CMS.openScheduleActModal('${dayId}', ${realIndex})">✏️</button>
+                  <button class="btn btn-danger btn-sm" onclick="CMS.deleteScheduleAct('${dayId}', ${realIndex})">🗑️</button>
+                </td>
+              </tr>`;
+            }).join('')}</tbody>
+          </table>
+        `;
+      },
+
+      openScheduleActModal(dayId = null, index = null) {
+        const selectedDay = dayId || document.getElementById('schedule-day-select').value;
+        const day = this.data.schedule?.days?.find(d => d.id === selectedDay);
+        const act = (index !== null && day) ? day.acts[index] : null;
+        const isEdit = act !== null;
+        const locations = this.data.schedule?.locations || [];
+
+        document.getElementById('modal-title').textContent = isEdit ? 'Schema-item bewerken' : 'Schema-item toevoegen';
+        document.getElementById('modal-body').innerHTML = `
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Dag</label>
+              <select class="form-select" id="sched-day">
+                ${this.data.schedule.days.map(d => `<option value="${d.id}" ${d.id === selectedDay ? 'selected' : ''}>${d.name}</option>`).join('')}
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Locatie</label>
+              <select class="form-select" id="sched-location">
+                ${locations.map(l => `<option value="${l.id}" ${act?.location === l.id ? 'selected' : ''}>${l.name}</option>`).join('')}
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Naam</label>
+              <input type="text" class="form-input" id="sched-name" value="${act?.name || ''}" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">ID (uniek)</label>
+              <input type="text" class="form-input" id="sched-id" value="${act?.id || ''}" ${isEdit ? 'readonly style="opacity:0.6"' : ''} />
+            </div>
+          </div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label class="form-label">Starttijd</label>
+              <input type="time" class="form-input" id="sched-start" value="${act?.startTime || ''}" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Eindtijd</label>
+              <input type="time" class="form-input" id="sched-end" value="${act?.endTime || ''}" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Type</label>
+              <input type="text" class="form-input" id="sched-type" value="${act?.type || ''}" placeholder="DJ, Band, Pop..." />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Beschrijving NL</label>
+            <textarea class="form-textarea" id="sched-desc-nl" rows="2">${act?.description || ''}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Beschrijving EN</label>
+            <textarea class="form-textarea" id="sched-desc-en" rows="2">${act?.descriptionEn || ''}</textarea>
+          </div>
+        `;
+
+        document.getElementById('modal-footer').innerHTML = `
+          <button class="btn btn-outline" onclick="CMS.closeModal()">Annuleren</button>
+          <button class="btn btn-primary" onclick="CMS.saveScheduleAct('${selectedDay}', ${index})">${isEdit ? 'Opslaan' : 'Toevoegen'}</button>
+        `;
+
+        this.openModal();
+
+        if (!isEdit) {
+          document.getElementById('sched-name').addEventListener('input', (e) => {
+            document.getElementById('sched-id').value = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+          });
+        }
+      },
+
+      saveScheduleAct(originalDayId, index) {
+        const targetDayId = document.getElementById('sched-day').value;
+        const schedAct = {
+          id: document.getElementById('sched-id').value.trim(),
+          name: document.getElementById('sched-name').value.trim(),
+          location: document.getElementById('sched-location').value,
+          startTime: document.getElementById('sched-start').value,
+          endTime: document.getElementById('sched-end').value,
+          type: document.getElementById('sched-type').value.trim(),
+          description: document.getElementById('sched-desc-nl').value.trim(),
+          descriptionEn: document.getElementById('sched-desc-en').value.trim()
+        };
+
+        if (!schedAct.id || !schedAct.name || !schedAct.startTime || !schedAct.endTime) {
+          this.toast('Naam, ID, start- en eindtijd zijn verplicht.', 'error');
+          return;
+        }
+
+        if (index !== null) {
+          // Remove from original day
+          const origDay = this.data.schedule.days.find(d => d.id === originalDayId);
+          if (origDay) origDay.acts.splice(index, 1);
+        }
+
+        // Add to target day
+        const targetDay = this.data.schedule.days.find(d => d.id === targetDayId);
+        if (targetDay) {
+          targetDay.acts.push(schedAct);
+        }
+
+        this.saveData('schedule');
+        this.closeModal();
+        document.getElementById('schedule-day-select').value = targetDayId;
+        this.renderScheduleList();
+        this.toast(index !== null ? 'Schema-item bijgewerkt!' : 'Schema-item toegevoegd!', 'success');
+      },
+
+      deleteScheduleAct(dayId, index) {
+        const day = this.data.schedule.days.find(d => d.id === dayId);
+        if (!day) return;
+        if (!confirm(`Weet je zeker dat je "${day.acts[index].name}" wilt verwijderen?`)) return;
+        day.acts.splice(index, 1);
+        this.saveData('schedule');
+        this.renderScheduleList();
+        this.toast('Schema-item verwijderd.', 'info');
+      },
+
+      // ==================== NEWS ====================
+      renderNewsList() {
+        const container = document.getElementById('news-list-container');
+        const news = this.data.news?.news || [];
+        if (news.length === 0) {
+          container.innerHTML = `<div class="empty-state"><div class="empty-icon">📰</div><p>Nog geen nieuwsberichten.</p><button class="btn btn-primary" onclick="CMS.openNewsModal()">+ Eerste bericht toevoegen</button></div>`;
+          return;
+        }
+
+        container.innerHTML = `<div class="item-list">${news.map((item, i) => `
+          <div class="item-card">
+            <div class="item-card-info">
+              <div class="item-card-name">${item.titleNl || item.title || 'Zonder titel'}</div>
+              <div class="item-card-meta">${item.date} · ${item.tag || '-'}</div>
+            </div>
+            <div class="item-card-actions">
+              <button class="btn btn-outline btn-sm" onclick="CMS.openNewsModal(${i})">✏️ Bewerk</button>
+              <button class="btn btn-danger btn-sm" onclick="CMS.deleteNews(${i})">🗑️</button>
+            </div>
+          </div>
+        `).join('')}</div>`;
+      },
+
+      openNewsModal(index = null) {
+        const item = index !== null ? this.data.news.news[index] : null;
+        const isEdit = item !== null;
+
+        document.getElementById('modal-title').textContent = isEdit ? 'Nieuws bewerken' : 'Nieuws toevoegen';
+        document.getElementById('modal-body').innerHTML = `
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">ID (uniek)</label>
+              <input type="text" class="form-input" id="news-id" value="${item?.id || ''}" ${isEdit ? 'readonly style="opacity:0.6"' : ''} />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Datum</label>
+              <input type="date" class="form-input" id="news-date" value="${item?.date || new Date().toISOString().slice(0, 10)}" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Titel NL</label>
+              <input type="text" class="form-input" id="news-title-nl" value="${item?.titleNl || ''}" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Titel EN</label>
+              <input type="text" class="form-input" id="news-title-en" value="${item?.titleEn || ''}" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Inhoud NL</label>
+            <textarea class="form-textarea" id="news-body-nl">${item?.bodyNl || ''}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Inhoud EN</label>
+            <textarea class="form-textarea" id="news-body-en">${item?.bodyEn || ''}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tag</label>
+            <input type="text" class="form-input" id="news-tag" value="${item?.tag || ''}" placeholder="lineup, transport, info" />
+          </div>
+        `;
+
+        document.getElementById('modal-footer').innerHTML = `
+          <button class="btn btn-outline" onclick="CMS.closeModal()">Annuleren</button>
+          <button class="btn btn-primary" onclick="CMS.saveNews(${index})">${isEdit ? 'Opslaan' : 'Toevoegen'}</button>
+        `;
+
+        this.openModal();
+
+        if (!isEdit) {
+          document.getElementById('news-title-nl').addEventListener('input', (e) => {
+            document.getElementById('news-id').value = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40);
+          });
+        }
+      },
+
+      saveNews(index) {
+        const item = {
+          id: document.getElementById('news-id').value.trim(),
+          date: document.getElementById('news-date').value,
+          titleNl: document.getElementById('news-title-nl').value.trim(),
+          titleEn: document.getElementById('news-title-en').value.trim(),
+          bodyNl: document.getElementById('news-body-nl').value.trim(),
+          bodyEn: document.getElementById('news-body-en').value.trim(),
+          tag: document.getElementById('news-tag').value.trim()
+        };
+
+        if (!item.id || !item.titleNl) {
+          this.toast('ID en titel NL zijn verplicht.', 'error');
+          return;
+        }
+
+        if (index !== null) {
+          this.data.news.news[index] = item;
+        } else {
+          this.data.news.news.push(item);
+        }
+
+        this.saveData('news');
+        this.closeModal();
+        this.renderNewsList();
+        this.toast(index !== null ? 'Bericht bijgewerkt!' : 'Bericht toegevoegd!', 'success');
+      },
+
+      deleteNews(index) {
+        if (!confirm('Weet je zeker dat je dit bericht wilt verwijderen?')) return;
+        this.data.news.news.splice(index, 1);
+        this.saveData('news');
+        this.renderNewsList();
+        this.toast('Bericht verwijderd.', 'info');
+      },
+
+      // ==================== LOCATIONS ====================
+      renderLocationsList() {
+        const container = document.getElementById('locations-list-container');
+        const locations = this.data.schedule?.locations || [];
+        if (locations.length === 0) {
+          container.innerHTML = `<div class="empty-state"><div class="empty-icon">📍</div><p>Nog geen locaties.</p><button class="btn btn-primary" onclick="CMS.openLocationModal()">+ Eerste locatie toevoegen</button></div>`;
+          return;
+        }
+
+        container.innerHTML = `<div class="item-list">${locations.map((loc, i) => `
+          <div class="item-card">
+            <span class="color-swatch" style="background:${loc.color || '#247BA0'}"></span>
+            <div class="item-card-info">
+              <div class="item-card-name">${loc.name}</div>
+              <div class="item-card-meta">ID: ${loc.id}</div>
+            </div>
+            <div class="item-card-actions">
+              <button class="btn btn-outline btn-sm" onclick="CMS.openLocationModal(${i})">✏️ Bewerk</button>
+              <button class="btn btn-danger btn-sm" onclick="CMS.deleteLocation(${i})">🗑️</button>
+            </div>
+          </div>
+        `).join('')}</div>`;
+      },
+
+      openLocationModal(index = null) {
+        const loc = index !== null ? this.data.schedule.locations[index] : null;
+        const isEdit = loc !== null;
+
+        document.getElementById('modal-title').textContent = isEdit ? 'Locatie bewerken' : 'Locatie toevoegen';
+        document.getElementById('modal-body').innerHTML = `
+          <div class="form-group">
+            <label class="form-label">Naam</label>
+            <input type="text" class="form-input" id="loc-name" value="${loc?.name || ''}" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">ID (uniek, lowercase)</label>
+            <input type="text" class="form-input" id="loc-id" value="${loc?.id || ''}" ${isEdit ? 'readonly style="opacity:0.6"' : ''} />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Kleur</label>
+            <div class="form-color-input">
+              <input type="color" id="loc-color" value="${loc?.color || '#247BA0'}" />
+              <input type="text" class="form-input" id="loc-color-hex" value="${loc?.color || '#247BA0'}" style="flex:1" />
+            </div>
+          </div>
+        `;
+
+        // Bind color sync
+        setTimeout(() => {
+          const c = document.getElementById('loc-color');
+          const h = document.getElementById('loc-color-hex');
+          c.addEventListener('input', () => h.value = c.value);
+          h.addEventListener('input', () => { if (/^#[0-9A-Fa-f]{6}$/.test(h.value)) c.value = h.value; });
+        }, 10);
+
+        document.getElementById('modal-footer').innerHTML = `
+          <button class="btn btn-outline" onclick="CMS.closeModal()">Annuleren</button>
+          <button class="btn btn-primary" onclick="CMS.saveLocation(${index})">${isEdit ? 'Opslaan' : 'Toevoegen'}</button>
+        `;
+
+        this.openModal();
+
+        if (!isEdit) {
+          document.getElementById('loc-name').addEventListener('input', (e) => {
+            document.getElementById('loc-id').value = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+          });
+        }
+      },
+
+      saveLocation(index) {
+        const loc = {
+          id: document.getElementById('loc-id').value.trim(),
+          name: document.getElementById('loc-name').value.trim(),
+          color: document.getElementById('loc-color').value
+        };
+
+        if (!loc.id || !loc.name) {
+          this.toast('Naam en ID zijn verplicht.', 'error');
+          return;
+        }
+
+        if (index !== null) {
+          this.data.schedule.locations[index] = loc;
+        } else {
+          this.data.schedule.locations.push(loc);
+        }
+
+        this.saveData('schedule');
+        this.closeModal();
+        this.renderLocationsList();
+        this.toast(index !== null ? 'Locatie bijgewerkt!' : 'Locatie toegevoegd!', 'success');
+      },
+
+      deleteLocation(index) {
+        if (!confirm(`Weet je zeker dat je "${this.data.schedule.locations[index].name}" wilt verwijderen?`)) return;
+        this.data.schedule.locations.splice(index, 1);
+        this.saveData('schedule');
+        this.renderLocationsList();
+        this.toast('Locatie verwijderd.', 'info');
+      },
+
+      // ==================== FESTIVAL INFO ====================
+      populateFestivalForm() {
+        const f = this.data.festival;
+        if (!f) return;
+        document.getElementById('festival-name').value = f.name || '';
+        document.getElementById('festival-location').value = f.location || '';
+        document.getElementById('festival-date').value = f.date || '';
+        document.getElementById('festival-end-date').value = f.endDate || '';
+        document.getElementById('hero-title').value = f.heroTitle || '';
+        document.getElementById('hero-subtitle').value = f.heroSubtitle || '';
+        document.getElementById('hero-date').value = f.heroDate || '';
+      },
+
+      saveFestivalInfo() {
+        this.data.festival = {
+          name: document.getElementById('festival-name').value.trim(),
+          location: document.getElementById('festival-location').value.trim(),
+          date: document.getElementById('festival-date').value,
+          endDate: document.getElementById('festival-end-date').value,
+          heroTitle: document.getElementById('hero-title').value.trim(),
+          heroSubtitle: document.getElementById('hero-subtitle').value.trim(),
+          heroDate: document.getElementById('hero-date').value.trim()
+        };
+
+        // Also update schedule.festival
+        this.data.schedule.festival = {
+          ...this.data.schedule.festival,
+          name: this.data.festival.name,
+          location: this.data.festival.location,
+          date: this.data.festival.date
+        };
+
+        this.saveData('festival');
+        this.saveData('schedule');
+        this.toast('Festival informatie opgeslagen!', 'success');
+      },
+
+      // ==================== THEME ====================
+      populateThemeForm() {
+        const t = this.data.theme;
+        if (!t) return;
+        ['accent', 'primary', 'secondary', 'base', 'info'].forEach(key => {
+          const el = document.getElementById(`theme-${key}`);
+          const hex = document.getElementById(`theme-${key}-hex`);
+          if (el && t[key]) { el.value = t[key]; }
+          if (hex && t[key]) { hex.value = t[key]; }
+        });
+      },
+
+      saveTheme() {
+        this.data.theme = {
+          accent: document.getElementById('theme-accent').value,
+          primary: document.getElementById('theme-primary').value,
+          secondary: document.getElementById('theme-secondary').value,
+          base: document.getElementById('theme-base').value,
+          info: document.getElementById('theme-info').value
+        };
+        this.saveData('theme');
+        this.toast('Thema opgeslagen!', 'success');
+      },
+
+      // ==================== EXPORT / IMPORT ====================
+      exportJSON(type) {
+        let data, filename;
+        switch (type) {
+          case 'acts':
+            data = this.data.acts;
+            filename = 'acts.json';
+            break;
+          case 'schedule':
+            data = this.data.schedule;
+            filename = 'schedule.json';
+            break;
+          case 'news':
+            data = this.data.news;
+            filename = 'news.json';
+            break;
+        }
+        if (!data) return;
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.toast(`${filename} geëxporteerd!`, 'success');
+      },
+
+      exportAllJSON() {
+        this.exportJSON('acts');
+        setTimeout(() => this.exportJSON('schedule'), 200);
+        setTimeout(() => this.exportJSON('news'), 400);
+      },
+
+      importFile(file) {
+        if (!file) return;
+        const type = document.getElementById('import-type').value;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            this.data[type] = data;
+            this.saveData(type);
+            this.renderSection(type === 'acts' ? 'acts' : type === 'schedule' ? 'schedule' : 'news');
+            this.toast(`${file.name} geïmporteerd!`, 'success');
+          } catch (err) {
+            this.toast('Ongeldig JSON-bestand.', 'error');
+          }
+        };
+        reader.readAsText(file);
+        document.getElementById('import-file').value = '';
+      },
+
+      resetAllData() {
+        if (!confirm('Weet je zeker dat je ALLE CMS-wijzigingen wilt wissen? De site laadt dan weer de originele bestanden.')) return;
+        localStorage.removeItem('cms-acts');
+        localStorage.removeItem('cms-schedule');
+        localStorage.removeItem('cms-news');
+        localStorage.removeItem('cms-festival');
+        localStorage.removeItem('cms-theme');
+        this.loadAllData().then(() => {
+          this.renderDashboard();
+          this.toast('Alle CMS-data gewist. Originele bestanden worden geladen.', 'info');
+        });
+      },
+
+      // ==================== MODAL ====================
+      openModal() {
+        document.getElementById('modal-overlay').classList.add('open');
+      },
+
+      closeModal() {
+        document.getElementById('modal-overlay').classList.remove('open');
+      },
+
+      // ==================== TOAST ====================
+      toast(message, type = 'info') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+        toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span> ${message}`;
+        container.appendChild(toast);
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateX(100%)';
+          toast.style.transition = '0.3s ease';
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      },
+
+      // ==================== PREVIEW ====================
+      refreshPreview() {
+        const frame = document.getElementById('preview-frame');
+        if (frame) {
+          frame.contentWindow?.location?.reload?.();
+        }
+      }
+    };
+
+    // Close modal on overlay click
+    document.getElementById('modal-overlay').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('modal-overlay')) CMS.closeModal();
+    });
+
+    // Init
+    CMS.init();
+  </script>
+</body>
+</html>
