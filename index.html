@@ -1039,6 +1039,98 @@
       margin-bottom: 4px;
     }
 
+    /* ==================== MAP INFO LIVE CARD ==================== */
+    .map-info-live-card {
+      display: flex;
+      gap: 14px;
+      margin-top: 18px;
+      margin-bottom: 14px;
+      padding: 12px;
+      background: var(--placeholder-bg);
+      border: 2px solid var(--color-accent);
+      border-radius: 12px;
+      cursor: pointer;
+      align-items: center;
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-align: left;
+    }
+
+    .map-info-live-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(240, 50, 40, 0.15);
+      border-color: var(--color-accent);
+    }
+
+    .map-info-live-card img {
+      width: 72px;
+      height: 72px;
+      border-radius: 8px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .map-info-live-card-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .map-info-live-card-name {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--color-secondary);
+      margin-bottom: 2px;
+    }
+
+    .map-info-live-card-tagline {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .map-info-live-card-time {
+      font-size: 12px;
+      opacity: 0.7;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .map-info-live-card-bio {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-top: 4px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--text);
+    }
+
+    .map-info-live-badge {
+      position: absolute;
+      top: -10px;
+      left: 12px;
+      background: var(--color-accent);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid white;
+    }
+
     .map-info-panel .map-info-subtitle {
       color: var(--text);
       opacity: 0.75;
@@ -2720,6 +2812,16 @@
   <script src="data/map-markers.js"></script>
   <script src="js/qrcode.min.js"></script>
   <script>
+    // ==================== TIME MOCK SUPPORT ====================
+    function getCurrentTime() {
+      const params = new URLSearchParams(window.location.search);
+      const mock = params.get("mockDate");
+      if (mock) {
+        return new Date(mock);
+      }
+      return new Date();
+    }
+
     // ==================== LANGUAGE / i18n ====================
     let currentLang = localStorage.getItem("ufestival-lang") || "nl";
 
@@ -3656,7 +3758,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       const card = document.getElementById("countdown-card");
       if (!card) return;
 
-      const now = new Date();
+      const now = getCurrentTime();
       const diff = FESTIVAL_DATE.getTime() - now.getTime();
       const endDiff = FESTIVAL_END.getTime() - now.getTime();
 
@@ -3734,7 +3836,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       const body = document.getElementById("live-feed-body");
       if (!body || !scheduleData) return;
 
-      const now = new Date();
+      const now = getCurrentTime();
       const nowMinutes = now.getHours() * 60 + now.getMinutes();
       const day = getScheduleDayForToday();
       if (!day) {
@@ -4068,7 +4170,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
     function getScheduleDayForToday() {
       if (!scheduleData) return null;
-      const today = new Date().toISOString().slice(0, 10);
+      const today = getCurrentTime().toISOString().slice(0, 10);
       const match = scheduleData.days.find(d => d.date === today);
       return match || scheduleData.days.find(d => d.id === currentDay) || scheduleData.days[0];
     }
@@ -4082,7 +4184,8 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     }
 
     function getCurrentActAtLocation(locationId) {
-      const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
+      const now = getCurrentTime();
+      const nowMinutes = now.getHours() * 60 + now.getMinutes();
       return getActsAtLocation(locationId).find(act => {
         const start = timeToMinutes(act.startTime);
         const end = timeToMinutes(act.endTime);
@@ -4091,7 +4194,8 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
     }
 
     function getNextActAtLocation(locationId) {
-      const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
+      const now = getCurrentTime();
+      const nowMinutes = now.getHours() * 60 + now.getMinutes();
       return getActsAtLocation(locationId).find(act => timeToMinutes(act.startTime) > nowMinutes) || null;
     }
 
@@ -4121,27 +4225,67 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         const currentAct = getCurrentActAtLocation(marker.locationId);
         const nextAct = getNextActAtLocation(marker.locationId);
 
-        const nowSection = document.createElement("div");
-        nowSection.className = "map-info-section";
-        nowSection.innerHTML = `<span class="map-info-label">${t("map.now")}</span> `;
         if (currentAct) {
-          nowSection.innerHTML += `${currentAct.name} (${currentAct.startTime} – ${currentAct.endTime})`;
-          if (actsById[currentAct.id]) {
-            const link = document.createElement("button");
-            link.type = "button";
-            link.className = "map-info-act-link";
-            link.textContent = t("map.viewAct");
-            link.addEventListener("click", () => {
-              closeMapInfoPanel();
-              openActDetail(currentAct.id);
-            });
-            body.appendChild(nowSection);
-            body.appendChild(link);
-          } else {
-            body.appendChild(nowSection);
+          const actDetail = actsById[currentAct.id];
+          
+          const fallbackImages = {
+            poton: "assets/ponton.png",
+            ponton: "assets/ponton.png",
+            lake: "assets/the lake.png",
+            club: "assets/the club.png",
+            hangar: "assets/hangar.png"
+          };
+          const actImage = actDetail?.image || fallbackImages[marker.locationId] || "assets/ponton.png";
+          const actTagline = actDetail ? getActTagline(actDetail) : getActTypeLabel(currentAct.type);
+          const actBio = actDetail ? getActBio(actDetail) : (currentLang === "en" ? (currentAct.descriptionEn || currentAct.description) : currentAct.description);
+
+          const liveCard = document.createElement("div");
+          liveCard.className = "map-info-live-card";
+          liveCard.setAttribute("role", "button");
+          liveCard.setAttribute("tabindex", "0");
+          liveCard.setAttribute("aria-label", `${currentAct.name}, ${actTagline}, ${currentAct.startTime} tot ${currentAct.endTime}`);
+          
+          liveCard.innerHTML = `
+            <div class="map-info-live-badge">
+              <span class="live-pulse" style="width: 6px; height: 6px; background: white; display: inline-block; border-radius: 50%;"></span>
+              ${t("home.liveNow") || "LIVE"}
+            </div>
+            <img src="${actImage}" alt="${currentAct.name}" />
+            <div class="map-info-live-card-info">
+              <div class="map-info-live-card-name">${currentAct.name}</div>
+              <div class="map-info-live-card-tagline">${actTagline}</div>
+              <div class="map-info-live-card-time">🕒 ${currentAct.startTime} – ${currentAct.endTime}</div>
+            </div>
+          `;
+
+          if (actBio) {
+            const bioText = document.createElement("div");
+            bioText.className = "map-info-live-card-bio";
+            bioText.textContent = actBio;
+            liveCard.querySelector(".map-info-live-card-info").appendChild(bioText);
           }
+
+          liveCard.addEventListener("click", () => {
+            closeMapInfoPanel();
+            if (actDetail) {
+              openActDetail(currentAct.id);
+            } else {
+              showActDetails(currentAct);
+            }
+          });
+
+          liveCard.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              liveCard.click();
+            }
+          });
+
+          body.appendChild(liveCard);
         } else {
-          nowSection.innerHTML += t("map.noActNow");
+          const nowSection = document.createElement("div");
+          nowSection.className = "map-info-section";
+          nowSection.innerHTML = `<span class="map-info-label">${t("map.now")}</span> ${t("map.noActNow")}`;
           body.appendChild(nowSection);
         }
 
@@ -4668,7 +4812,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
       notificationIntervals.forEach(minutesBefore => {
         const notifyTime = new Date(actTime.getTime() - minutesBefore * 60000);
-        const now = new Date();
+        const now = getCurrentTime();
 
         if (notifyTime > now) {
           const timeUntilNotification = notifyTime.getTime() - now.getTime();
