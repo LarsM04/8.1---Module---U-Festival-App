@@ -574,6 +574,11 @@
         max-height: clamp(280px, 55vh, 600px);
         touch-action: pan-x;
         user-select: none;
+        cursor: grab;
+      }
+
+      .schedule-grid-wrapper.grabbing {
+        cursor: grabbing;
       }
 
 .schedule-grid {
@@ -893,6 +898,52 @@
       height: 100%;
       display: block;
       pointer-events: none;
+    }
+
+    .map-marker.is-live::before {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 3px solid var(--color-accent);
+      animation: marker-live-pulse 1.8s infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    @keyframes marker-live-pulse {
+      0% {
+        transform: scale(0.85);
+        opacity: 0.5;
+        box-shadow: 0 0 0 0 rgba(240, 50, 40, 0.7);
+      }
+      70% {
+        transform: scale(1.15);
+        opacity: 1;
+        box-shadow: 0 0 0 8px rgba(240, 50, 40, 0);
+      }
+      100% {
+        transform: scale(0.85);
+        opacity: 0;
+        box-shadow: 0 0 0 0 rgba(240, 50, 40, 0);
+      }
+    }
+
+    .map-marker.is-live::after {
+      content: "LIVE";
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--color-accent);
+      color: white;
+      font-size: 8px;
+      font-weight: 700;
+      padding: 2px 4px;
+      border-radius: 4px;
+      border: 1px solid white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+      pointer-events: none;
+      animation: livePulse 1.5s infinite;
     }
 
     .map-marker:focus-visible {
@@ -2790,6 +2841,7 @@
           el.setAttribute("aria-label", getMarkerTitle(data));
         });
         renderMapLegend();
+        festivalMap.updateLiveMarkers();
       }
       if (actsData?.acts?.length) renderActsList();
       renderNews();
@@ -2838,6 +2890,7 @@
 
         if (page === "map") {
           refreshMapLayout();
+          festivalMap?.updateLiveMarkers();
         }
         if (page === "my-schedule") {
           renderMySchedule();
@@ -3546,6 +3599,54 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       });
     });
 
+    function initScheduleDragToScroll() {
+      const wrapper = document.querySelector(".schedule-grid-wrapper");
+      if (!wrapper) return;
+
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+      let moved = false;
+
+      wrapper.addEventListener("mousedown", (e) => {
+        if (e.button !== 0 || e.target.closest(".favorite-btn")) return;
+        isDown = true;
+        wrapper.classList.add("grabbing");
+        startX = e.pageX - wrapper.offsetLeft;
+        scrollLeft = wrapper.scrollLeft;
+        moved = false;
+      });
+
+      wrapper.addEventListener("mouseleave", () => {
+        isDown = false;
+        wrapper.classList.remove("grabbing");
+      });
+
+      wrapper.addEventListener("mouseup", () => {
+        isDown = false;
+        wrapper.classList.remove("grabbing");
+      });
+
+      wrapper.addEventListener("mousemove", (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - wrapper.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        if (Math.abs(walk) > 5) {
+          moved = true;
+        }
+        wrapper.scrollLeft = scrollLeft - walk;
+      });
+
+      wrapper.addEventListener("click", (e) => {
+        if (moved) {
+          e.preventDefault();
+          e.stopPropagation();
+          moved = false;
+        }
+      }, true);
+    }
+
     // ==================== COUNTDOWN TIMER ====================
     const FESTIVAL_DATE = new Date("2026-09-05T12:00:00+02:00");
     const FESTIVAL_END = new Date("2026-09-06T23:45:00+02:00");
@@ -3912,8 +4013,12 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       initFestivalMap();
       startCountdown();
       renderLiveFeed();
+      initScheduleDragToScroll();
       // Refresh live feed every minute
-      setInterval(renderLiveFeed, 60000);
+      setInterval(() => {
+        renderLiveFeed();
+        festivalMap?.updateLiveMarkers();
+      }, 60000);
       // Initialize QR code with a small delay to ensure library is ready
       setTimeout(() => {
         initQRCode();
@@ -4326,6 +4431,15 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         this.setActiveMarker(null);
       }
 
+      updateLiveMarkers() {
+        this.markers.forEach(({ el, data }) => {
+          if (data.type === "stage" && data.locationId) {
+            const isLive = getCurrentActAtLocation(data.locationId) !== null;
+            el.classList.toggle("is-live", isLive);
+          }
+        });
+      }
+
       onResize() {
         if (this.needsFit || this.scale <= 0) {
           this.fitToViewport();
@@ -4466,6 +4580,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       mapMarkersData.markers.forEach(marker => {
         festivalMap.addMarker(marker, openMapInfoPanel);
       });
+      festivalMap.updateLiveMarkers();
 
       const fitMap = () => {
         if (document.getElementById("map").classList.contains("active")) {
@@ -4513,6 +4628,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
       const mapPageObserver = new MutationObserver(() => {
         if (mapPage.classList.contains("active")) {
           refreshMapLayout();
+          festivalMap?.updateLiveMarkers();
           setTimeout(refreshMapLayout, 150);
           setTimeout(refreshMapLayout, 500);
         }
