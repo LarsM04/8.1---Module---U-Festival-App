@@ -186,6 +186,12 @@
       overscroll-behavior: none;
     }
 
+    main:has(> #schedule.active) {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
     .page {
       display: none;
       animation: fade 0.2s ease-in-out;
@@ -199,6 +205,12 @@
       min-height: 0;
       overflow: visible;
       padding-bottom: 0;
+    }
+
+    #schedule.active {
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
     }
 
     .page-title {
@@ -556,6 +568,8 @@
 .schedule-grid-container {
        display: flex;
        flex-direction: column;
+       flex: 1;
+       min-height: 0;
        gap: 8px;
      }
 
@@ -571,7 +585,8 @@
         flex-direction: column;
         width: 100%;
         max-width: 100%;
-        max-height: clamp(280px, 55vh, 600px);
+        flex: 1;
+        min-height: 200px;
         touch-action: auto;
         user-select: none;
         cursor: grab;
