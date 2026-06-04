@@ -186,12 +186,6 @@
       overscroll-behavior: none;
     }
 
-    main:has(> #schedule.active) {
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
     .page {
       display: none;
       animation: fade 0.2s ease-in-out;
@@ -205,12 +199,6 @@
       min-height: 0;
       overflow: visible;
       padding-bottom: 0;
-    }
-
-    #schedule.active {
-      flex: 1;
-      min-height: 0;
-      overflow: hidden;
     }
 
     .page-title {
@@ -568,16 +556,14 @@
 .schedule-grid-container {
        display: flex;
        flex-direction: column;
-       flex: 1;
-       min-height: 0;
        gap: 8px;
      }
 
 .schedule-grid-wrapper {
         overflow-x: auto;
-        overflow-y: auto;
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior-y: contain;
+        overscroll-behavior-x: contain;
         border: 2px solid var(--card-border);
         border-radius: 12px;
         background: var(--card-bg);
@@ -585,9 +571,7 @@
         flex-direction: column;
         width: 100%;
         max-width: 100%;
-        flex: 1;
-        min-height: 200px;
-        touch-action: auto;
+        touch-action: pan-x;
         user-select: none;
         cursor: grab;
       }
@@ -3722,9 +3706,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
 
       let isDown = false;
       let startX;
-      let startY;
       let scrollLeft;
-      let scrollTop;
       let moved = false;
 
       wrapper.addEventListener("mousedown", (e) => {
@@ -3732,9 +3714,7 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         isDown = true;
         wrapper.classList.add("grabbing");
         startX = e.pageX - wrapper.offsetLeft;
-        startY = e.pageY - wrapper.offsetTop;
         scrollLeft = wrapper.scrollLeft;
-        scrollTop = wrapper.scrollTop;
         moved = false;
       });
 
@@ -3752,14 +3732,11 @@ document.querySelectorAll(".schedule-tabs").forEach(tabGroup => {
         if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - wrapper.offsetLeft;
-        const y = e.pageY - wrapper.offsetTop;
         const walkX = (x - startX) * 1.5;
-        const walkY = (y - startY) * 1.5;
-        if (Math.abs(walkX) > 5 || Math.abs(walkY) > 5) {
+        if (Math.abs(walkX) > 5) {
           moved = true;
         }
         wrapper.scrollLeft = scrollLeft - walkX;
-        wrapper.scrollTop = scrollTop - walkY;
       });
 
       wrapper.addEventListener("click", (e) => {
